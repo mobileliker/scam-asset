@@ -1,0 +1,3 @@
+create user 'zxck_laravel'@'%' identified by 'zxck123456ZXCK';
+create database zxck_laravel;
+grant all on zxck_laravel.* to 'zxck_laravel'@'%';
