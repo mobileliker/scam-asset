@@ -1,0 +1,47 @@
+/**************************后台*****************************/
+
+/*顶部导航*/
+.admin-navar-top{
+	background-color: rgb(48,151,209);
+}
+
+.admin-navar-top{
+	.navbar-brand, .navbar-nav>li>a, .navbar-text{
+		color: #f5f5f5;
+	}
+
+	.navbar-brand{
+		font-weight: bold;
+	}
+}
+
+/*左部导航*/
+.admin-navar-left{
+	li{
+		background-color: rgb(48,151,209);
+		color: #f5f5f5;
+		text-align: center;		
+	}
+
+	a{
+		text-indent: 1em;
+	}
+
+	.active{
+		background-color: rgb(32,137,94);
+	}
+}
+
+
+/*底部工具栏*/
+.admin-toolbar{
+	.pagination{
+		margin:	0 0 !important;
+	}
+} 
+
+
+/*内容*/
+.form-operate-delete {
+	display: inline;
+}
