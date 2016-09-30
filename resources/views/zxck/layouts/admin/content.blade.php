@@ -9,7 +9,6 @@ description:
 
 @section('css')
 @parent
-<link href="/zxck/css/common.css" rel="stylesheet">
 <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 @endsection
 
