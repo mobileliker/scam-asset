@@ -1,3 +1,10 @@
+{{--
+version: 1.0 view 基础页
+author: wuzhihui
+date: 2016/9/30
+description:
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +15,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', '知行创客') }}</title>
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">

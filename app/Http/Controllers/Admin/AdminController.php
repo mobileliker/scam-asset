@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
-
 /*
-功能：后台首页的Controller类
-作者：wuzhihui
-时间：2016/8/16
-*/
+ * @version: 1.0 后台管理首页
+ * @author: wuzhihui
+ * @date: 2016/9/30
+ * @description:
+ */
 
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -19,6 +19,6 @@ class AdminController extends Controller
     //
     public function index()
     {
-        return view('zxck.admin.index');
+        return view(config('theme', 'zxck').'.admin.index');
     }
 }

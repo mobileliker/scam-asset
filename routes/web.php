@@ -22,5 +22,12 @@ Route::get('/home', 'HomeController@index');
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth'],function() {
 	Route::get('/', 'AdminController@index');
-	Route::resource('service', 'ServiceController');
+
+	//check
+	Route::post('util/check/{model}', 'UtilController@check');
+
+	//info
+	Route::post('info/batch-delete', 'InfoController@batch_delete');
+	//Route::post('info/check', 'InfoController@check');
+	Route::resource('info', 'InfoController');
 });

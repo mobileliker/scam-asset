@@ -9,5 +9,9 @@ return [
     'qq' => 'QQ',
     'operate' => '操作',
     'save' => '保存',
-    'index' => '首页'
+    'index' => '首页',
+    'search' => '查询',
+    'query' => '查询',
+    'key' => '关键字',
+    'value' => '值'
 ];
