@@ -5,7 +5,7 @@ date: 2016/9/30
 description:
 --}}
 
-@extends(config('theme', 'zxck').'.layouts.admin.content')
+@extends(config('app.theme').'.layouts.admin.content')
 
 @section('content')
 
@@ -18,7 +18,7 @@ description:
 <div class="panel panel-default">
   <div class="panel-body">
 
-      @include(config('theme', 'zxck').'.layouts.admin.error_alert')
+      @include(config('app.theme').'.layouts.admin.error_alert')
       @yield('error_alert')
 
 		<form class="form-horizontal" id="form-info" role="form" action="{{url('admin/info/'.$info->id)}}" method="post">
@@ -51,7 +51,7 @@ description:
 
 @section('script')
 @parent
-<script src="{{url(config('theme', 'zxck').'/js/admin/info.js')}}"></script>
+<script src="{{url(config('app.theme').'/js/admin/info.js')}}"></script>
 <script>
   $().ready(function(){
     AdminInfo.init();

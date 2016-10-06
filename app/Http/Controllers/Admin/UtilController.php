@@ -21,7 +21,7 @@ class UtilController extends Controller
     //用于验证某一字段的值是否重复
     public function check(Request $request, $model)
     {
-    	$table_name = config('theme', 'zxck_').str_plural($model);
+    	$table_name = str_plural($model);
     	$id = $request->input('id');
         $field = $request->input('field');
         $value = $request->input('value');

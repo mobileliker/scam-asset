@@ -19,6 +19,6 @@ class AdminController extends Controller
     //
     public function index()
     {
-        return view(config('theme', 'zxck').'.admin.index');
+        return view(config('app.theme').'.admin.index');
     }
 }

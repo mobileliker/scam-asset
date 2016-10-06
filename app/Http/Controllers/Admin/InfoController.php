@@ -52,7 +52,7 @@ class InfoController extends Controller
 
 
         $infos = $infos->paginate(10);
-        return view(config('app.theme', 'zxck').'.admin.info.index')->withInfos($infos);
+        return view(config('app.theme').'.admin.info.index')->withInfos($infos);
 
     }
 
@@ -64,7 +64,7 @@ class InfoController extends Controller
     public function create()
     {
         //return 'admin.info.create';
-        return view(config('app.theme', 'zxck').'.admin.info.create');
+        return view(config('app.theme').'.admin.info.create');
     }
 
 
@@ -127,7 +127,7 @@ class InfoController extends Controller
     {
         //
         $info = Info::find($id);
-        return view(config('app.theme', 'zxck').'.admin.info.edit')->withInfo($info);
+        return view(config('app.theme').'.admin.info.edit')->withInfo($info);
     }
 
 

@@ -1,4 +1,4 @@
-@extends('zxck.layouts.admin.content')
+@extends(config('app.theme').'.layouts.admin.content')
 
 @section('content')
 <div class="container">

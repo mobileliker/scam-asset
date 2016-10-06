@@ -5,7 +5,7 @@ date: 2016/9/30
 description:
 --}}
 
-@extends(config('app.theme', 'zxck').'.layouts.admin.content')
+@extends(config('app.theme').'.layouts.admin.content')
 
 @section('content')
 <ol class="breadcrumb">
@@ -89,8 +89,8 @@ description:
 
 @section('script')
 @parent
-<script src="{{url(config('theme', 'zxck').'/js/admin/info.js')}}"></script>
-<script src="{{url(config('theme', 'zxck').'/js/util.js')}}"></script>
+<script src="{{url(config('app.theme').'/js/admin/info.js')}}"></script>
+<script src="{{url(config('app.theme').'/js/util.js')}}"></script>
 <script>
   $().ready(function(){
     AdminInfo.init();

@@ -14,7 +14,7 @@ admin.index
 
 @section('script')
 @parent
-<script src="{{url(config('theme', 'zxck').'/js/admin/index.js')}}"></script>
+<script src="{{url(config('app.theme').'/js/admin/index.js')}}"></script>
 <script>
 	$().ready(function(){
 		AdminIndex.init();
