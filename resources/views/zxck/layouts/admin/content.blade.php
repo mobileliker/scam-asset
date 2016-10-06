@@ -90,7 +90,7 @@ description:
 
 @section('script')
     @parent
-    <script src="/zxck/js/common.js"></script>
+    <script src="{{url(config('theme', 'zxck').'/js/common.js')}}"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
 
     @include('layouts.jquery_validate')
