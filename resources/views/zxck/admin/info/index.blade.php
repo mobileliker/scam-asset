@@ -18,9 +18,9 @@ description:
     <div class="col-lg-4 col-md-4 col-sm-10 col-xs-10">
     	<form class="form-admin-search"action="{{url('admin/info')}}" method="GET">
 		    <div class="input-group">
+		      <input name="query_text" type="text" class="form-control">
           <input id="_sort" name="_sort" type="hidden">
           <input id="_order" name="_order" type="hidden">
-		      <input name="query_text" type="text" class="form-control">
 		      <span class="input-group-btn">
 		        <button class="btn btn-default" type="button submit">@lang('common.search')</button>
 		      </span>

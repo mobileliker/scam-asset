@@ -7,7 +7,7 @@ var AdminInfo = function() {
 		initIndex: function() {
 			$("#batch_delete").click(function(){
 				var _token = $("meta[name=csrf-token]").attr("content"); 
-				console.log(_token);
+				//console.log(_token);
 				var checkboxs = document.getElementsByName("checkbox[]");
 		        //console.log(checkboxs);
 		        var arr_checkbox = new Array();
