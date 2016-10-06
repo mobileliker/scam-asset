@@ -16,8 +16,10 @@ description:
 <div class="panel panel-default">
   <div class="panel-body">
     <div class="col-lg-4 col-md-4 col-sm-10 col-xs-10">
-    	<form action="{{url('admin/info')}}" method="GET">
+    	<form class="form-admin-search"action="{{url('admin/info')}}" method="GET">
 		    <div class="input-group">
+          <input id="_sort" name="_sort" type="hidden">
+          <input id="_order" name="_order" type="hidden">
 		      <input name="query_text" type="text" class="form-control">
 		      <span class="input-group-btn">
 		        <button class="btn btn-default" type="button submit">@lang('common.search')</button>
@@ -37,8 +39,8 @@ description:
   		<thead>
   			<tr>
   				<th>#</th>
-  				<th>@lang('common.key')</th>
-  				<th>@lang('common.value')</th>
+  				<th><a class="admin-order-group" data-sort="key" data-order="asc" href="javascript:void(0)">@lang('common.key')</a></th>
+  				<th><a class="admin-order-group" data-sort="value" data-order='asc' href="javascript:void(0)">@lang('common.value')</a></th>
           <th>@lang('common.operate')</th>
   			</tr>
   		</thead>
@@ -77,7 +79,7 @@ description:
       </div>
 
       <div class="pull-right">
-      {!! $infos->appends(['query_text' => old('query_text')])->links() !!}
+      {!! $infos->appends(['query_text' => old('query_text'), '_sort' => old('_sort'), '_order' => old('_order')])->links() !!}
       </div>
   </div>
 </div>
@@ -88,10 +90,12 @@ description:
 @section('script')
 @parent
 <script src="{{url(config('theme', 'zxck').'/js/admin/info.js')}}"></script>
+<script src="{{url(config('theme', 'zxck').'/js/util.js')}}"></script>
 <script>
   $().ready(function(){
     AdminInfo.init();
     AdminInfo.initIndex();
+    Util.initOrder("{{old('_sort')}}", "{{old('_order')}}");
   });
 </script>
 @endsection

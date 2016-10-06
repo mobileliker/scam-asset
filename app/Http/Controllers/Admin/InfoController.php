@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use Redirect;
 
 use App\Info;
+use IQuery;
 
 class InfoController extends Controller
 {
@@ -46,6 +47,9 @@ class InfoController extends Controller
             }
 
         }
+
+        IQuery::ofOrder($infos, $request);
+
 
         $infos = $infos->paginate(10);
         return view(config('app.theme', 'zxck').'.admin.info.index')->withInfos($infos);
