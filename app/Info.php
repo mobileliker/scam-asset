@@ -16,6 +16,4 @@ class Info extends Model
 {
 	use SoftDeletes;
     protected $dates = ['deleted_at'];  //开启deleted_at字段
-    //protected $table = config('app.db_prex', 'zxck_') . 'infos'; //绑定表
-    protected $table = 'zxck_infos'; //绑定表
 }

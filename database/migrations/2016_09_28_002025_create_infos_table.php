@@ -20,7 +20,7 @@ class CreateInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('app.db_prex', 'zxck_').'infos', function (Blueprint $table) {
+        Schema::create('infos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('key'); //主键
             $table->text('value'); //值
@@ -28,8 +28,8 @@ class CreateInfosTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table(config('app.db_prex', 'zxck_').'infos', function ($table) {
-            $table->unique(['key', 'deleted_at'],config('app.db_prex', 'zxck_').'configs_key_unique');
+        Schema::table('infos', function ($table) {
+            $table->unique(['key', 'deleted_at'],'infos_key_unique');
        });
     }
 
@@ -40,6 +40,6 @@ class CreateInfosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('app.db_prex', 'zxck_').'infos');
+        Schema::dropIfExists('infos');
     }
 }

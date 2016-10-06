@@ -134,7 +134,6 @@ return [
     |
     */
     'theme' => 'zxck',
-    'db_prex' => 'zxck_',
     'name' => '知行创客',
 
 
