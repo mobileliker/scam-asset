@@ -45,3 +45,18 @@
 .form-operate-delete {
 	display: inline;
 }
+
+
+/*底部*/
+.admin-footer
+{
+	position: fixed;
+	bottom: 0;
+	height: 40px;
+    width: 100%;
+    z-index: 99999;
+    background: rgb(48,151,209);
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}

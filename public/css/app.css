@@ -5797,4 +5797,16 @@ button.close {
 .form-operate-delete {
   display: inline; }
 
+/*底部*/
+.admin-footer {
+  position: fixed;
+  bottom: 0;
+  height: 40px;
+  width: 100%;
+  z-index: 99999;
+  background: #3097d1;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center; }
+
 /*# sourceMappingURL=app.css.map */

@@ -80,6 +80,9 @@ description:
     <div class="col-lg-10">
     	@yield('content')
     </div>
+    <div class="col-lg-12 admin-footer">
+        <span> <i class="fa fa-copyright"></i>&nbsp;2016-2016 知行创客工作室  All rights reserved.</span>
+    </div>
 
 @endsection
 
