@@ -38,6 +38,16 @@ description:
 		    </div>
 		  </div>
 		  <div class="form-group">
+		    <label for="type" class="col-sm-2 control-label">@lang('common.type')</label>
+		    <div class="col-sm-10">
+		    	<select class="form-control" id="type" name="type">
+		    		@foreach(App\User::TYPE as $key=>$type)
+		    		<option value="{{$key}}">{{$type}}</option>
+		    		@endforeach
+		    	</select>
+		    </div>
+		  </div>
+		  <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
 		      <button type="submit" class="btn btn-default">@lang('common.save')</button>
 		    </div>
@@ -54,7 +64,7 @@ description:
 <script src="{{url(config('app.theme').'/js/admin/info.js')}}"></script>
 <script>
   $().ready(function(){
-    AdminInfo.init();
+    AdminInfo.init("{{$user->type}}");
     AdminInfo.initEdit();
   });
 </script>

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use ReflectionClass;
 use DB;
 
 class UtilController extends Controller
@@ -25,12 +26,26 @@ class UtilController extends Controller
     	$id = $request->input('id');
         $field = $request->input('field');
         $value = $request->input('value');
-        if($id == null){
-        	$res = DB::table($table_name)->where($field, $value)->first();
-        }else{
-            $res = DB::table($table_name)->where($field, $value)->where('id', '!=', $id)->first();
+        $res = DB::table($table_name)->whereNull('deleted_at')->where($field, $value);
+        if($id != null){
+        	$res = $res->where('id', '!=', $id);
         }
+        $res = $res->first();
         if($res != null) return "false";
         else return "true";
+    }
+
+    //批量删除
+    public function batch_delete(Request $request, $model)
+    {
+
+        $ids = $request->input('ids');
+        $class = new ReflectionClass('App\\'.ucfirst($model));//建立这个类的反射类  
+        $model  = $class->newInstanceArgs();//相当于实例化类
+        if($model->destroy($ids) > 0){
+            return 'true';
+        }else{
+            return 'false';
+        }
     }
 }

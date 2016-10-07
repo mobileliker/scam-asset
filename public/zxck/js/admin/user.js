@@ -1,7 +1,7 @@
-var AdminInfo = function() {
+var AdminUser = function() {
 	return {
 		init: function() {
-			$("#left-nav-info-manager").attr("class", $("#left-nav-info-manager").attr("class") + " active");
+			$("#left-nav-user-manager").attr("class", $("#left-nav-user-manager").attr("class") + " active");
 		},
 
 		initIndex: function() {
@@ -21,7 +21,7 @@ var AdminInfo = function() {
 		        }
 		        //console.log(arr_checkbox);
 
-		          $.post("/admin/util/batch-delete/info",
+		          $.post("/admin/util/batch-delete/user",
 		              {
 		                  _token : _token,
 		                  ids : arr_checkbox
@@ -38,54 +38,72 @@ var AdminInfo = function() {
 		},
 
 		initCreate: function() {
-			$("#form-info").validate({
+			$("#form-user").validate({
 				rules:{
-					key: {
+					name: {
+						maxlength:255
+					},
+					email:{
 						required:true,
 						maxlength:255,
+						email:true,
 			            remote:{
-			              url: "/admin/util/check/info",
+			              url: "/admin/util/check/user",
 			              type: "post",
 			              dataType: "json",
 			              data:{
 			                _token: function(){return $("meta[name=csrf-token]").attr("content");},
-			                field: function(){return $("#key").attr("name");},
-			                value: function(){return $("#key").val();}
+			                field: function(){return $("#email").attr("name");},
+			                value: function(){return $("#email").val();}
 			              }
 			            }
 					},
-					value:{
+					password:{
 						required:true,
-						maxlength:2000
+						maxlength:30
+					},
+					password2:{
+						required:true,
+						maxlength:30,
+						equalTo: "#password"
 					}
 				}
 			});
 		},
 
-		initEdit: function() {
-			$("#form-info").validate({
+		initEdit: function(type) {
+			$("#type").val(type);
+
+			$("#form-user").validate({
 				rules:{
-					key: {
+					name: {
+						maxlength:255
+					},
+					email:{
 						required:true,
 						maxlength:255,
+						email:true,
 			            remote:{
-			              url: "/admin/util/check/info",
+			              url: "/admin/util/check/user",
 			              type: "post",
 			              dataType: "json",
 			              data:{
 			                _token: function(){return $("meta[name=csrf-token]").attr("content");},
 			                id: function(){return $("#id").val();},
-			                field: function(){return $("#key").attr("name");},
-			                value: function(){return $("#key").val();}
+			                field: function(){return $("#email").attr("name");},
+			                value: function(){return $("#email").val();}
 			              }
 			            }
 					},
-					value:{
-						required:true,
-						maxlength:2000
+					password:{
+						maxlength:30
+					},
+					password2:{
+						maxlength:30,
+						equalTo: "#password"
 					}
 				}
 			});
-		},
+		},/**/
 	};
 }();

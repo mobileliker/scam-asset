@@ -14,10 +14,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Redirect;
+use Redirect, DB;
 
 use App\Info;
 use IQuery;
+use ReflectionClass;
 
 class InfoController extends Controller
 {
@@ -160,16 +161,21 @@ class InfoController extends Controller
         }
     }
 
-    public function batch_delete(Request $request)
+    /*public function batch_delete(Request $request)
     {
 
         $ids = $request->input('ids');
-        if(Info::destroy($ids) > 0){
+        //if(Info::destroy($ids) > 0)
+        $class = new ReflectionClass('App\Info');//建立 Person这个类的反射类  
+        $info  = $class->newInstanceArgs();//相当于实例化Person 类
+
+
+        if($info->destroy($ids) > 0){
             return 'true';
         }else{
             return 'false';
         }
-    }
+    }*/
 
     
     /*public function check(Request $request)

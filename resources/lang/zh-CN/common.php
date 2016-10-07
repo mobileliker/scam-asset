@@ -13,5 +13,8 @@ return [
     'search' => '查询',
     'query' => '查询',
     'key' => '关键字',
-    'value' => '值'
+    'value' => '值',
+    'email' => '邮箱',
+    'type' => '类型',
+    'password' => '密码',
 ];

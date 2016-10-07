@@ -25,9 +25,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 
 	//check
 	Route::post('util/check/{model}', 'UtilController@check');
+	Route::post('util/batch-delete/{model}', 'UtilController@batch_delete');
 
 	//info
 	Route::post('info/batch-delete', 'InfoController@batch_delete');
 	//Route::post('info/check', 'InfoController@check');
 	Route::resource('info', 'InfoController');
+
+	//user
+	//Route::post('user/batch-delete', 'UserController@batch_delete');
+	Route::resource('user', 'UserController');
 });

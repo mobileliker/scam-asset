@@ -75,6 +75,9 @@ description:
             <a href="{{url('/admin/info')}}" class="list-group-item" id="left-nav-info-manager">
                 <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;配置管理
             </a>
+            <a href="{{url('/admin/user')}}" class="list-group-item" id="left-nav-user-manager">
+                <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;用户管理
+            </a>
         </div>
     </div>
     <div class="col-lg-10">
