@@ -53,7 +53,12 @@ class InfoController extends Controller
 
 
         $infos = $infos->paginate(10);
-        return view(config('app.theme').'.admin.info.index')->withInfos($infos);
+
+        if($infos == null || count($infos) == 0){
+            return view(config('app.theme').'.admin.info.index')->withInfos($infos)->with('status', '查询结果为空');
+        }else{
+            return view(config('app.theme').'.admin.info.index')->withInfos($infos); 
+        }
 
     }
 
@@ -90,7 +95,7 @@ class InfoController extends Controller
         $info->value = $value;
 
         if($info->save()){
-            return Redirect::to('admin/info');
+            return Redirect::to('admin/info')->with('status', '保存成功');
         }else{
             return Redirect::back()->withErrors('保存失败');
         }

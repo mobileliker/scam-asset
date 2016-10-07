@@ -16,6 +16,7 @@ class ModifyUsersTable extends Migration
         //
         Schema::table('users', function ($table) {
             $table->tinyInteger('type')->default(App\User::TYPE_USER)->after('password');
+            $table->softDeletes()->after('type');
        });
     }
 
@@ -29,6 +30,7 @@ class ModifyUsersTable extends Migration
         //
         Schema::table('users', function ($table) {
             $table->dropColumn('type');
+            $table->dropColum('deleted_at');
        });
     }
 }

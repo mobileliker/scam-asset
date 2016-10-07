@@ -49,7 +49,11 @@ class UserController extends Controller
 
         $users = $users->paginate(10);
 
-        return view(config('app.theme').'.admin.user.index')->withUsers($users);
+        if($users == null || count($users) == 0){
+            return view(config('app.theme').'.admin.user.index')->withUsers($users)->with('status', '查询结果为空');
+        }else{
+            return view(config('app.theme').'.admin.user.index')->withUsers($users); 
+        }
     }
 
     /**
@@ -90,7 +94,7 @@ class UserController extends Controller
         $user->type = $type;
 
         if($user->save()){
-            return Redirect::to('admin/user');
+            return Redirect::to('admin/user')->with('status', '保存成功');
         }else{
             return Redirect::back()->withErrors('保存失败');
         }
@@ -152,7 +156,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         if($user->delete()){
-            return Redirect::back();
+            return Redirect::back()->with('status', '删除成功');
         }else{
             return Redirec::back()->withErrors();
         }

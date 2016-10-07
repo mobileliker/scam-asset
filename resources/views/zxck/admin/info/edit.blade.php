@@ -64,7 +64,7 @@ description:
 <script src="{{url(config('app.theme').'/js/admin/info.js')}}"></script>
 <script>
   $().ready(function(){
-    AdminInfo.init("{{$user->type}}");
+    AdminInfo.init();
     AdminInfo.initEdit();
   });
 </script>

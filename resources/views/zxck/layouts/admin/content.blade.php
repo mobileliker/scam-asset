@@ -10,6 +10,7 @@ description:
 @section('css')
 @parent
 <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/layer/2.4/skin/layer.min.css" rel="stylesheet">
 @endsection
 
 @section('app')
@@ -95,7 +96,16 @@ description:
     @parent
     <script src="{{url(config('theme', 'zxck').'/js/common.js')}}"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-
+    <script src="//cdn.bootcss.com/layer/2.4/layer.min.js"></script>
     @include('layouts.jquery_validate')
     @yield('jquery_validate')
+    @if (session('status'))
+    <script>
+        layer.msg("{{session('status')}}");
+    </script>
+    @elseif(isset($status))
+    <script>
+        layer.msg("{{$status}}");
+    </script>
+    @endif
 @endsection
