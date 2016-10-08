@@ -13,36 +13,34 @@ var AdminContent = function() {
 				});
 			});
 
-
-			$("#form-suser").validate({
-				rules:{
-					sname: {
-						maxlength:255
-					},
-					spassword:{
-						maxlength:30
-					},
-					spassword2:{
-						maxlength:30,
-						equalTo: "#spassword"
-					}
-				}
-			});
-
-			$("#form-suser").submit(function(){
-				//console.log('submit');
-	            $('#form-suser').ajaxSubmit(function(data) { 
-	            	//console.log(data);
-	            	if(data == "false"){
-	            		layer.msg('保存失败');
-	            	}else{
-	            		layer.closeAll();
-	            		layer.msg('保存成功');
-	            		//console.log(data.name);
-	            		$("#a-admin-name").html(data.name + "<span class='caret'></span>");
-	            	}
-	            }); 
-				return false;
+			$("#btn-suser-save").click(function() {			
+				$("#form-suser").validate({
+					rules:{
+						sname: {
+							maxlength:255
+						},
+						spassword:{
+							maxlength:30
+						},
+						spassword2:{
+							maxlength:30,
+							equalTo: "#spassword"
+						}
+					},	
+		            submitHandler: function () {
+			            $('#form-suser').ajaxSubmit(function(data) { 
+			            	//console.log(data);
+			            	if(data == "false"){
+			            		layer.msg('保存失败');
+			            	}else{
+			            		layer.closeAll();
+			            		layer.msg('保存成功');
+			            		//console.log(data.name);
+			            		$("#a-admin-name").html(data.name + "<span class='caret'></span>");
+			            	}
+			            }); 
+		            }
+				});
 			});
 		},
 	};
