@@ -20,6 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 
+//user admin
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth'],function() {
 	Route::get('/', 'AdminController@index');
 
@@ -27,6 +28,20 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	Route::post('util/check/{model}', 'UtilController@check');
 	Route::post('util/batch-delete/{model}', 'UtilController@batch_delete');
 
+	//info
+	Route::post('info/batch-delete', 'InfoController@batch_delete');
+	//Route::post('info/check', 'InfoController@check');
+	Route::resource('info', 'InfoController');
+
+	//user
+	//Route::post('user/batch-delete', 'UserController@batch_delete');
+	Route::put('user/{id}/settings', 'UserController@settings');
+	Route::resource('user', 'UserController');
+});
+
+//admin admin
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth','can:admin']],function() {
+	
 	//info
 	Route::post('info/batch-delete', 'InfoController@batch_delete');
 	//Route::post('info/check', 'InfoController@check');

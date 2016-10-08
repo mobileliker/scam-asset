@@ -74,6 +74,7 @@ description:
             <li class="list-group-item">后台管理</li>
             <a href="/admin" class="list-group-item" id="left-nav-index-index">@lang('common.index')</a>
         </div>
+        @if(Auth::user()->type == App\User::TYPE_ADMIN)
         <div class="list-group">
             <li class="list-group-item">系统管理</li>
             <a href="{{url('/admin/info')}}" class="list-group-item" id="left-nav-info-manager">
@@ -83,6 +84,7 @@ description:
                 <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;用户管理
             </a>
         </div>
+        @endif
     </div>
     <div class="col-lg-10">
     	@yield('content')
