@@ -18,4 +18,6 @@ return [
     'type' => '类型',
     'password' => '密码',
     'settings' => '设置',
+    'login' => '登录',
+    'remember-me' => '记住我',
 ];

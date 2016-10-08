@@ -5778,16 +5778,22 @@ button.close {
   font-weight: bold; }
 
 /*左部导航*/
-.admin-navar-left li {
-  background-color: #3097d1;
-  color: #f5f5f5;
-  text-align: center; }
+.admin-navar-left {
+  padding-bottom: 40px; }
+  .admin-navar-left li {
+    background-color: #3097d1;
+    color: #f5f5f5;
+    text-align: center; }
+  .admin-navar-left a {
+    text-indent: 1em; }
+  .admin-navar-left .active {
+    background-color: #20b25e; }
+  .admin-navar-left .active:hover {
+    background-color: #20895e; }
 
-.admin-navar-left a {
-  text-indent: 1em; }
-
-.admin-navar-left .active {
-  background-color: #20895e; }
+/*中部主内容*/
+.admin-content {
+  padding-bottom: 40px; }
 
 /*底部工具栏*/
 .admin-toolbar .pagination {

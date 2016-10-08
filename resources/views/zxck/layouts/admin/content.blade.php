@@ -78,7 +78,7 @@ description:
         <div class="list-group">
             <li class="list-group-item">系统管理</li>
             <a href="{{url('/admin/info')}}" class="list-group-item" id="left-nav-info-manager">
-                <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;配置管理
+                <i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;配置管理
             </a>
             <a href="{{url('/admin/user')}}" class="list-group-item" id="left-nav-user-manager">
                 <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;用户管理
@@ -86,7 +86,7 @@ description:
         </div>
         @endif
     </div>
-    <div class="col-lg-10">
+    <div class="col-lg-10 admin-content">
     	@yield('content')
     </div>
     <div class="col-lg-12 admin-footer">

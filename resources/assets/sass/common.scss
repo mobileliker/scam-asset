@@ -17,6 +17,8 @@
 
 /*左部导航*/
 .admin-navar-left{
+	padding-bottom: 40px;
+
 	li{
 		background-color: rgb(48,151,209);
 		color: #f5f5f5;
@@ -28,10 +30,19 @@
 	}
 
 	.active{
+		background-color: rgb(32,178,94);
+	}
+
+	.active:hover{
 		background-color: rgb(32,137,94);
 	}
+
 }
 
+/*中部主内容*/
+.admin-content {
+	padding-bottom: 40px;
+}
 
 /*底部工具栏*/
 .admin-toolbar{
