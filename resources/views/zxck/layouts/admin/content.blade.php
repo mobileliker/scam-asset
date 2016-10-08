@@ -43,11 +43,14 @@ description:
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <a id="a-admin-name" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a id="a-admin-settings" href="javascript:void(0)">@lang('common.settings')</a>
+                            </li>
                             <li>
                                 <a href="{{ url('/logout') }}"
                                     onclick="event.preventDefault();
@@ -88,6 +91,37 @@ description:
         <span> <i class="fa fa-copyright"></i>&nbsp;2016-2016 {{config('app.copyright')}}  All rights reserved.</span>
     </div>
 
+    <div id="admin-settings" style="display: none; padding: 20px 20px;">
+        <form class="form-horizontal" id="form-suser" role="form" action="{{url('admin/user/'.Auth::user()->id).'/settings'}}" method="post">
+            {{ csrf_field() }}
+            <input name="_method" type="hidden" value="PUT">
+            <input type="hidden" id="id" name="id" value="{{Auth::user()->id}}">
+          <div class="form-group">
+            <label for="sname" class="col-sm-2 control-label">@lang('common.name')</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="sname" name="sname" type="text" placeholder="@lang('common.name')" value="{{Auth::user()->name}}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="spassword" class="col-sm-2 control-label">@lang('common.password')</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="spassword" name="spassword" type="password" placeholder="@lang('common.password')">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="spassword2" class="col-sm-2 control-label">确认@lang('common.password')</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="spassword2" name="spassword2" type="password" placeholder="确认@lang('common.password')">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button id="btn-suser-save" type="submit" class="btn btn-default">@lang('common.save')</button>
+            </div>
+          </div>
+        </form>
+    </div>
+
 @endsection
 
 
@@ -99,6 +133,7 @@ description:
     <script src="//cdn.bootcss.com/layer/2.4/layer.min.js"></script>
     @include('layouts.jquery_validate')
     @yield('jquery_validate')
+    <script src="//cdn.bootcss.com/jquery.form/3.51/jquery.form.min.js"></script>
     @if (session('status'))
     <script>
         layer.msg("{{session('status')}}");
@@ -108,4 +143,10 @@ description:
         layer.msg("{{$status}}");
     </script>
     @endif
+    <script src="{{url(config('theme', 'zxck').'/js/admin/content.js')}}"></script>
+    <script>
+        $().ready(function() {
+            AdminContent.init();
+        });
+    </script>
 @endsection

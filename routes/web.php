@@ -34,5 +34,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 
 	//user
 	//Route::post('user/batch-delete', 'UserController@batch_delete');
+	Route::put('user/{id}/settings', 'UserController@settings');
 	Route::resource('user', 'UserController');
 });

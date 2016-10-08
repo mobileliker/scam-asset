@@ -161,4 +161,21 @@ class UserController extends Controller
             return Redirec::back()->withErrors();
         }
     }
+
+    public function settings(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $name = $request->input('sname');
+        $password = $request->input('spassword');
+
+        if($name != null && $name != '') $user->name = $name;
+        if($password != null && $password != '') $user->password = bcrypt($password);
+
+        if($user->save()){
+            return $user;
+        }else{
+            return "false";
+        }
+    }
 }

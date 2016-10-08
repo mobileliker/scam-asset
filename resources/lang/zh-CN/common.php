@@ -17,4 +17,5 @@ return [
     'email' => '邮箱',
     'type' => '类型',
     'password' => '密码',
+    'settings' => '设置',
 ];
