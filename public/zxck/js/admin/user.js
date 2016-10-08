@@ -4,7 +4,9 @@ var AdminUser = function() {
 			$("#left-nav-user-manager").attr("class", $("#left-nav-user-manager").attr("class") + " active");
 		},
 
-		initIndex: function() {
+		initIndex: function(type) {
+			$("#type").val(type);
+
 			$("#batch_delete").click(function(){
 				var _token = $("meta[name=csrf-token]").attr("content"); 
 				//console.log(_token);

@@ -104,7 +104,7 @@ description:
 <script>
   $().ready(function(){
     AdminUser.init();
-    AdminUser.initIndex();
+    AdminUser.initIndex("{{old('type')}}");
     Util.initOrder("{{old('_sort')}}", "{{old('_order')}}");
   });
 </script>
