@@ -26,7 +26,7 @@ description:
         </div>
         <div class="col-lg-4 col-md-4 col-sm-10 col-xs-10">
   		    <div class="input-group">
-  		      <input name="query_text" type="text" class="form-control" value="{{old('query_text')}}">
+  		      <input name="query_text" type="text" class="form-control" value="{{old('query_text')}}" placeholder="请输入名字进行查询">
             <input id="_sort" name="_sort" type="hidden">
             <input id="_order" name="_order" type="hidden">
   		      <span class="input-group-btn">
