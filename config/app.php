@@ -133,9 +133,9 @@ return [
     |
     |
     */
-    'theme' => 'zxck',
-    'name' => '知行创客后台管理系统',
-    'copyright' => '知行创客工作室',
+    'theme' => 'scama',
+    'name' => '华南农业博物馆资产管理系统',
+    'copyright' => '华南农业博物馆筹建办公室',
 
 
     /*
