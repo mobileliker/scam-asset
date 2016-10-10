@@ -20,4 +20,5 @@ return [
     'settings' => '设置',
     'login' => '登录',
     'remember-me' => '记住我',
+    'yuan' => '元',
 ];

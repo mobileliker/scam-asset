@@ -27,13 +27,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	//check
 	Route::post('util/check/{model}', 'UtilController@check');
 	Route::post('util/batch-delete/{model}', 'UtilController@batch_delete');
+
+	//asset
+	Route::resource('asset', 'AssetController');
 });
 
 //admin admin
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth','can:admin']],function() {
 
 	//info
-	Route::post('info/batch-delete', 'InfoController@batch_delete');
+	//Route::post('info/batch-delete', 'InfoController@batch_delete');
 	//Route::post('info/check', 'InfoController@check');
 	Route::resource('info', 'InfoController');
 

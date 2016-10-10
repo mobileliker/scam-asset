@@ -72,7 +72,12 @@ description:
 	<div class="col-lg-2 admin-navar-left">
         <div class="list-group">
             <li class="list-group-item">后台管理</li>
-            <a href="/admin" class="list-group-item" id="left-nav-index-index">@lang('common.index')</a>
+            <a href="/admin" class="list-group-item" id="left-nav-index-index">
+                <i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;@lang('common.index')
+            </a>
+            <a href="{{url('/admin/asset')}}" class="list-group-item" id="left-nav-asset-manager">
+                <i class="fa fa-archive" aria-hidden="true"></i>&nbsp;&nbsp;资产管理
+            </a>
         </div>
         @if(Auth::user()->type == App\User::TYPE_ADMIN)
         <div class="list-group">
