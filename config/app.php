@@ -192,6 +192,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Other Service Providers
+         */
+        'Maatwebsite\Excel\ExcelServiceProvider',
 
         /*
          * Mannal Service Providers
@@ -245,6 +249,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        //Other Facecade
+        'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 
         //mannal facecade
         'IQuery' => App\Facades\IQueryClass::class, //IQuery 别名
