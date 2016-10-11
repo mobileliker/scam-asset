@@ -29,6 +29,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	Route::post('util/batch-delete/{model}', 'UtilController@batch_delete');
 
 	//asset
+	Route::get('asset/{id}/export', 'AssetController@export');
 	Route::resource('asset', 'AssetController');
 });
 

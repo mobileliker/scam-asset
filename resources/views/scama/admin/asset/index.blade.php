@@ -87,6 +87,9 @@ description:
             <td>{{$asset->amount}}</td>
             <td>{{$asset->sum}}</td>
             <td>
+              <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/export')}}">
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+              </a>
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/edit')}}">
                 <i class="fa fa-pencil"></i>
               </a>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Asset;
 
 use Auth, Redirect;
+use Excel;
 use IQuery;
 
 class AssetController extends Controller
@@ -83,6 +84,8 @@ class AssetController extends Controller
             'post_date' => 'required|date',
             'number' => 'required|unique:assets,number,'.$id,
             'name' => 'required|string|max:255',
+            'serial' => 'required|string|max:255',
+            'course' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'size' => 'required|string|max:255',
             'consumer_company' => 'required|string|max:255',
@@ -106,6 +109,8 @@ class AssetController extends Controller
         $post_date = $request->input('post_date');
         $number = $request->input('number');
         $name = $request->input('name');
+        $serial = $request->input('serial');
+        $course = $request->input('course');
         $model = $request->input('model');
         $size = $request->input('size');
         $consumer_company = $request->input('consumer_company');
@@ -135,6 +140,8 @@ class AssetController extends Controller
         $asset->post_date = $post_date;
         $asset->number = $number;
         $asset->name = $name;
+        $asset->serial = $serial;
+        $asset->course = $course;
         $asset->model = $model;
         $asset->size = $size;
         $asset->consumer_company = $consumer_company;
@@ -225,5 +232,66 @@ class AssetController extends Controller
         }else{
             return Redirect::back()->withErrors();
         }
+    }
+
+    public function export($id)
+    {
+        //return "admin.asset.export";
+        $asset = Asset::find($id);
+
+        $filePath = resource_path('assets/template/export.xls');
+
+        Excel::load($filePath, function($reader) use($asset){
+
+            $post_date = $asset->post_date;
+            $number = $asset->number;
+            $name = $asset->name;
+            $serial = $asset->serial;
+            $course = $asset->course;
+            $model = $asset->model;
+            $size = $asset->size;
+            $consumer_company = $asset->consumer_company;
+            $factory = $asset->factory;
+            $provider = $asset->provider;
+            $country = $asset->country;
+            $storage_location = $asset->storage_location;
+            $application = $asset->application;
+            $invoice = $asset->invoice;
+            $purchase_number = $asset->purchase_number;
+            $purchase_date = $asset->purchase_date;
+            $card = $asset->card;
+            $price = $asset->price;
+            $amount = $asset->amount;
+            $sum = $asset->sum;
+            $entry = $asset->entry;
+            //$consumer_id = $asset->consumer_id;
+            //$handler_id = $asset->handler_id;
+            //$memo = $asset->memo;
+
+            $sheet = $reader->getActiveSheet();
+            $sheet->setCellValue('B2', $post_date);
+            $sheet->setCellValue('J2', $number);
+            $sheet->setCellValue('B3', $name);
+            $sheet->setCellValue('F3', $serial);
+            $sheet->setCellValue('I3', $course);
+            $sheet->setCellValue('B4', $model);
+            $sheet->setCellValue('F4', $size);
+            $sheet->setCellValue('I4', $consumer_company);
+            $sheet->setCellValue('B5', $factory);
+            $sheet->setCellValue('F5', $provider);
+            $sheet->setCellValue('I5', $country);
+            $sheet->setCellValue('B6', $storage_location);
+            $sheet->setCellValue('F6', $application);
+            $sheet->setCellValue('I6', $invoice);
+            $sheet->setCellValue('B7', $purchase_number);
+            $sheet->setCellValue('F7', $purchase_date);
+            $sheet->setCellValue('I7', $card);
+            $sheet->setCellValue('B8', $price);
+            $sheet->setCellValue('F8', $amount);
+            $sheet->setCellValue('I8', $sum);
+            $sheet->setCellValue('D10', $entry);
+
+        })->export('xls');
+
     }
 }

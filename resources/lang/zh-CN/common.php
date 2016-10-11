@@ -21,4 +21,5 @@ return [
     'login' => '登录',
     'remember-me' => '记住我',
     'yuan' => '元',
+    'serial' => '编号',
 ];

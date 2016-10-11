@@ -18,6 +18,8 @@ class CreateAssetsTable extends Migration
             $table->date('post_date'); //入账日期
             $table->integer('number')->unique(); //单据号
             $table->string('name'); //藏品名称
+            $table->string('serial');//藏品编号
+            $table->string('course');//经费科目
             $table->string('model'); //型号
             $table->string('size'); //规格
             $table->string('consumer_company')->default('scam'); //领用单位

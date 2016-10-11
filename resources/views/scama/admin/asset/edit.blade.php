@@ -49,6 +49,18 @@ description:
             </div>
           </div>
           <div class="form-group">
+            <label class="col-sm-2 control-label" for="serial">@lang('common.serial')</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="serial" name="serial" type="text" placeholder="@lang('common.serial')" value="{{$asset->serial}}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="course">经费科目</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="course" name="course" type="text" placeholder="经费科目" value="{{$asset->course}}">
+            </div>
+          </div>
+          <div class="form-group">
             <label class="col-sm-2 control-label" for="model">@lang('web.model')</label>
             <div class="col-sm-10">
               <input class="form-control" id="model" name="model" type="text" placeholder="@lang('web.model')" value="{{$asset->model}}">
@@ -60,14 +72,14 @@ description:
               <input class="form-control" id="size" name="size" type="text" placeholder="@lang('web.size')" value="{{$asset->size}}">
             </div>
           </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
           <div class="form-group">
             <label class="col-sm-2 control-label" for="consumer_company">@lang('web.consumer-company')</label>
             <div class="col-sm-10">
               <input class="form-control" id="consumer_company" name="consumer_company" type="text" placeholder="@lang('web.consumer-company')" value="{{$asset->consumer_company}}">
             </div>
           </div>
-        </div>
-        <div class="col-lg-6 col-sm-12">
           <div class="form-group">
             <label class="col-sm-2 control-label" for="factory">@lang('web.factory')</label>
             <div class="col-sm-10">
