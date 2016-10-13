@@ -57,7 +57,11 @@ description:
           <div class="form-group">
             <label class="col-sm-2 control-label" for="course">经费科目</label>
             <div class="col-sm-10">
-              <input class="form-control" id="course" name="course" type="text" placeholder="经费科目" value="{{$asset->course}}">
+              <select class="form-control" id="course" name="course">
+                @foreach(App\Category::categories('course') as $category)
+                  <option value="{{$category->value}}">{{$category->name}}</option>
+                @endforeach
+              </select>
             </div>
           </div>
           <div class="form-group">
@@ -107,7 +111,9 @@ description:
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-expanded="false">@lang('web.storage-location') <span class="caret"></span></button>
                   <ul class="dropdown-menu">
-                    <li><a class="a-select" href="javascript:void(0);" data-id="storage_location">3号楼303</a></li>
+                    @foreach(App\Category::categories('storage_location') as $category)
+                      <li><a class="a-select" href="javascript:void(0);" data-id="storage_location">{{$category->value}}</a></li>
+                    @endforeach
                   </ul>
                 </div>
                 <input class="form-control" id="storage_location" name="storage_location" type="text" value="{{$asset->storage_location}}">
@@ -118,8 +124,9 @@ description:
             <label class="col-sm-2 control-label" for="application">@lang('web.application')</label>
             <div class="col-sm-10">
               <select class="form-control" id="application" name="application">
-                <option value="科研">科研</option>
-                <option value="教学">教学</option>
+                @foreach(App\Category::categories('application') as $category)
+                  <option value="{{$category->value}}">{{$category->name}}</option>
+                @endforeach
               </select>
             </div>
           </div>
@@ -153,7 +160,9 @@ description:
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-expanded="false">@lang('web.card') <span class="caret"></span></button>
                   <ul class="dropdown-menu">
-                    <li><a class="a-select" href="javascript:void(0);"  data-id="card">9700-32010097</a></li>
+                    @foreach(App\Category::categories('card') as $category)
+                      <li><a class="a-select" href="javascript:void(0);" data-id="card">{{$category->value}}</a></li>
+                    @endforeach
                   </ul>
                 </div>
                 <input class="form-control" id="card" name="card" type="text" value="{{$asset->card}}">
@@ -229,7 +238,7 @@ description:
   <script>
     $().ready(function(){
       AdminAsset.init();
-      AdminAsset.initEdit("{{$asset->country}}", "{{$asset->application}}","{{$asset->consumer_id}}","{{$asset->handler_id }}");
+      AdminAsset.initEdit("{{$asset->country}}", "{{$asset->application}}","{{$asset->consumer_id}}","{{$asset->handler_id }}","{{$asset->course}}");
     });
   </script>
 @endsection

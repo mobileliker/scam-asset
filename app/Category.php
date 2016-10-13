@@ -18,4 +18,9 @@ class Category extends Model
     {
     	return $this->hasMany('App\Category', 'pid', 'id');
     }
+
+    public static function categories($serial)
+    {
+        return Category::where('serial', '=', $serial)->first()->sub_categories;
+    }
 }

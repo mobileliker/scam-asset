@@ -154,7 +154,7 @@ var AdminAsset = function(){
       });
     },
 
-    initEdit: function(country, application, consumer_id, handler_id) {
+    initEdit: function(country, application, consumer_id, handler_id, course) {
       $(".a-select").click(function(){
         //console.log($(this).html());
         $("#" + $(this).attr("data-id")).val($(this).html());
@@ -168,6 +168,7 @@ var AdminAsset = function(){
       $("#application").val(application);
       $("#consumer_id").val(consumer_id);
       $("#handler_id").val(handler_id);
+      $("#course").val(course);
 
 
       $("#form-asset").validate({
