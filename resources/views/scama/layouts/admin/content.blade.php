@@ -85,8 +85,14 @@ description:
             <a href="{{url('/admin/info')}}" class="list-group-item" id="left-nav-info-manager">
                 <i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;配置管理
             </a>
+            <a href="{{url('/admin/category')}}" class="list-group-item" id="left-nav-category-manager">
+                <i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;&nbsp;分类管理
+            </a>
             <a href="{{url('/admin/user')}}" class="list-group-item" id="left-nav-user-manager">
                 <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;用户管理
+            </a>
+            <a href="{{url('/admin/alog')}}" class="list-group-item" id="left-nav-alog">
+                <i class="fa fa-calendar" aria-hidden="true"></i></i>&nbsp;&nbsp;操作日志
             </a>
         </div>
         @endif

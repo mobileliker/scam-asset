@@ -22,4 +22,10 @@ return [
     'remember-me' => '记住我',
     'yuan' => '元',
     'serial' => '编号',
+    'time' => '时间',
+    'username' => '用户名',
+    'module' => '模块',
+    'content' => '内容',
+    'ip' => 'IP',
+    'null' => '无',
 ];

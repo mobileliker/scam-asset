@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Asset;
+use App\Asset, App\Alog;
 
 use Auth, Redirect;
 use Excel;
@@ -164,6 +164,9 @@ class AssetController extends Controller
         $asset->memo = $memo;
 
         if($asset->save()){
+            if($id == 0) $operate = Alog::OPERATE_CREATE;
+            else $operate = Alog::OPERATE_UPDATE;
+            Alog::log('Asset', $operate, $asset->name, $request->getClientIp());
             return Redirect::to('admin/asset')->with('status', '保存成功');
         }else{
             return Redirect::back()->withInput()->withErrors();
@@ -224,10 +227,11 @@ class AssetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $asset = Asset::find($id);
         if($asset->delete()){
+            Alog::log('Category', Alog::OPERATE_DELETE, $asset->name, $request->getClientIp());
             return Redirect::back()->with('status', '删除成功');
         }else{
             return Redirect::back()->withErrors();
