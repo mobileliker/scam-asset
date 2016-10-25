@@ -78,6 +78,9 @@ description:
             <a href="{{url('/admin/asset')}}" class="list-group-item" id="left-nav-asset-manager">
                 <i class="fa fa-archive" aria-hidden="true"></i>&nbsp;&nbsp;资产管理
             </a>
+            <a href="{{url('/admin/invoice')}}" class="list-group-item" id="left-nav-invoice-manager">
+                <i class="fa fa-file" aria-hidden="true"></i></i>&nbsp;&nbsp;单据管理
+            </a>
         </div>
         @if(Auth::user()->type == App\User::TYPE_ADMIN)
         <div class="list-group">

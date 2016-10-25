@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAssetsTable extends Migration
+class CreateInvoicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateAssetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('assets', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->date('post_date'); //入账日期
-            //$table->integer('number')->unique(); //单据号
-            $table->tinyInteger('type');//类型
+            $table->integer('number')->unique(); //单据号
             $table->string('name'); //藏品名称
             $table->string('serial');//藏品编号
             $table->string('course');//经费科目
@@ -37,20 +36,12 @@ class CreateAssetsTable extends Migration
             $table->integer('amount')->default(1); //数量
             $table->decimal('sum','20','2'); //金额
             $table->string('entry'); //录入
-            $table->integer('consumer_id')->unsigned(); //领用
-            $table->integer('handler_id')->unsigned(); //经手
+            $table->string('consumer'); //领用
+            $table->string('handler'); //经手
             $table->text('memo')->nullable(); //备注
             $table->integer('user_id')->unsigned();
-            $table->string('image')->nullable(); //图片
             $table->softDeletes();
             $table->timestamps();
-        });
-
-
-        Schema::table('assets', function ($table) {
-            $table->foreign('consumer_id')->references('id')->on('users');
-            $table->foreign('handler_id')->references('id')->on('users');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -61,6 +52,6 @@ class CreateAssetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assets');
+        Schema::dropIfExists('invoices');
     }
 }

@@ -37,9 +37,14 @@ description:
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="number">@lang('web.bill-number')</label>
+            <label class="col-sm-2 control-label" for="type">展厅</label>
             <div class="col-sm-10">
-              <input class="form-control" id="number" name="number" type="text" placeholder="@lang('web.bill-number')" value="{{$asset->number}}">
+              <select class="form-control" id="type" name="type">
+                <option value="">请选择...</option>
+                @foreach(App\Asset::TYPE as $key=>$type)
+                  <option value="{{$key}}">{{$type}}</option>
+                @endforeach
+              </select>
             </div>
           </div>
           <div class="form-group">
@@ -238,7 +243,7 @@ description:
   <script>
     $().ready(function(){
       AdminAsset.init();
-      AdminAsset.initEdit("{{$asset->country}}", "{{$asset->application}}","{{$asset->consumer_id}}","{{$asset->handler_id }}","{{$asset->course}}");
+      AdminAsset.initEdit("{{$asset->type}}","{{$asset->country}}", "{{$asset->application}}","{{$asset->consumer_id}}","{{$asset->handler_id }}","{{$asset->course}}");
     });
   </script>
 @endsection

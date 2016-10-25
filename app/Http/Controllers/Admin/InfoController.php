@@ -74,7 +74,7 @@ class InfoController extends Controller
     }
 
 
-    public function storeOrUpdate(Request $request,$id = 0)
+    public function storeOrUpdate(Request $request,$id = -1)
     {
         $this->validate($request, [
             'key' => 'required|string|max:255',
@@ -85,7 +85,7 @@ class InfoController extends Controller
         $key = $request->input('key');
         $value = $request->input('value');
 
-        if($id == 0){
+        if($id == -1){
             $info = new Info;
         }else{
             $info = Info::find($id);
@@ -95,7 +95,7 @@ class InfoController extends Controller
         $info->value = $value;
 
         if($info->save()){
-            if($id == 0) $operate = Alog::OPERATE_CREATE;
+            if($id == -1) $operate = Alog::OPERATE_CREATE;
             else $operate = Alog::OPERATE_UPDATE;
             Alog::log('Info', $operate, $info->key.'=>'.$info->value, $request->getClientIp());
             return Redirect::to('admin/info')->with('status', '保存成功');

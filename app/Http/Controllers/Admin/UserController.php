@@ -66,7 +66,7 @@ class UserController extends Controller
         return view(config('app.theme').'.admin.user.create');
     }
 
-    public function storeOrUpdate(Request $request,$id = 0)
+    public function storeOrUpdate(Request $request,$id = -1)
     {
         $this->validate($request, [
             'name' => 'string|max:255',
@@ -82,7 +82,7 @@ class UserController extends Controller
         $password = $request->input('password');
         $type = $request->input('type');
 
-        if($id == 0){
+        if($id == -1){
             $user = new User;
         }else{
             $user = User::find($id);
@@ -94,7 +94,7 @@ class UserController extends Controller
         $user->type = $type;
 
         if($user->save()){
-            if($id == 0) $operate = Alog::OPERATE_CREATE;
+            if($id == -1) $operate = Alog::OPERATE_CREATE;
             else $operate = Alog::OPERATE_UPDATE;
             Alog::log('User', $operate, $user->name.'('.$user->email.')', $request->getClientIp());
             return Redirect::to('admin/user')->with('status', '保存成功');
