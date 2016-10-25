@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Asset, App\Alog;
+use App\Asset, App\Alog, App\Invoice;
 
 use Auth, Redirect;
 use Excel;
@@ -82,7 +82,6 @@ class AssetController extends Controller
         //validate
         $this->validate($request, [
             'post_date' => 'required|date',
-            'number' => 'required|unique:assets,number,'.$id,
             'name' => 'required|string|max:255',
             'serial' => 'required|string|max:255',
             'course' => 'required|string|max:255',
@@ -107,7 +106,7 @@ class AssetController extends Controller
             'memo' => 'string|max:2000',
         ]);
         $post_date = $request->input('post_date');
-        $number = $request->input('number');
+        $type = $request->input('type');
         $name = $request->input('name');
         $serial = $request->input('serial');
         $course = $request->input('course');
@@ -138,7 +137,7 @@ class AssetController extends Controller
         }
 
         $asset->post_date = $post_date;
-        $asset->number = $number;
+        $asset->type = $type;
         $asset->name = $name;
         $asset->serial = $serial;
         $asset->course = $course;
@@ -243,59 +242,13 @@ class AssetController extends Controller
         //return "admin.asset.export";
         $asset = Asset::find($id);
 
-        $filePath = resource_path('assets/template/export.xls');
+        $c_invoice = Invoice::where('number', '>', $asset->type * 10000000)->where('number', '<=', $asset->type * 10000000 + 9999999)->orderBy('number', 'desc')->first();
+        if($c_invoice != null && count($c_invoice) > 0 ) $number = $c_invoice->number + 1;
+        else $number = $asset->type * 10000000 + 1;
 
-        Excel::load($filePath, function($reader) use($asset){
+        $invoice = Invoice::generate($asset, $number);
 
-            $post_date = $asset->post_date;
-            $number = $asset->number;
-            $name = $asset->name;
-            $serial = $asset->serial;
-            $course = $asset->course;
-            $model = $asset->model;
-            $size = $asset->size;
-            $consumer_company = $asset->consumer_company;
-            $factory = $asset->factory;
-            $provider = $asset->provider;
-            $country = $asset->country;
-            $storage_location = $asset->storage_location;
-            $application = $asset->application;
-            $invoice = $asset->invoice;
-            $purchase_number = $asset->purchase_number;
-            $purchase_date = $asset->purchase_date;
-            $card = $asset->card;
-            $price = $asset->price;
-            $amount = $asset->amount;
-            $sum = $asset->sum;
-            $entry = $asset->entry;
-            //$consumer_id = $asset->consumer_id;
-            //$handler_id = $asset->handler_id;
-            //$memo = $asset->memo;
-
-            $sheet = $reader->getActiveSheet();
-            $sheet->setCellValue('B2', $post_date);
-            $sheet->setCellValue('J2', $number);
-            $sheet->setCellValue('B3', $name);
-            $sheet->setCellValue('F3', $serial);
-            $sheet->setCellValue('I3', $course);
-            $sheet->setCellValue('B4', $model);
-            $sheet->setCellValue('F4', $size);
-            $sheet->setCellValue('I4', $consumer_company);
-            $sheet->setCellValue('B5', $factory);
-            $sheet->setCellValue('F5', $provider);
-            $sheet->setCellValue('I5', $country);
-            $sheet->setCellValue('B6', $storage_location);
-            $sheet->setCellValue('F6', $application);
-            $sheet->setCellValue('I6', $invoice);
-            $sheet->setCellValue('B7', $purchase_number);
-            $sheet->setCellValue('F7', $purchase_date);
-            $sheet->setCellValue('I7', $card);
-            $sheet->setCellValue('B8', $price);
-            $sheet->setCellValue('F8', $amount);
-            $sheet->setCellValue('I8', $sum);
-            $sheet->setCellValue('D10', $entry);
-
-        })->export('xls');
+        $invoice->export();
 
     }
 }

@@ -33,23 +33,15 @@ description:
               <input class="form-control" id="post_date" name="post_date" type="date" placeholder="@lang('web.post-date')">
             </div>
           </div>
-          {{--
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="gallery">展厅</label>
+            <label class="col-sm-2 control-label" for="type">展厅</label>
             <div class="col-sm-10">
-              <select class="form-control" id="gallery" name="gallery">
+              <select class="form-control" id="type" name="type">
                 <option value="">请选择...</option>
-                @foreach(App\Category::categories('gallery') as $category)
-                  <option value="{{$category->value}}">{{$category->name}}</option>
+                @foreach(App\Asset::TYPE as $key=>$type)
+                  <option value="{{$key}}">{{$type}}</option>
                 @endforeach
               </select>
-            </div>
-          </div>
-          --}}
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="number">@lang('web.bill-number')</label>
-            <div class="col-sm-10">
-              <input class="form-control" id="number" name="number" type="text" placeholder="@lang('web.bill-number')">
             </div>
           </div>
           <div class="form-group">

@@ -31,6 +31,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	//asset
 	Route::get('asset/{id}/export', 'AssetController@export');
 	Route::resource('asset', 'AssetController');
+
+	//Invoice
+	Route::get('invoice', 'InvoiceController@index');
+	Route::get('invoice/{id}/export', 'InvoiceController@export');
 });
 
 //admin admin

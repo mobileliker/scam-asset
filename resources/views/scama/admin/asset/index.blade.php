@@ -56,7 +56,7 @@ description:
         <tr>
           <th>#</th>
           <th><a class="admin-order-group" data-sort="post_date" data-order='asc' href="javascript:void(0)">@lang('web.post-date')</a></th>
-          <th><a class="admin-order-group" data-sort="number" data-order='asc' href="javascript:void(0)">@lang('web.bill-number')</a></th>
+          <th><a class="admin-order-group" data-sort="type" data-order='asc' href="javascript:void(0)">@lang('common.type')</a></th>
           <th>@lang('web.name')</th>
           <th>@lang('web.model')</th>
           <th>@lang('web.size')</th>
@@ -75,7 +75,7 @@ description:
           <tr>
             <td><input class="checkbox-batch" name="checkbox[]" type="checkbox" data-group="assets" data-id="{{$asset->id}}"></td>
             <td>{{$asset->post_date}}</td>
-            <td>{{$asset->number}}</td>
+            <td>{{App\Asset::TYPE[$asset->type]}}</td>
             <td>{{$asset->name}}</td>
             <td>{{$asset->model}}</td>
             <td>{{$asset->size}}</td>

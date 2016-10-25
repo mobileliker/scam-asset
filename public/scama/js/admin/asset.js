@@ -25,19 +25,6 @@ var AdminAsset = function(){
             required: true,
             date: true
           },
-          number:{
-            required: true,
-            remote:{
-              url: "/admin/util/check/asset",
-              type: "post",
-              dataType: "json",
-              data:{
-                _token: function(){return $("meta[name=csrf-token]").attr("content");},
-                field: function(){return $("#number").attr("name");},
-                value: function(){return $("#number").val();}
-              }
-            }
-          },
           name:{
             required: true,
             maxlength: 255
@@ -123,7 +110,7 @@ var AdminAsset = function(){
       });
     },
 
-    initEdit: function(country, application, consumer_id, handler_id, course) {
+    initEdit: function(type, country, application, consumer_id, handler_id, course) {
       $(".a-select").click(function(){
         //console.log($(this).html());
         $("#" + $(this).attr("data-id")).val($(this).html());
@@ -133,6 +120,7 @@ var AdminAsset = function(){
         $("#sum").val($("#price").val() * $("#amount").val());
       });
 
+      $("#type").val(type);
       $("#country").val(country);
       $("#application").val(application);
       $("#consumer_id").val(consumer_id);
@@ -145,20 +133,6 @@ var AdminAsset = function(){
           post_date:{
             required: true,
             date: true
-          },
-          number:{
-            required: true,
-            remote:{
-              url: "/admin/util/check/asset",
-              type: "post",
-              dataType: "json",
-              data:{
-                _token: function(){return $("meta[name=csrf-token]").attr("content");},
-                id : function(){return $("#id").val();},
-                field: function(){return $("#number").attr("name");},
-                value: function(){return $("#number").val();}
-              }
-            }
           },
           name:{
             required: true,
