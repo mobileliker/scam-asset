@@ -77,7 +77,7 @@ class AssetController extends Controller
         return view(config('app.theme').'.admin.asset.create');
     }
 
-    public function storeOrUpdate(Request $request, $id = 0)
+    public function storeOrUpdate(Request $request, $id = -1)
     {
         //validate
         $this->validate($request, [
@@ -131,7 +131,7 @@ class AssetController extends Controller
         $handler_id = $request->input('handler_id');
         $memo = $request->input('memo');
 
-        if(0 == $id){
+        if(-1 == $id){
             $asset = new Asset;
         }else{
             $asset = Asset::find($id);
@@ -164,7 +164,7 @@ class AssetController extends Controller
         $asset->memo = $memo;
 
         if($asset->save()){
-            if($id == 0) $operate = Alog::OPERATE_CREATE;
+            if($id == -1) $operate = Alog::OPERATE_CREATE;
             else $operate = Alog::OPERATE_UPDATE;
             Alog::log('Asset', $operate, $asset->name, $request->getClientIp());
             return Redirect::to('admin/asset')->with('status', '保存成功');

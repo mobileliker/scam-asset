@@ -70,7 +70,7 @@ class CategoryController extends Controller
     }
 
 
-    public function storeOrUpdate(Request $request, $id = 0)
+    public function storeOrUpdate(Request $request, $id = -1)
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
@@ -85,7 +85,7 @@ class CategoryController extends Controller
         $serial = $request->input('serial');
         $pid = $request->input('pid');
 
-        if($id == 0){
+        if($id == -1){
             $category = new Category;
         }else{
             $category = Category::find($id);
@@ -98,7 +98,7 @@ class CategoryController extends Controller
         else $category->pid = null;
 
         if($category->save()){
-            if($id == 0) $operate = Alog::OPERATE_CREATE;
+            if($id == -1) $operate = Alog::OPERATE_CREATE;
             else $operate = Alog::OPERATE_UPDATE;
             Alog::log('Category', $operate, $category->name, $request->getClientIp());
             return Redirect::to('admin/category')->with('status', '保存成功');
