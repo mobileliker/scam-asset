@@ -16,6 +16,14 @@ description:
   <div class="panel panel-default">
     <div class="panel-body">
       <form class="form-admin-search"action="{{url('admin/asset')}}" method="GET">
+        <div class="col-lg-2 col-md-2 col-sm-10 col-xs-10">
+          <select class="form-control" id="type" name="type">
+            <option value="">@lang('common.type')</option>
+            @foreach(App\Asset::TYPE as $key=>$type)
+              <option value="{{$key}}">{{$type}}</option>
+            @endforeach
+          </select>
+        </div>
         <div class="col-lg-2 col-md-2 col-sm-12">
           <div class="form-group">
              <label class="control-label col-lg-2" for="post_date_start">从</label>
@@ -58,14 +66,14 @@ description:
           <th><a class="admin-order-group" data-sort="post_date" data-order='asc' href="javascript:void(0)">@lang('web.post-date')</a></th>
           <th><a class="admin-order-group" data-sort="type" data-order='asc' href="javascript:void(0)">@lang('common.type')</a></th>
           <th>@lang('web.name')</th>
-          <th>@lang('web.model')</th>
-          <th>@lang('web.size')</th>
+          {{--<th>@lang('web.model')</th>--}}
+          {{--<th>@lang('web.size')</th>--}}
           <th>@lang('web.factory')</th>
           <th>@lang('web.provider')</th>
           <th>@lang('web.invoice')</th>
           <th><a class="admin-order-group" data-sort="purchase_number" data-order='asc' href="javascript:void(0)">@lang('web.purchase-number')</a></th>
-          <th><a class="admin-order-group" data-sort="price" data-order='asc' href="javascript:void(0)">@lang('web.price')(@lang('common.yuan'))</a></th>
-          <th><a class="admin-order-group" data-sort="amount" data-order='asc' href="javascript:void(0)">@lang('web.amount')</a></th>
+          {{--<th><a class="admin-order-group" data-sort="price" data-order='asc' href="javascript:void(0)">@lang('web.price')(@lang('common.yuan'))</a></th>--}}
+          {{--<th><a class="admin-order-group" data-sort="amount" data-order='asc' href="javascript:void(0)">@lang('web.amount')</a></th>--}}
           <th><a class="admin-order-group" data-sort="sum" data-order='asc' href="javascript:void(0)">@lang('web.sum')(@lang('common.yuan'))</a></th>
           <th>@lang('common.operate')</th>
         </tr>
@@ -77,14 +85,14 @@ description:
             <td>{{$asset->post_date}}</td>
             <td>{{App\Asset::TYPE[$asset->type]}}</td>
             <td>{{$asset->name}}</td>
-            <td>{{$asset->model}}</td>
-            <td>{{$asset->size}}</td>
+            {{--<td>{{$asset->model}}</td>--}}
+            {{--<td>{{$asset->size}}</td>--}}
             <td>{{$asset->factory}}</td>
             <td>{{$asset->provider}}</td>
             <td>{{$asset->invoice}}</td>
             <td>{{$asset->purchase_number}}</td>
-            <td>{{$asset->price}}</td>
-            <td>{{$asset->amount}}</td>
+            {{--<td>{{$asset->price}}</td>--}}
+            {{--<td>{{$asset->amount}}</td>--}}
             <td>{{$asset->sum}}</td>
             <td>
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/export')}}">
@@ -118,7 +126,7 @@ description:
       </div>
 
       <div class="pull-right">
-        {!! $assets->appends(['query_text' => old('query_text'),'_sort' => old('_sort'), '_order' => old('_order')])->links() !!}
+        {!! $assets->appends(['type' => old('type'), 'query_text' => old('query_text'),'_sort' => old('_sort'), '_order' => old('_order')])->links() !!}
       </div>
     </div>
   </div>
@@ -133,7 +141,7 @@ description:
   <script>
     $().ready(function(){
       AdminAsset.init();
-      AdminAsset.initIndex();
+      AdminAsset.initIndex("{{old('type')}}");
       Util.initOrder("{{old('_sort')}}", "{{old('_order')}}");
     });
   </script>
