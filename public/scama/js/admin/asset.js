@@ -11,6 +11,8 @@ var AdminAsset = function(){
     },
 
     initCreate: function(){
+      $("#course").val("自筹");
+
       $(".a-select").click(function(){
         //console.log($(this).html());
         $("#" + $(this).attr("data-id")).val($(this).html());
@@ -32,7 +34,6 @@ var AdminAsset = function(){
             maxlength: 255
           },
           serial:{
-            required: true,
             maxlength: 255
           },
           course:{
@@ -75,7 +76,6 @@ var AdminAsset = function(){
             maxlength: 255
           },
           purchase_number: {
-            required: true
           },
           purchase_date: {
             required: true,
@@ -141,7 +141,6 @@ var AdminAsset = function(){
             maxlength: 255
           },
           serial:{
-            required: true,
             maxlength: 255
           },
           course:{
@@ -184,7 +183,6 @@ var AdminAsset = function(){
             maxlength: 255
           },
           purchase_number: {
-            required: true
           },
           purchase_date: {
             required: true,

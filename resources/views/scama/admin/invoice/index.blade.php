@@ -43,9 +43,9 @@ description:
                     </div>
                 </div>
             </form>
-            <div class="pull-right col-lg-1 col-md-1 col-sm-2 col-xs-2">
+            {{--<div class="pull-right col-lg-1 col-md-1 col-sm-2 col-xs-2">
                 <a class="form-control btn btn-success" href="{{url('/admin/invoice/create')}}">@lang('common.add')</a>
-            </div>
+            </div>--}}
         </div>
     </div>
 
@@ -112,13 +112,14 @@ description:
 
     <div class="panel panel-default admin-toolbar">
         <div class="panel-body">
+            {{--
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                 <input class="checkbox-all" type="checkbox" data-group-name="invoices">
             </div>
             <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2">
                 <button class="form-control btn btn-danger" id="batch_delete" type="button">@lang('common.delete')</button>
             </div>
-
+            --}}
             <div class="pull-right">
                 {!! $invoices->appends(['query_text' => old('query_text'),'_sort' => old('_sort'), '_order' => old('_order')])->links() !!}
             </div>

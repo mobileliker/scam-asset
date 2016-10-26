@@ -18,7 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->date('post_date'); //入账日期
             $table->integer('number')->unique(); //单据号
             $table->string('name'); //藏品名称
-            $table->string('serial');//藏品编号
+            $table->string('serial')->nullable();//藏品编号
             $table->string('course');//经费科目
             $table->string('model'); //型号
             $table->string('size'); //规格
@@ -29,7 +29,7 @@ class CreateInvoicesTable extends Migration
             $table->string('storage_location'); //存放地点
             $table->string('application'); //使用方向
             $table->string('invoice'); //发票号
-            $table->string('purchase_number'); //申购单号
+            $table->string('purchase_number')->nullable(); //申购单号
             $table->date('purchase_date'); //购置日期
             $table->string('card'); //经费卡号
             $table->decimal('price','20','2'); //单价

@@ -88,7 +88,7 @@ class AssetController extends Controller
         $this->validate($request, [
             'post_date' => 'required|date',
             'name' => 'required|string|max:255',
-            'serial' => 'required|string|max:255',
+            'serial' => 'string|max:255',
             'course' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'size' => 'required|string|max:255',
@@ -99,7 +99,7 @@ class AssetController extends Controller
             'storage_location' => 'required|string|max:255',
             'application' => 'required|string|max:255',
             'invoice' => 'required|string|max:255',
-            'purchase_number' => 'required|string|max:255',
+            'purchase_number' => 'string|max:255',
             'purchase_date' => 'required|date',
             'card' => 'required|string|max:255',
             'price' => 'required|numeric',
