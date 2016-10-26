@@ -53,6 +53,11 @@ class AssetController extends Controller
             $assets = $assets->where('post_date', '<=', $post_date_end);
         }
 
+        $type = $request->input('type');
+        if($type != null && $type != ''){
+            $assets = $assets->where('type', '=', $type);
+        }
+
 
         IQuery::ofOrder($assets, $request);
 

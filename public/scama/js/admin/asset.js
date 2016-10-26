@@ -4,7 +4,9 @@ var AdminAsset = function(){
       $("#left-nav-asset-manager").attr("class", $("#left-nav-asset-manager").attr("class") + " active");
     },
 
-    initIndex: function(){
+    initIndex: function(type){
+      $("#type").val(type);
+
       Util.initBatchDelete("asset");
     },
 
