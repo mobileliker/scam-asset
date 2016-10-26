@@ -5767,6 +5767,9 @@ button.close {
     display: none !important; } }
 
 /**************************后台*****************************/
+body {
+  font-family: sans-serif !important; }
+
 /*顶部导航*/
 .admin-navar-top {
   background-color: #3097d1; }
