@@ -106,8 +106,8 @@ description:
             {{--<td>{{$asset->price}}</td>--}}
             {{--<td>{{$asset->amount}}</td>--}}
             <td>{{$asset->sum}}</td>
-            <td>{{$asset->handler->name}}</td>
             <td>{{$asset->consumer->name}}</td>
+            <td>{{$asset->handler->name}}</td>
             <td>
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/export')}}" target="_blank">
                 <i class="fa fa-external-link" aria-hidden="true"></i>
