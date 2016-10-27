@@ -16,7 +16,7 @@ description:
   <div class="panel panel-default">
     <div class="panel-body">
       <form class="form-admin-search"action="{{url('admin/asset')}}" method="GET">
-        <div class="col-lg-2 col-md-2 col-sm-10 col-xs-10">
+        <div class="col-lg-1 col-md-1 col-sm-10 col-xs-10">
           <select class="form-control" id="type" name="type">
             <option value="">@lang('common.type')</option>
             @foreach(App\Asset::TYPE as $key=>$type)
@@ -51,8 +51,10 @@ description:
           </div>
         </div>
       </form>
-      <div class="pull-right col-lg-1 col-md-1 col-sm-2 col-xs-2">
-        <a class="form-control btn btn-success" href="{{url('/admin/asset/create')}}">@lang('common.add')</a>
+      <div class="pull-right admin-permission">
+        <a class="btn btn-success btn-lg" id="a-admin-asset-import" href="javascript:void(0)">@lang('common.import')</a>
+        <a class="btn btn-success btn-lg" id="a-admin-asset-export" href="{{url('admin/asset/export')}}" target="_blank">@lang('common.export')</a>
+        <a class="btn btn-success btn-lg" href="{{url('/admin/asset/create')}}">@lang('common.add')</a>
       </div>
     </div>
   </div>
@@ -64,17 +66,21 @@ description:
         <tr>
           <th>#</th>
           <th><a class="admin-order-group" data-sort="post_date" data-order='asc' href="javascript:void(0)">@lang('web.post-date')</a></th>
-          <th><a class="admin-order-group" data-sort="type" data-order='asc' href="javascript:void(0)">@lang('common.type')</a></th>
+          <th>@lang('common.type')</th>
+          <td>@lang('common.category')</td>
           <th>@lang('web.name')</th>
+          <th>@lang('common.serial')</th>
           {{--<th>@lang('web.model')</th>--}}
           {{--<th>@lang('web.size')</th>--}}
-          <th>@lang('web.factory')</th>
-          <th>@lang('web.provider')</th>
-          <th>@lang('web.invoice')</th>
-          <th><a class="admin-order-group" data-sort="purchase_number" data-order='asc' href="javascript:void(0)">@lang('web.purchase-number')</a></th>
+          {{--<th>@lang('web.factory')</th>--}}
+          {{--<th>@lang('web.provider')</th>--}}
+          {{--<th>@lang('web.invoice')</th>--}}
+          {{--<th><a class="admin-order-group" data-sort="purchase_number" data-order='asc' href="javascript:void(0)">@lang('web.purchase-number')</a></th>--}}
           {{--<th><a class="admin-order-group" data-sort="price" data-order='asc' href="javascript:void(0)">@lang('web.price')(@lang('common.yuan'))</a></th>--}}
           {{--<th><a class="admin-order-group" data-sort="amount" data-order='asc' href="javascript:void(0)">@lang('web.amount')</a></th>--}}
           <th><a class="admin-order-group" data-sort="sum" data-order='asc' href="javascript:void(0)">@lang('web.sum')(@lang('common.yuan'))</a></th>
+          <th>@lang('web.consumer')</th>
+          <th>@lang('web.handler')</th>
           <th>@lang('common.operate')</th>
         </tr>
         </thead>
@@ -84,16 +90,24 @@ description:
             <td><input class="checkbox-batch" name="checkbox[]" type="checkbox" data-group="assets" data-id="{{$asset->id}}"></td>
             <td>{{$asset->post_date}}</td>
             <td>{{App\Asset::TYPE[$asset->type]}}</td>
+            <td>
+              @if(isset(App\Category::where('serial', 'like', 'category-%')->where('value','=',$asset->category_number)->first()->name))
+              {{App\Category::where('serial', 'like', 'category-%')->where('value','=',$asset->category_number)->first()->name}}
+              @endif
+            </td>
             <td>{{$asset->name}}</td>
+            <td>{{$asset->serial}}</td>
             {{--<td>{{$asset->model}}</td>--}}
             {{--<td>{{$asset->size}}</td>--}}
-            <td>{{$asset->factory}}</td>
-            <td>{{$asset->provider}}</td>
-            <td>{{$asset->invoice}}</td>
-            <td>{{$asset->purchase_number}}</td>
+            {{--<td>{{$asset->factory}}</td>--}}
+            {{--<td>{{$asset->provider}}</td>--}}
+            {{--<td>{{$asset->invoice}}</td>--}}
+            {{--<td>{{$asset->purchase_number}}</td>--}}
             {{--<td>{{$asset->price}}</td>--}}
             {{--<td>{{$asset->amount}}</td>--}}
             <td>{{$asset->sum}}</td>
+            <td>{{$asset->handler->name}}</td>
+            <td>{{$asset->consumer->name}}</td>
             <td>
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/export')}}" target="_blank">
                 <i class="fa fa-external-link" aria-hidden="true"></i>
@@ -131,6 +145,35 @@ description:
     </div>
   </div>
 
+
+  <div id="admin-asset-import" style="display: none; padding: 20px 20px;">
+    <form class="form-horizontal" id="form-asset" role="form" action="{{url('admin/asset/import')}}" method="post">
+      {{ csrf_field() }}
+      <input name="_method" type="hidden" value="PUT">
+      <div class="form-group">
+        <label for="file" class="col-sm-2 control-label">@lang('common.file')</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="file" name="file" type="file" placeholder="@lang('common.file')" accept="application/vnd.ms-excel">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">@lang('common.type')</label>
+        <div class="col-sm-10">
+          <label class="checkbox-inline">
+            <input type="radio" name="type"value="override" checked>覆盖
+          </label>
+          <label class="checkbox-inline">
+            <input type="radio" name="type" value="ignore">忽略
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button id="btn-import-save" type="submit" class="btn btn-default">@lang('common.save')</button>
+        </div>
+      </div>
+    </form>
+  </div>
 @endsection
 
 

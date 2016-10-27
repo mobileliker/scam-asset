@@ -132,6 +132,22 @@ description:
               </select>
             </div>
           </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="category">@lang('common.category')</label>
+            <div class="col-sm-10">
+              <select class="form-control" id="category" name="category">
+                @foreach(App\Category::categories('category') as $category)
+                  <option value="{{$category->value}}">{{$category->name}}</option>
+                  @foreach(App\Category::categories($category->serial) as $category2)
+                    <option value="{{$category2->value}}">--{{$category2->name}}</option>
+                    @foreach(App\Category::categories($category2->serial) as $category3)
+                      <option value="{{$category3->value}}">----{{$category3->name}}</option>
+                    @endforeach
+                  @endforeach
+                @endforeach
+              </select>
+            </div>
+          </div>
         </div>
         <div class="page-header col-lg-12">
           <h4>财务信息</h4>

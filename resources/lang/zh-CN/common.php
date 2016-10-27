@@ -28,4 +28,7 @@ return [
     'content' => '内容',
     'ip' => 'IP',
     'null' => '无',
+    'category' => '分类',
+    'import' => '导入',
+    'export' => '导出',
 ];

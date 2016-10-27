@@ -12,6 +12,7 @@ use App\Asset, App\Alog, App\Invoice;
 use Auth, Redirect;
 use Excel;
 use IQuery;
+use App\User;
 
 class AssetController extends Controller
 {
@@ -88,6 +89,8 @@ class AssetController extends Controller
         $this->validate($request, [
             'post_date' => 'required|date',
             'name' => 'required|string|max:255',
+            'type' => 'required',
+            'category_number' => 'required',
             'serial' => 'string|max:255',
             'course' => 'required|string|max:255',
             'model' => 'required|string|max:255',
@@ -112,6 +115,7 @@ class AssetController extends Controller
         ]);
         $post_date = $request->input('post_date');
         $type = $request->input('type');
+        $category_number = $request->input('category_number');
         $name = $request->input('name');
         $serial = $request->input('serial');
         $course = $request->input('course');
@@ -143,6 +147,7 @@ class AssetController extends Controller
 
         $asset->post_date = $post_date;
         $asset->type = $type;
+        $asset->category_number = $category_number;
         $asset->name = $name;
         $asset->serial = $serial;
         $asset->course = $course;
@@ -252,8 +257,135 @@ class AssetController extends Controller
         else $number = $asset->type * 10000000 + 1;
 
         $invoice = Invoice::generate($asset, $number);
-
         $invoice->export();
+
+    }
+
+    public function import(Request $request)
+    {
+        /*$this->validate($request, [
+            'type' => 'required',
+            'file' => 'required'
+        ]);*/
+
+        $type = $request->input('type');
+        $file = $request->file('file');
+        //Log::info($file);
+        if($file != null && $file -> isValid()) {
+            $mimeType = $file->getMimeType();
+            $entension = $file->getClientOriginalExtension();
+            $file_name = md5(date('ymdhis') . $file->getClientOriginalName()) . '.' . $entension;
+            $path = $file->move('storage/tmp', $file_name);
+            //Log::info($path);
+            Excel::load($path, function ($reader) use ($type) {
+                $results = $reader->getSheet(0);
+                $results_array = $results->toArray();
+                foreach($results_array as $key=>$cells) {
+                    //Log::info($key);
+                    if ($key == 0) continue; // ignore head
+                    $asset = Asset::where('serial', '=', $cells[3])->where('serial', '!=', null)->first();
+                    if($type == 'override' || $asset == null) $asset = new Asset;
+                    $asset->post_date = $cells[1];
+                    $asset->name = $cells[2];
+                    $asset->serial = $cells[3];
+                    if(strpos($cells[3],'E') == 0) $asset->type = Asset::TYPE_E;
+                    $asset->price = $cells[4];
+                    $asset->invoice = $cells[5];
+                    $asset->course = $cells[6];
+                    $asset->model = $cells[7];
+                    $asset->factory = $cells[8];
+                    $asset->provider = $cells[9];
+                    $asset->country = $cells[10];
+                    $asset->storage_location = $cells[11];
+                    $asset->application = $cells[12];
+                    $asset->purchase_number = $cells[13];
+                    $asset->purchase_date = $cells[14];
+                    $asset->consumer_company = $cells[15];
+                    $asset->amount = $cells[16];
+                    $asset->sum = $cells[17];
+                    $asset->consumer_id = User::where('name', '=', $cells[18])->first()->id;
+                    $asset->entry = $cells[19];
+                    $asset->handler_id = User::where('name', '=', $cells[20])->first()->id;
+                    $asset->user_id = Auth::user()->id;
+                    $asset->size = "";
+                    $asset->card = "9700-32010097";
+                    $asset->save();
+                }
+            });
+
+            return "ture";
+        }
+
+
+
+    }
+
+    public function batch_export()
+    {
+        //return "admin.asset.batch_export";
+
+
+        Excel::create('固定资产', function($excel) {
+
+            $excel->sheet('固定资产', function($sheet){
+                //$assets = Asset::all()->toArray();
+                //$sheet->fromArray($assets);
+                $assets = Asset::all();
+
+                $header = [
+                    '序号',
+                    '入账日期',
+                    '藏品名称',
+                    '藏品编号',
+                    '单价',
+                    '发票号',
+                    '经费科目',
+                    '型号',
+                    '厂家',
+                    '供应商',
+                    '国别',
+                    '存放地点',
+                    '使用方向',
+                    '申购单号',
+                    '购置日期',
+                    '领用单位',
+                    '数量',
+                    '金额(元)',
+                    '保管人',
+                    '录入',
+                    '经手人',
+                ];
+                $sheet->appendRow($header);
+
+                foreach($assets as $key=>$asset){
+                    $data = [
+                        $key + 1,
+                        $asset->post_date,
+                        $asset->name,
+                        $asset->serial,
+                        $asset->price,
+                        $asset->invoice,
+                        $asset->course,
+                        $asset->model,
+                        $asset->factory,
+                        $asset->provider,
+                        $asset->country,
+                        $asset->storage_location,
+                        $asset->application,
+                        $asset->purchase_number,
+                        $asset->purchase_date,
+                        $asset->consumer_company,
+                        $asset->amount,
+                        $asset->sum,
+                        $asset->consumer->name,
+                        $asset->entry,
+                        $asset->handler->name,
+                    ];
+                    $sheet->appendRow($data);
+                }
+
+            });
+        })->export('xls');
 
     }
 }

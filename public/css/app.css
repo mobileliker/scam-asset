@@ -6,6 +6,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+@import url(//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css);
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -5801,6 +5802,9 @@ body {
 /*底部工具栏*/
 .admin-toolbar .pagination {
   margin: 0 0 !important; }
+
+.admin-permission .btn {
+  display: inline; }
 
 /*内容*/
 .form-operate-delete {

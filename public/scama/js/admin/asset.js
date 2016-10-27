@@ -8,6 +8,40 @@ var AdminAsset = function(){
       $("#type").val(type);
 
       Util.initBatchDelete("asset");
+
+      $("#a-admin-asset-import").click(function () {
+
+        layer.open({
+          type: 1,
+          title: '固定资产导入',
+          skin: 'layui-layer-rim',
+          area: ['600px', '300px'],
+          content: $('#admin-asset-import')
+        });
+      });
+      
+      $("#btn-import-save").click(function() {
+        $("#form-asset").validate({
+          rules:{
+            file:{
+              required: true
+            }
+          },
+          submitHandler: function () {
+            $('#form-asset').ajaxSubmit(function(data) {
+              //console.log(data);
+              if(data == "false"){
+                layer.closeAll();
+                layer.msg('导入失败');
+              }else{
+                layer.closeAll();
+                layer.msg('保存成功');
+                history.go(0);
+              }
+            });
+          }
+        });
+      });
     },
 
     initCreate: function(){
@@ -112,7 +146,7 @@ var AdminAsset = function(){
       });
     },
 
-    initEdit: function(type, country, application, consumer_id, handler_id, course) {
+    initEdit: function(category_number, type, country, application, consumer_id, handler_id, course) {
       $(".a-select").click(function(){
         //console.log($(this).html());
         $("#" + $(this).attr("data-id")).val($(this).html());
@@ -122,6 +156,7 @@ var AdminAsset = function(){
         $("#sum").val($("#price").val() * $("#amount").val());
       });
 
+      $("#category_number").val(category_number);
       $("#type").val(type);
       $("#country").val(country);
       $("#application").val(application);

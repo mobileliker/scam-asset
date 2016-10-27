@@ -60,5 +60,68 @@ class CategoryTableSeeder extends Seeder
         foreach($values as $value) {
             $category2 = App\Category::firstOrCreate(['name' => $value, 'value' => $value, 'serial' => $category->serial . '-' . $value, 'pid' => $category->id]);
         }
+
+        $category = App\Category::firstOrCreate(['name' => '分类', 'value' => 'category', 'serial' => 'category']); //分类
+        $category2 = App\Category::firstOrCreate(['name' => '文物', 'value' => '4010000', 'serial' => $category->serial . '-' . '文物', 'pid' => $category->id]);
+        $category3 = App\Category::firstOrCreate(['name' => '不可移动文物', 'value' => '4010100', 'serial' => $category2->serial . '-' . '不可移动文物', 'pid' => $category2->id]);
+        $map = [
+            '古遗址' => '4010101',
+            '古墓葬' => '4010102',
+            '古建筑' => '4010103',
+            '石窟寺' => '4010104',
+            '原址石刻' => '4010105',
+            '近现代重要史迹及代表性建筑' => '4010106',
+            '其他不可移动文物' => '4010199',
+        ];
+        foreach($map as $name=>$value) {
+            $category4 = App\Category::firstOrCreate(['name' => $name, 'value' => $value, 'serial' => $category3->serial . '-' . $name, 'pid' => $category3->id]);
+        }
+
+
+        $category3 = App\Category::firstOrCreate(['name' => '可移动文物', 'value' => '4010200', 'serial' => $category2->serial . '-' . '可移动文物', 'pid' => $category2->id]);
+        $map = [
+            '考古发掘出土文物' => '4010201',
+            '传世文物' => '4010202',
+            '古生物化石' => '4010203',
+            '其他可移动文物' => '4010299',
+        ];
+        foreach($map as $name=>$value) {
+            $category4 = App\Category::firstOrCreate(['name' => $name, 'value' => $value, 'serial' => $category3->serial . '-' . $name, 'pid' => $category3->id]);
+        }
+
+
+        $category2 = App\Category::firstOrCreate(['name' => '陈列品', 'value' => '4020000', 'serial' => $category->serial . '-' . '陈列品', 'pid' => $category->id]);
+        $category3 = App\Category::firstOrCreate(['name' => '标本', 'value' => '4020100', 'serial' => $category2->serial . '-' . '标本', 'pid' => $category2->id]);
+        $map = [
+            '动物标本' => '4020101',
+            '人体标本' => '4020102',
+            '人体病理标本' => '4020103',
+            '植物标本' => '4020104',
+            '医药标本' => '4020105',
+            '矿物标本' => '4020106',
+            '其他标本' => '4020199',
+        ];
+        foreach($map as $name=>$value) {
+            $category4 = App\Category::firstOrCreate(['name' => $name, 'value' => $value, 'serial' => $category3->serial . '-' . $name, 'pid' => $category3->id]);
+        }
+
+        $category3 = App\Category::firstOrCreate(['name' => '模型', 'value' => '4020200', 'serial' => $category2->serial . '-' . '模型', 'pid' => $category2->id]);
+        $map = [
+            '天体模型' => '4020201',
+            '生物模型' => '4020202',
+            '人体模型' => '4020203',
+            '人体病理模型' => '4020204',
+            '其他模型' => '4020299',
+        ];
+        foreach($map as $name=>$value) {
+            $category4 = App\Category::firstOrCreate(['name' => $name, 'value' => $value, 'serial' => $category3->serial . '-' . $name, 'pid' => $category3->id]);
+        }
+
+        $category3 = App\Category::firstOrCreate(['name' => '其他陈列品', 'value' => '4029900', 'serial' => $category2->serial . '-' . '其他陈列品', 'pid' => $category2->id]);
+
+
+
+
+
     }
 }

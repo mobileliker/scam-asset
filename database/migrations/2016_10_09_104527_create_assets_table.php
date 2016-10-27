@@ -18,6 +18,7 @@ class CreateAssetsTable extends Migration
             $table->date('post_date'); //入账日期
             //$table->integer('number')->unique(); //单据号
             $table->tinyInteger('type');//类型
+            $table->string('category_number'); //分类
             $table->string('name'); //藏品名称
             $table->string('serial')->nullable();//藏品编号
             $table->string('course');//经费科目
@@ -42,6 +43,7 @@ class CreateAssetsTable extends Migration
             $table->text('memo')->nullable(); //备注
             $table->integer('user_id')->unsigned();
             $table->string('image')->nullable(); //图片
+            $table->tinyInteger('status')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
