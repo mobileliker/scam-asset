@@ -52,7 +52,7 @@ description:
         </div>
       </form>
       <div class="pull-right admin-permission">
-        <a class="btn btn-success btn-lg" id="a-admin-asset-import" href="javascript:void(0)">@lang('common.import')</a>
+        {{-- <a class="btn btn-success btn-lg" id="a-admin-asset-import" href="javascript:void(0)">@lang('common.import')</a>--}}
         <a class="btn btn-success btn-lg" id="a-admin-asset-export" href="{{url('admin/asset/export')}}" target="_blank">@lang('common.export')</a>
         <a class="btn btn-success btn-lg" href="{{url('/admin/asset/create')}}">@lang('common.add')</a>
       </div>
