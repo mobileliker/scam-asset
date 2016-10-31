@@ -19,6 +19,23 @@ var AdminAsset = function(){
           content: $('#admin-asset-import')
         });
       });
+
+      $(".a-admin-asset-image").click(function() {
+        var image = $(this).attr('data-image');
+        //console.log(image);
+        //('#admin-asset-image img').attr("src", "/storage/upload/image/bdeec66746ae08ce41d0e8c7a9f44df9.jpg");
+        $('#admin-asset-image img').attr("src", image);
+        $('#admin-asset-image a').attr("href", image);
+
+        var layer_image = layer.open({
+          type: 1,
+          title: false, //不显示标题
+          area: '720px',
+          content: $('#admin-asset-image')
+        });
+        //layer.iframeAuto(layer_image);
+        
+      });
       
       $("#btn-import-save").click(function() {
         $("#form-asset").validate({

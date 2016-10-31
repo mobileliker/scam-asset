@@ -31,4 +31,5 @@ return [
     'category' => '分类',
     'import' => '导入',
     'export' => '导出',
+    'image' => '图片',
 ];

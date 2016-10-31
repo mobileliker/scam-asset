@@ -21,7 +21,7 @@ description:
       @include(config('app.theme').'.layouts.admin.error_alert')
       @yield('error_alert')
 
-      <form class="form-horizontal" id="form-asset" role="form" action="{{url('admin/asset')}}" method="post">
+      <form class="form-horizontal" id="form-asset" role="form" action="{{url('admin/asset')}}" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="page-header">
           <h4>基本信息</h4>
@@ -78,14 +78,14 @@ description:
               <input class="form-control" id="size" name="size" type="text" placeholder="@lang('web.size')">
             </div>
           </div>
-        </div>
-        <div class="col-lg-6 col-sm-12">
           <div class="form-group">
             <label class="col-sm-2 control-label" for="consumer_company">@lang('web.consumer-company')</label>
             <div class="col-sm-10">
               <input class="form-control" id="consumer_company" name="consumer_company" type="text" placeholder="@lang('web.consumer-company')" value="华南农业博物馆">
             </div>
           </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
           <div class="form-group">
             <label class="col-sm-2 control-label" for="factory">@lang('web.factory')</label>
             <div class="col-sm-10">
@@ -133,9 +133,9 @@ description:
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="category">@lang('common.category')</label>
+            <label class="col-sm-2 control-label" for="category_number">@lang('common.category')</label>
             <div class="col-sm-10">
-              <select class="form-control" id="category" name="category">
+              <select class="form-control" id="category_number" name="category_number">
                 @foreach(App\Category::categories('category') as $category)
                   <option value="{{$category->value}}">{{$category->name}}</option>
                   @foreach(App\Category::categories($category->serial) as $category2)
@@ -146,6 +146,12 @@ description:
                   @endforeach
                 @endforeach
               </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="image">@lang('common.image')</label>
+            <div class="col-sm-10">
+              <input type="file" class="form-control" id="image" name="image" accept="image/*">
             </div>
           </div>
         </div>

@@ -81,6 +81,7 @@ description:
           <th><a class="admin-order-group" data-sort="sum" data-order='asc' href="javascript:void(0)">@lang('web.sum')(@lang('common.yuan'))</a></th>
           <th>@lang('web.consumer')</th>
           <th>@lang('web.handler')</th>
+          <td>@lang('common.image')</td>
           <th>@lang('common.operate')</th>
         </tr>
         </thead>
@@ -90,11 +91,11 @@ description:
             <td><input class="checkbox-batch" name="checkbox[]" type="checkbox" data-group="assets" data-id="{{$asset->id}}"></td>
             <td>{{$asset->post_date}}</td>
             <td>{{App\Asset::TYPE[$asset->type]}}</td>
-            <td>
-              @if(isset(App\Category::where('serial', 'like', 'category-%')->where('value','=',$asset->category_number)->first()->name))
-              {{App\Category::where('serial', 'like', 'category-%')->where('value','=',$asset->category_number)->first()->name}}
-              @endif
-            </td>
+            @if(isset(App\Category::where('serial', 'like', 'category-%')->where('value','=',$asset->category_number)->first()->name))
+              <td>{{App\Category::where('serial', 'like', 'category-%')->where('value','=',$asset->category_number)->first()->name}}</td>
+            @else
+              <td></td>
+            @endif
             <td>{{$asset->name}}</td>
             <td>{{$asset->serial}}</td>
             {{--<td>{{$asset->model}}</td>--}}
@@ -108,6 +109,11 @@ description:
             <td>{{$asset->sum}}</td>
             <td>{{$asset->consumer->name}}</td>
             <td>{{$asset->handler->name}}</td>
+            @if($asset->image == null || $asset->image == '')
+              <td>无</td>
+            @else
+              <td><a class="a-admin-asset-image" href="javascript:void(0)" data-image="{{asset($asset->image)}}">查看</a></td>
+            @endif
             <td>
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/export')}}" target="_blank">
                 <i class="fa fa-external-link" aria-hidden="true"></i>
@@ -173,6 +179,11 @@ description:
         </div>
       </div>
     </form>
+  </div>
+
+  <div id="admin-asset-image" style="display:none;padding:20px 20px;">
+    <a href="" target="_blank"><img src="" width="100%" height="100%"></a>
+
   </div>
 @endsection
 

@@ -91,6 +91,7 @@ class AssetController extends Controller
             'name' => 'required|string|max:255',
             'type' => 'required',
             'category_number' => 'required',
+            'image' => 'image',
             'serial' => 'string|max:255',
             'course' => 'required|string|max:255',
             'model' => 'required|string|max:255',
@@ -143,6 +144,15 @@ class AssetController extends Controller
             $asset = new Asset;
         }else{
             $asset = Asset::find($id);
+        }
+
+        $file = $request->file('image');
+        if($file != null && $file -> isValid()){
+            //$mimeType = $file -> getMimeType();
+            $entension = $file -> getClientOriginalExtension();
+            $pic_name = md5(date('ymdhis').$file->getClientOriginalName()).'.'.$entension;
+            $path = $file -> move('storage/upload/image', $pic_name);
+            $asset->image = $path;
         }
 
         $asset->post_date = $post_date;
