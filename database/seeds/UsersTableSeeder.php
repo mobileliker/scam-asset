@@ -11,11 +11,14 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-	    $user = new App\User;
-        $user->name = 'admin';
-        $user->email = 'admin@'.config('app.theme').'.com';
-        $user->password = bcrypt('123456');
-        $user->type = App\User::TYPE_ADMIN;
-        $user->save();
+        $users = App\User::all();
+        if($users == null || count($users) == 0){
+            $user = new App\User;
+            $user->name = 'admin';
+            $user->email = 'admin@'.config('app.theme').'.com';
+            $user->password = bcrypt('123456');
+            $user->type = App\User::TYPE_ADMIN;
+            $user->save();
+        }
     }
 }

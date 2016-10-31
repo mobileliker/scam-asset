@@ -14,12 +14,18 @@ class CategoryTableSeeder extends Seeder
         //factory('App\Category', 50)->create();
 
         //storage_location
+        App\Category::where('serial', 'like', 'storage_location%')->delete();
         $category = App\Category::firstOrCreate(['name' => '保存地点', 'value' => 'storage_location', 'serial' => 'storage_location']); //保存地点
-        for($i = 1; $i <=3; $i++){
+        /*for($i = 1; $i <=3; $i++){
             for($j = 1; $j <= 9; $j++){
                 $k = '三号楼'.$i.'0'.$j;
                 $category2 = App\Category::firstOrCreate(['name' => $k, 'value' => $k, 'serial' => $category->serial.'-'.$k, 'pid' => $category->id]);
             }
+        }*/
+        $values = ['206', '303', '305', '306', '308', '309'];
+        foreach($values as $value){
+            $k = '三号楼'.$value;
+            $category2 = App\Category::firstOrCreate(['name' => $k, 'value' => $k, 'serial' => $category->serial.'-'.$k, 'pid' => $category->id]);
         }
 
         //使用方向
