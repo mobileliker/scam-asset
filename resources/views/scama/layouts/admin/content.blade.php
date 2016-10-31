@@ -68,100 +68,105 @@ description:
     </nav>
 
 
-	<div class="col-lg-2 admin-navar-left">
-        <div class="list-group">
-            <li class="list-group-item">后台管理</li>
-            <a href="/admin" class="list-group-item" id="left-nav-index-index">
-                <i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;@lang('common.index')
-            </a>
-            <a href="{{url('/admin/asset')}}" class="list-group-item" id="left-nav-asset-manager">
-                <i class="fa fa-archive" aria-hidden="true"></i>&nbsp;&nbsp;资产管理
-            </a>
-            <a href="{{url('/admin/invoice')}}" class="list-group-item" id="left-nav-invoice-manager">
-                <i class="fa fa-file" aria-hidden="true"></i></i>&nbsp;&nbsp;单据管理
-            </a>
-        </div>
-        @if(Auth::user()->type == App\User::TYPE_ADMIN)
-        <div class="list-group">
-            <li class="list-group-item">系统管理</li>
-            <a href="{{url('/admin/info')}}" class="list-group-item" id="left-nav-info-manager">
-                <i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;配置管理
-            </a>
-            <a href="{{url('/admin/category')}}" class="list-group-item" id="left-nav-category-manager">
-                <i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;&nbsp;分类管理
-            </a>
-            <a href="{{url('/admin/user')}}" class="list-group-item" id="left-nav-user-manager">
-                <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;用户管理
-            </a>
-            <a href="{{url('/admin/alog')}}" class="list-group-item" id="left-nav-alog">
-                <i class="fa fa-calendar" aria-hidden="true"></i></i>&nbsp;&nbsp;操作日志
-            </a>
-        </div>
-        @endif
+    <div class="col-lg-2 admin-navar-left">
+    {{--
+    <div class="list-group">
+        <li class="list-group-item">后台管理</li>
+        <a href="/admin" class="list-group-item" id="left-nav-index-index">
+            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;@lang('common.index')
+        </a>
     </div>
-    <div class="col-lg-10 admin-content">
-    	@yield('content')
+    --}}
+    <div class="list-group">
+        <li class="list-group-item">固定资产管理</li>
+        <a href="{{url('/admin/asset')}}" class="list-group-item" id="left-nav-asset-manager">
+            <i class="fa fa-archive" aria-hidden="true"></i>&nbsp;&nbsp;资产管理
+        </a>
+        <a href="{{url('/admin/invoice')}}" class="list-group-item" id="left-nav-invoice-manager">
+            <i class="fa fa-file" aria-hidden="true"></i></i>&nbsp;&nbsp;单据管理
+        </a>
     </div>
-    <div class="col-lg-12 admin-footer">
-        <span> <i class="fa fa-copyright"></i>&nbsp;2016-2016 {{config('app.copyright')}}  All rights reserved.</span>
+    @if(Auth::user()->type == App\User::TYPE_ADMIN)
+    <div class="list-group">
+        <li class="list-group-item">系统管理</li>
+        <a href="{{url('/admin/info')}}" class="list-group-item" id="left-nav-info-manager">
+            <i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;配置管理
+        </a>
+        <a href="{{url('/admin/category')}}" class="list-group-item" id="left-nav-category-manager">
+            <i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;&nbsp;分类管理
+        </a>
+        <a href="{{url('/admin/user')}}" class="list-group-item" id="left-nav-user-manager">
+            <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;用户管理
+        </a>
+        <a href="{{url('/admin/alog')}}" class="list-group-item" id="left-nav-alog">
+            <i class="fa fa-calendar" aria-hidden="true"></i></i>&nbsp;&nbsp;操作日志
+        </a>
     </div>
+    @endif
+</div>
+<div class="col-lg-10 admin-content">
+    @yield('content')
+</div>
+<div class="col-lg-12 admin-footer">
+    <span> <i class="fa fa-copyright"></i>&nbsp;2016-2016 {{config('app.copyright')}}  All rights reserved.</span>
+</div>
 
-    <div id="admin-settings" style="display: none; padding: 20px 20px;">
-        <form class="form-horizontal" id="form-suser" role="form" action="{{url('admin/user/'.Auth::user()->id).'/settings'}}" method="post">
-            {{ csrf_field() }}
-            <input name="_method" type="hidden" value="PUT">
-            <input type="hidden" id="id" name="id" value="{{Auth::user()->id}}">
-          <div class="form-group">
-            <label for="sname" class="col-sm-2 control-label">@lang('common.name')</label>
-            <div class="col-sm-10">
-              <input class="form-control" id="sname" name="sname" type="text" placeholder="@lang('common.name')" value="{{Auth::user()->name}}">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="spassword" class="col-sm-2 control-label">@lang('common.password')</label>
-            <div class="col-sm-10">
-              <input class="form-control" id="spassword" name="spassword" type="password" placeholder="@lang('common.password')">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="spassword2" class="col-sm-2 control-label">确认@lang('common.password')</label>
-            <div class="col-sm-10">
-              <input class="form-control" id="spassword2" name="spassword2" type="password" placeholder="确认@lang('common.password')">
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-              <button id="btn-suser-save" type="submit" class="btn btn-default">@lang('common.save')</button>
-            </div>
-          </div>
-        </form>
-    </div>
+<div id="admin-settings" style="display: none; padding: 20px 20px;">
+    <form class="form-horizontal" id="form-suser" role="form" action="{{url('admin/user/'.Auth::user()->id).'/settings'}}" method="post">
+        {{ csrf_field() }}
+        <input name="_method" type="hidden" value="PUT">
+        <input type="hidden" id="id" name="id" value="{{Auth::user()->id}}">
+      <div class="form-group">
+        <label for="sname" class="col-sm-2 control-label">@lang('common.name')</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="sname" name="sname" type="text" placeholder="@lang('common.name')" value="{{Auth::user()->name}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="spassword" class="col-sm-2 control-label">@lang('common.password')</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="spassword" name="spassword" type="password" placeholder="@lang('common.password')">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="spassword2" class="col-sm-2 control-label">确认@lang('common.password')</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="spassword2" name="spassword2" type="password" placeholder="确认@lang('common.password')">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button id="btn-suser-save" type="submit" class="btn btn-default">@lang('common.save')</button>
+        </div>
+      </div>
+    </form>
+</div>
 
 @endsection
 
 
 
 @section('script')
-    @parent
-    <script src="{{url(config('app.theme').'/js/common.js')}}"></script>
-    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-    <script src="//cdn.bootcss.com/layer/2.4/layer.min.js"></script>
-    @include('layouts.jquery_validate')
-    @yield('jquery_validate')
-    <script src="//cdn.bootcss.com/jquery.form/3.51/jquery.form.min.js"></script>
-    @if (session('status'))
-    <script>
-        layer.msg("{{session('status')}}");
-    </script>
-    @elseif(isset($status))
-    <script>
-        layer.msg("{{$status}}");
-    </script>
-    @endif
-    <script src="{{url(config('app.theme').'/js/admin/content.js')}}"></script>
-    <script>
-        $().ready(function() {
-            AdminContent.init();
-        });
-    </script>
+@parent
+<script src="{{url(config('app.theme').'/js/common.js')}}"></script>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+<script src="//cdn.bootcss.com/layer/2.4/layer.min.js"></script>
+@include('layouts.jquery_validate')
+@yield('jquery_validate')
+<script src="//cdn.bootcss.com/jquery.form/3.51/jquery.form.min.js"></script>
+@if (session('status'))
+<script>
+    layer.msg("{{session('status')}}");
+</script>
+@elseif(isset($status))
+<script>
+    layer.msg("{{$status}}");
+</script>
+@endif
+<script src="{{url(config('app.theme').'/js/admin/content.js')}}"></script>
+<script>
+    $().ready(function() {
+        AdminContent.init();
+    });
+</script>
 @endsection
