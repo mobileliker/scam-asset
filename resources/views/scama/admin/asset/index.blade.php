@@ -118,6 +118,7 @@ description:
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/export')}}" target="_blank">
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
+              <a class="a-admin-asset-qrcode btn btn-primary btn-xs" href="javascript:void(0)" data-id="{{$asset->id}}"><i class="fa fa-qrcode" aria-hidden="true"></i></a>
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/edit')}}">
                 <i class="fa fa-pencil"></i>
               </a>
@@ -183,7 +184,10 @@ description:
 
   <div id="admin-asset-image" style="display:none;padding:20px 20px;">
     <a href="" target="_blank"><img src="" width="100%" height="100%"></a>
+  </div>
 
+  <div id="admin-asset-qrcode" style="display:none;padding:20px 20px;">
+    <a href="" target="_blank"><img src="" width="100%" height="100%"></a>
   </div>
 @endsection
 

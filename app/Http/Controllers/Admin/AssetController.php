@@ -11,7 +11,7 @@ use App\Asset, App\Alog, App\Invoice;
 
 use Auth, Redirect;
 use Excel;
-use IQuery;
+use IQuery, IQrcode;
 use App\User;
 
 class AssetController extends Controller
@@ -397,5 +397,12 @@ class AssetController extends Controller
             });
         })->export('xls');
 
+    }
+
+    public function qrcode($id)
+    {
+        $asset = Asset::find($id);
+        $link = url('s?c='.$asset->serial);
+        return IQrcode::generate($link);
     }
 }

@@ -36,6 +36,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	Route::put('asset/import', 'AssetController@import');
 	Route::get('asset/export', 'AssetController@batch_export');
 	Route::get('asset/{id}/export', 'AssetController@export');
+	Route::get('asset/{id}/qrcode', 'AssetController@qrcode');
 	Route::resource('asset', 'AssetController');
 
 	//Invoice
@@ -61,4 +62,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 
 	//category
 	Route::resource('category', 'CategoryController');
+});
+
+Route::group([/*'namespace' => 'Home'*/], function() {
+	Route::get('s', 'HomeController@search');
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Redirect;
+use App\Asset;
 
 class HomeController extends Controller
 {
@@ -26,5 +27,12 @@ class HomeController extends Controller
     {
         //return view('home');
         return Redirect::to('admin');
+    }
+
+    public function search(Request $request)
+    {
+        $code = $request->input('c');
+        $asset =  Asset::where('serial', '=', $code)->first();
+        dd($asset);
     }
 }
