@@ -196,11 +196,13 @@ return [
          * Other Service Providers
          */
         'Maatwebsite\Excel\ExcelServiceProvider',
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
         /*
          * Mannal Service Providers
          */
         App\Providers\IQueryServiceProvider::class, //注册iquery
+        App\Providers\IQrcodeServiceProvider::class,
 
     ],
 
@@ -252,9 +254,11 @@ return [
 
         //Other Facecade
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
 
         //mannal facecade
         'IQuery' => App\Facades\IQueryClass::class, //IQuery 别名
+        'IQrcode' => App\Facades\IQrcodeClass::class,
 
     ],
 

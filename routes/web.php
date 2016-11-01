@@ -11,6 +11,12 @@
 |
 */
 
+/******************test**************************/
+Route::group(['prefix' => 'test'], function() {
+	Route::get('iqrcode', 'TestController@iqrcode');
+});
+/******************end-test**********************/
+
 Route::get('/', 'HomeController@index');
 
 Auth::routes();
