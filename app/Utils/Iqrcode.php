@@ -23,4 +23,13 @@ class IQrcode{
         QrCode::format('png')->size(Iqrcode::$SIZE)->margin(Iqrcode::$MARGIN)->color(Iqrcode::$COLOR['r'],Iqrcode::$COLOR['g'],Iqrcode::$COLOR['b'])->errorCorrection(Iqrcode::$ERROECORRECTION)->merge(Iqrcode::$WATERMARK_PATH, Iqrcode::$WATERMARK_SIZE)->generate($str, $path);
         return $path;
     }
+
+    public function generate2($str, $name)
+    {
+        //$path = 'storage/qrcode/'.$name.'.png';
+        $path = public_path(). '/storage/qrcode/'.$name.'.png';
+        QrCode::format('png')->size(Iqrcode::$SIZE)->margin(Iqrcode::$MARGIN)->color(Iqrcode::$COLOR['r'],Iqrcode::$COLOR['g'],Iqrcode::$COLOR['b'])->errorCorrection(Iqrcode::$ERROECORRECTION)->merge(Iqrcode::$WATERMARK_PATH, Iqrcode::$WATERMARK_SIZE)->generate($str, $path);
+        return $path;
+
+    }
 }

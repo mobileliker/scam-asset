@@ -40,24 +40,17 @@ var AdminAsset = function(){
         var id = $(this).attr('data-id');
         var link = "/admin/asset/" + id + "/qrcode";
 
-        $.ajax({
-          type : "GET",  //提交方式
-          url : link,//路径
-          data : {
-          },//数据，这里使用的是Json格式进行传输
-          success : function(result) {//返回数据根据结果进行相应的处理
-            $('#admin-asset-qrcode img').attr("src", "/" + result);
-            $('#admin-asset-qrcode a').attr("href", "/" + result);
+        var image = $(this).attr('data-image');
+        $('#admin-asset-qrcode img').attr("src", image);
+        $('#admin-asset-qrcode a').attr("href", image);
 
-            var layer_image = layer.open({
-              type: 1,
-              title: false, //不显示标题
-              area: '720px',
-              content: $('#admin-asset-qrcode')
-            });
-            //layer.iframeAuto(layer_image);
-          }
+        var layer_image = layer.open({
+          type: 1,
+          title: false, //不显示标题
+          area: '720px',
+          content: $('#admin-asset-qrcode')
         });
+        //layer.iframeAuto(layer_image);
 
       });
       

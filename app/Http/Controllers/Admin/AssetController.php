@@ -183,6 +183,10 @@ class AssetController extends Controller
         $asset->memo = $memo;
 
         if($asset->save()){
+
+            $link = url('s?c='.$asset->serial);
+            IQrcode::generate2($link, $asset->serial);
+
             if($id == -1) $operate = Alog::OPERATE_CREATE;
             else $operate = Alog::OPERATE_UPDATE;
             Alog::log('Asset', $operate, $asset->name, $request->getClientIp());
