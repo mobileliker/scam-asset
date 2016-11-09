@@ -33,6 +33,7 @@ class HomeController extends Controller
     {
         $code = $request->input('c');
         $asset =  Asset::where('serial', '=', $code)->first();
-        dd($asset);
+        //dd($asset);
+        return view(config('app.theme').'.home.asset.index')->withAsset($asset);
     }
 }

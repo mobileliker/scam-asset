@@ -5822,4 +5822,8 @@ body {
   padding: 10px 0;
   text-align: center; }
 
+/**************前台****************/
+#home-asset-info .panel-title {
+  text-align: center; }
+
 /*# sourceMappingURL=app.css.map */
