@@ -273,6 +273,21 @@ class AssetController extends Controller
         $invoice = Invoice::generate($asset, $number);
         $invoice->export();
 
+
+    }
+
+    public function generate()
+    {
+        $assets = Asset::all();
+
+        foreach($assets as $asset){
+            $c_invoice = Invoice::where('number', '>', $asset->type * 10000000)->where('number', '<=', $asset->type * 10000000 + 9999999)->orderBy('number', 'desc')->first();
+            if($c_invoice != null && count($c_invoice) > 0 ) $number = $c_invoice->number + 1;
+            else $number = $asset->type * 10000000 + 1;
+
+            $invoice = Invoice::generate($asset, $number);
+            $invoice->store();
+        }
     }
 
     public function import(Request $request)
@@ -315,11 +330,11 @@ class AssetController extends Controller
                     $asset->purchase_number = $cells[13];
                     $asset->purchase_date = $cells[14];
                     $asset->consumer_company = $cells[15];
-                    $asset->amount = $cells[16];
-                    $asset->sum = $cells[17];
-                    $asset->consumer_id = User::where('name', '=', $cells[18])->first()->id;
-                    $asset->entry = $cells[19];
-                    $asset->handler_id = User::where('name', '=', $cells[20])->first()->id;
+                    $asset->amount = 1;
+                    $asset->sum = $cells[4];
+                    $asset->consumer_id = User::where('name', '=', $cells[16])->first()->id;
+                    $asset->entry = $cells[17];
+                    $asset->handler_id = User::where('name', '=', $cells[18])->first()->id;
                     $asset->user_id = Auth::user()->id;
                     $asset->size = "";
                     $asset->card = "9700-32010097";
@@ -409,4 +424,6 @@ class AssetController extends Controller
         $link = url('s?c='.$asset->serial);
         return IQrcode::generate($link);
     }
+
+
 }
