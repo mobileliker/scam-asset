@@ -5826,4 +5826,25 @@ body {
 #home-asset-info .panel-title {
   text-align: center; }
 
+/***************登录*****************/
+.h-middle {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%); }
+
+#auth-login {
+  background-color: #efefef; }
+  #auth-login #auth-login-panel {
+    background-color: #ffffff; }
+    #auth-login #auth-login-panel #auth-login-panel-show {
+      padding-left: 0;
+      padding-right: 0; }
+    #auth-login #auth-login-panel #auth-login-panel-input {
+      padding-left: 60px;
+      padding-right: 60px; }
+      #auth-login #auth-login-panel #auth-login-panel-input #auth-login-panel-input-logo {
+        margin: 15px auto;
+        text-align: center; }
+
 /*# sourceMappingURL=app.css.map */

@@ -13,7 +13,12 @@
 
 /******************test**************************/
 Route::group(['prefix' => 'test'], function() {
-	Route::get('iqrcode', 'TestController@iqrcode');
+	//Route::get('iqrcode', 'TestController@iqrcode');
+});
+Route::group(['prefix' => 'html'], function() {
+	Route::get('auth/login', function() {
+		return view(config('app.theme').'.auth.login');
+	});
 });
 /******************end-test**********************/
 
