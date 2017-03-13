@@ -64,8 +64,7 @@ return [
     |
     */
 
-    //'timezone' => 'UTC',
-    'timezone' => 'Asia/Shanghai',
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,8 +77,7 @@ return [
     |
     */
 
-    //'locale' => 'en',
-    'locale' => 'zh-CN',
+    'locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -128,18 +126,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Mannal Configuration
-    |--------------------------------------------------------------------------
-    |
-    |
-    */
-    'theme' => 'scama',
-    'name' => '华南农业博物馆资产管理系统',
-    'copyright' => '华南农业博物馆筹建办公室',
-
-
-    /*
-    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -180,8 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
-
-        //
+        Laravel\Tinker\TinkerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -191,18 +176,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        /*
-         * Other Service Providers
-         */
-        'Maatwebsite\Excel\ExcelServiceProvider',
-        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-
-        /*
-         * Mannal Service Providers
-         */
-        App\Providers\IQueryServiceProvider::class, //注册iquery
-        App\Providers\IQrcodeServiceProvider::class,
 
     ],
 
@@ -223,6 +196,7 @@ return [
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
         'Blade' => Illuminate\Support\Facades\Blade::class,
+        'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
         'Bus' => Illuminate\Support\Facades\Bus::class,
         'Cache' => Illuminate\Support\Facades\Cache::class,
         'Config' => Illuminate\Support\Facades\Config::class,
@@ -251,14 +225,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
-        //Other Facecade
-        'Excel' => 'Maatwebsite\Excel\Facades\Excel',
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-
-        //mannal facecade
-        'IQuery' => App\Facades\IQueryClass::class, //IQuery 别名
-        'IQrcode' => App\Facades\IQrcodeClass::class,
 
     ],
 

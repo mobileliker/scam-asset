@@ -9,13 +9,6 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    const TYPE_ADMIN = 1;
-    const TYPE_USER = 2;
-    const TYPE = [
-        self::TYPE_ADMIN => '管理员',
-        self::TYPE_USER => '用户',
-    ];
-
     /**
      * The attributes that are mass assignable.
      *
