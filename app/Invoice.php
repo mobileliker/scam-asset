@@ -58,7 +58,7 @@ class Invoice extends Model
         $distPath = storage_path('excel/exports/'.$this->post_date.$this->serial.'.xls');
         copy($filePath, $distPath);
 
-        Excel::load($filePath, function($reader) {
+        Excel::load($distPath, function($reader) {
 
             $post_date = $this->post_date;
             $number = $this->number;
@@ -114,7 +114,7 @@ class Invoice extends Model
         $distPath = storage_path('excel/exports/'.$this->post_date.$this->serial.'.xls');
         copy($filePath, $distPath);
 
-        Excel::load($filePath, function($reader) {
+        Excel::load($distPath, function($reader) {
 
             $post_date = $this->post_date;
             $number = $this->number;
