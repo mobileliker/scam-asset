@@ -64,7 +64,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    //'timezone' => 'UTC',
+    'timezone' => 'Asia/Shanghai',
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +78,8 @@ return [
     |
     */
 
-    'locale' => 'en',
+    //'locale' => 'en',
+    'locale' => 'zh-CN',
 
     /*
     |--------------------------------------------------------------------------
@@ -123,6 +125,17 @@ return [
     'log' => env('APP_LOG', 'single'),
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mannal Configuration
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'theme' => 'scama',
+    'name' => '华南农业博物馆资产管理系统',
+    'copyright' => '华南农业博物馆筹建办公室',
 
     /*
     |--------------------------------------------------------------------------
@@ -177,6 +190,17 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Other Service Providers
+         */
+        'Maatwebsite\Excel\ExcelServiceProvider',
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+
+        /*
+         * Mannal Service Providers
+         */
+        App\Providers\IQueryServiceProvider::class, //注册iquery
+        App\Providers\IQrcodeServiceProvider::class,
     ],
 
     /*
@@ -225,6 +249,14 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        //Other Facecade
+        'Excel' => 'Maatwebsite\Excel\Facades\Excel',
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+
+        //mannal facecade
+        'IQuery' => App\Facades\IQueryClass::class, //IQuery 别名
+        'IQrcode' => App\Facades\IQrcodeClass::class,
 
     ],
 
