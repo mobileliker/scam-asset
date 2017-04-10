@@ -89,7 +89,7 @@ class AssetController extends Controller
     {
         //validate
         $this->validate($request, [
-            'post_date' => 'required|date',
+            'post_date' => 'bail|required|date',
             'name' => 'required|string|max:255',
             'type' => 'required',
             'category_number' => 'required',

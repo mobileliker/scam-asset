@@ -8,6 +8,7 @@
             </el-breadcrumb>
         </el-col>
         <el-col :lg="24">
+          <error-component v-if="Object.getOwnPropertyNames(errors).length > 1" :berrors="errors"></error-component>
           <el-tabs v-model="tabName" type="card">
             <el-tab-pane label="基本信息" name="basic">
             <el-form ref="form" :model="asset" label-width="80px">
@@ -74,7 +75,9 @@
                     action="/admin/image/update"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
-                    list-type="picture">
+                    :on-success="handleSuccess"
+                    list-type="picture"
+                    accept="image/*">
                     <el-button size="small" type="primary">点击上传</el-button>
                     <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                   </el-upload>
@@ -144,9 +147,12 @@
 </style>
 <script>
     import content from '../layouts/Content.vue'
+    import error from '../layouts/Error.vue'
     export default {
         components: {
-            'content-component' : content
+            'content-component' : content,
+            'error-component' : error
+
         },
         data() {
             return {
@@ -252,7 +258,8 @@
                     entry : '华南农业博物馆',
                     consumer_id : '',
                     handler_id : ''
-                }
+                },
+                errors : {}
             }
         },
         mounted() {
@@ -307,9 +314,13 @@
                 //console.log('commit');
                 axios.post('/admin/asset', this.asset)
                     .then(response => {
-                        console.log(response);
+                        //console.log(response);
+                        this.$router.push('/asset');
                     }).catch(error => {
-                        console.log(error);
+                        //console.log(error.response.data);
+                        if(error.response.status == 422) {
+                            this.errors = error.response.data;
+                        }
                     });
             },
 
@@ -320,8 +331,9 @@
                 //console.log(file);
               },
               handleSuccess(response, file, fileList){
-                console.log(response);
+                //console.log(response);
                 this.asset.image = response.url;
+                //console.log(this.asset.image);
               },
               postDateChange(value) {
                 this.asset.post_date = value;

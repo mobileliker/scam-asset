@@ -59381,7 +59381,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "lg": 24
     }
-  }, [_c('el-tabs', {
+  }, [(Object.getOwnPropertyNames(_vm.errors).length > 1) ? _c('error-component', {
+    attrs: {
+      "berrors": _vm.errors
+    }
+  }) : _vm._e(), _vm._v(" "), _c('el-tabs', {
     attrs: {
       "type": "card"
     },
@@ -59678,7 +59682,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "action": "/admin/image/update",
       "on-preview": _vm.handlePreview,
       "on-remove": _vm.handleRemove,
-      "list-type": "picture"
+      "on-success": _vm.handleSuccess,
+      "list-type": "picture",
+      "accept": "image/*"
     }
   }, [_c('el-button', {
     attrs: {
@@ -86519,6 +86525,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__layouts_Content_vue__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__layouts_Content_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__layouts_Content_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__layouts_Error_vue__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__layouts_Error_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__layouts_Error_vue__);
 //
 //
 //
@@ -86663,11 +86671,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
     components: {
-        'content-component': __WEBPACK_IMPORTED_MODULE_0__layouts_Content_vue___default.a
+        'content-component': __WEBPACK_IMPORTED_MODULE_0__layouts_Content_vue___default.a,
+        'error-component': __WEBPACK_IMPORTED_MODULE_1__layouts_Error_vue___default.a
+
     },
     data: function data() {
         return {
@@ -86760,7 +86774,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 entry: '华南农业博物馆',
                 consumer_id: '',
                 handler_id: ''
-            }
+            },
+            errors: {}
         };
     },
     mounted: function mounted() {
@@ -86809,11 +86824,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         commit: function commit() {
+            var _this2 = this;
+
             //console.log('commit');
             axios.post('/admin/asset', this.asset).then(function (response) {
-                console.log(response);
+                //console.log(response);
+                _this2.$router.push('/asset');
             }).catch(function (error) {
-                console.log(error);
+                //console.log(error.response.data);
+                if (error.response.status == 422) {
+                    _this2.errors = error.response.data;
+                }
             });
         },
         handleRemove: function handleRemove(file, fileList) {
@@ -86823,8 +86844,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //console.log(file);
         },
         handleSuccess: function handleSuccess(response, file, fileList) {
-            console.log(response);
+            //console.log(response);
             this.asset.image = response.url;
+            //console.log(this.asset.image);
         },
         postDateChange: function postDateChange(value) {
             this.asset.post_date = value;
@@ -87671,6 +87693,146 @@ var mutations = (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED
 __webpack_require__(41);
 module.exports = __webpack_require__(40);
 
+
+/***/ }),
+/* 163 */,
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)();
+exports.push([module.i, "\n#error-alert {\n    margin-bottom : 22px;\n}\n", ""]);
+
+/***/ }),
+/* 170 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(172)
+
+var Component = __webpack_require__(5)(
+  /* script */
+  __webpack_require__(173),
+  /* template */
+  __webpack_require__(171),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "E:\\Data\\Code\\scam-asset\\resources\\assets\\js\\components\\layouts\\Error.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Error.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7c7f2942", Component.options)
+  } else {
+    hotAPI.reload("data-v-7c7f2942", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('el-alert', {
+    attrs: {
+      "id": "error-alert",
+      "title": "错误",
+      "type": "error"
+    }
+  }, [_c('ul', _vm._l((_vm.berrors), function(error, key) {
+    return _c('div', _vm._l((error), function(item) {
+      return _c('li', [_vm._v("\n            " + _vm._s(item) + "\n            ")])
+    }))
+  }))])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-7c7f2942", module.exports)
+  }
+}
+
+/***/ }),
+/* 172 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(169);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(7)("2eac3d6c", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/.0.14.5@css-loader/index.js!../../../../../node_modules/.10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-7c7f2942!../../../../../node_modules/.10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./Error.vue", function() {
+     var newContent = require("!!../../../../../node_modules/.0.14.5@css-loader/index.js!../../../../../node_modules/.10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-7c7f2942!../../../../../node_modules/.10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./Error.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 173 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _props$data$props$mou;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = _props$data$props$mou = {
+    props: {},
+    data: function data() {
+        return {};
+    }
+}, _defineProperty(_props$data$props$mou, "props", {
+    berrors: null
+}), _defineProperty(_props$data$props$mou, "mounted", function mounted() {
+    console.log(this.errors);
+}), _defineProperty(_props$data$props$mou, "components", {}), _props$data$props$mou;
 
 /***/ })
 /******/ ]);
