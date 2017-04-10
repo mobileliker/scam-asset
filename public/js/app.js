@@ -59402,10 +59402,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "basic"
     }
   }, [_c('el-form', {
-    ref: "form",
+    ref: "asset1",
     attrs: {
       "model": _vm.asset,
-      "label-width": "80px"
+      "label-width": "80px",
+      "rules": _vm.rules1
     }
   }, [_c('el-col', {
     attrs: {
@@ -59413,7 +59414,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "入账日期"
+      "label": "入账日期",
+      "prop": "post_date_obj"
     }
   }, [_c('el-date-picker', {
     attrs: {
@@ -59436,7 +59438,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-select', {
     attrs: {
-      "placeholder": "请选择..."
+      "placeholder": "请选择...",
+      "prop": "type"
     },
     model: {
       value: (_vm.asset.type),
@@ -59454,7 +59457,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }))], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "名称"
+      "label": "名称",
+      "prop": "name"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59469,7 +59473,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "编号"
+      "label": "编号",
+      "prop": "serial"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59484,7 +59489,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "经费科目"
+      "label": "经费科目",
+      "prop": "course"
     }
   }, [_c('el-select', {
     attrs: {
@@ -59506,7 +59512,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }))], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "型号"
+      "label": "型号",
+      "prop": "model"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59521,7 +59528,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "尺寸"
+      "label": "尺寸",
+      "prop": "size"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59536,7 +59544,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "领用单位"
+      "label": "领用单位",
+      "prop": "comsumer_company"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59551,7 +59560,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "厂家"
+      "label": "厂家",
+      "prop": "factory"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59570,7 +59580,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "供应商"
+      "label": "供应商",
+      "prop": "provider"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59585,7 +59596,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "国别"
+      "label": "国别",
+      "prop": "country"
     }
   }, [_c('el-select', {
     attrs: {
@@ -59607,7 +59619,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }))], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "保存地点"
+      "label": "保存地点",
+      "prop": "storage_location"
     }
   }, [_c('el-select', {
     attrs: {
@@ -59629,7 +59642,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }))], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "使用方向"
+      "label": "使用方向",
+      "prop": "application"
     }
   }, [_c('el-select', {
     attrs: {
@@ -59651,7 +59665,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }))], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "分类"
+      "label": "分类",
+      "prop": "category_number"
     }
   }, [_c('el-select', {
     attrs: {
@@ -59697,13 +59712,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("只能上传jpg/png文件，且不超过500kb")])], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-tab-pane', {
     attrs: {
       "label": "财务信息",
-      "name": "second"
+      "name": "finance"
     }
   }, [_c('el-form', {
-    ref: "form",
+    ref: "asset2",
     attrs: {
       "model": _vm.asset,
-      "label-width": "80px"
+      "label-width": "80px",
+      "rules": _vm.rules2
     }
   }, [_c('el-col', {
     attrs: {
@@ -59711,7 +59727,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "发票号"
+      "label": "发票号",
+      "prop": "invoice"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59726,7 +59743,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "申购单号"
+      "label": "申购单号",
+      "prop": "purchase_number"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59741,7 +59759,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "购置日期"
+      "label": "购置日期",
+      "prop": "purchase_date_obj"
     }
   }, [_c('el-date-picker', {
     attrs: {
@@ -59752,15 +59771,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "change": _vm.purchaseDateChange
     },
     model: {
-      value: (_vm.asset.purchase_date),
+      value: (_vm.asset.purchase_date_obj),
       callback: function($$v) {
-        _vm.asset.purchase_date = $$v
+        _vm.asset.purchase_date_obj = $$v
       },
-      expression: "asset.purchase_date"
+      expression: "asset.purchase_date_obj"
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "经费卡号"
+      "label": "经费卡号",
+      "prop": "card"
     }
   }, [_c('el-select', {
     attrs: {
@@ -59782,12 +59802,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }))], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "价格"
+      "label": "价格",
+      "prop": "price"
     }
   }, [_c('el-input', {
     attrs: {
-      "placeholder": "价格",
-      "type": "number"
+      "placeholder": "价格"
     },
     model: {
       value: (_vm.asset.price),
@@ -59798,7 +59818,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "数量"
+      "label": "数量",
+      "prop": "amount"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59814,12 +59835,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "金额"
+      "label": "金额",
+      "prop": "sum"
     }
   }, [_c('el-input', {
     attrs: {
       "placeholder": "金额",
-      "type": "number"
+      "disabled": true
     },
     model: {
       value: (_vm.asset.sum),
@@ -59831,13 +59853,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-tab-pane', {
     attrs: {
       "label": "操作信息",
-      "name": "third"
+      "name": "operate"
     }
   }, [_c('el-form', {
-    ref: "form",
+    ref: "asset3",
     attrs: {
       "model": _vm.asset,
-      "label-width": "80px"
+      "label-width": "80px",
+      "rules": _vm.rules3
     }
   }, [_c('el-col', {
     attrs: {
@@ -59845,7 +59868,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "录入"
+      "label": "录入",
+      "prop": "entry"
     }
   }, [_c('el-input', {
     attrs: {
@@ -59860,7 +59884,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "领用"
+      "label": "领用",
+      "prop": "consumer_id"
     }
   }, [_c('el-select', {
     attrs: {
@@ -59882,7 +59907,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }))], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "经手"
+      "label": "经手",
+      "prop": "handler_id"
     }
   }, [_c('el-select', {
     attrs: {
@@ -86775,7 +86801,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 consumer_id: '',
                 handler_id: ''
             },
-            errors: {}
+            errors: {},
+            rules1: {
+                post_date_obj: [{ type: 'date', required: true, message: '请输入入账日期', trigger: 'blur' }],
+                name: [{ required: true, message: '请输入名称', trigger: 'blur' }, { max: 255, message: '名称不能操作255个字', trigger: 'blur' }],
+                'category_number': [{ required: true, message: '请选择分类', trigger: 'change' }],
+                serial: [{ max: 10, message: '序列号不能操作10位', trigger: 'blur' }],
+                course: [{ required: true, message: '请输入经费科目', trigger: 'change' }],
+                model: [{ required: true, message: '请输入型号', trigger: 'blur' }],
+                size: [{ required: true, message: '请输入尺寸', trigger: 'blur' }],
+                'consumer_company': [{ required: true, message: '请输入领用单位', trigger: 'blur' }, { max: 255, message: '领用单位不能操作255个字', trigger: 'blur' }],
+                'factory': [{ required: true, message: '请输入厂家', trigger: 'blur' }, { max: 255, message: '厂家不能操作255个字', trigger: 'blur' }],
+                'provider': [{ required: true, message: '请输入供应商', trigger: 'blur' }, { max: 255, message: '供应商不能操作255个字', trigger: 'blur' }],
+                country: [{ required: true, message: '请输入国别', trigger: 'change' }],
+                'storage_location': [{ required: true, message: '请选择保存地点', trigger: 'change' }],
+                'application': [{ required: true, message: '请选择使用方向', trigger: 'change' }]
+            },
+            rules2: {
+                'invoice': [{ required: true, message: '请输入发票号', trigger: 'blur' }],
+                'purchase_number': [{ max: 255, message: '申购单号不能操作255个字', trigger: 'blur' }],
+                'purchase_date_obj': [{ type: 'date', required: true, message: '请输入购置日期', trigger: 'blur' }],
+                card: [{ required: true, message: '请选择经费卡号', trigger: 'change' }],
+                price: [{ required: true, message: '请输入价格', trigger: 'blur' }],
+                amount: [{ required: true, message: '请输入数量', trigger: 'blur' }]
+            },
+            rules3: {
+                entry: [{ required: true, message: '请输入录入人', trigger: 'blur' }, { max: 255, message: '录入人不能操作255字', trigger: 'blur' }],
+                consumer_id: [{ type: 'number', required: true, message: '请选择领用人', trigger: 'change' }],
+                handler_id: [{ type: 'number', required: true, message: '请选择经手人', trigger: 'change' }]
+            }
         };
     },
     mounted: function mounted() {
@@ -86827,13 +86881,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             //console.log('commit');
-            axios.post('/admin/asset', this.asset).then(function (response) {
-                //console.log(response);
-                _this2.$router.push('/asset');
-            }).catch(function (error) {
-                //console.log(error.response.data);
-                if (error.response.status == 422) {
-                    _this2.errors = error.response.data;
+            this.$refs['asset1'].validate(function (valid) {
+                if (valid) {
+                    //alert('submit');
+                    _this2.$refs['asset2'].validate(function (valid) {
+                        if (valid) {
+                            //alert('submit!');
+                            _this2.$refs['asset3'].validate(function (valid) {
+                                if (valid) {
+                                    //alert('submit!');
+                                    axios.post('/admin/asset', _this2.asset).then(function (response) {
+                                        //console.log(response);
+                                        _this2.$router.push('/asset');
+                                    }).catch(function (error) {
+                                        //console.log(error.response.data);
+                                        if (error.response.status == 422) {
+                                            _this2.errors = error.response.data;
+                                        }
+                                    });
+                                } else {
+                                    _this2.tabName = 'operate';
+                                }
+                            });
+                        } else {
+                            _this2.tabName = 'finance';
+                        }
+                    });
+                } else {
+                    _this2.tabName = 'basic';
                 }
             });
         },

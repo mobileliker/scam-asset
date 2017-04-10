@@ -11,60 +11,60 @@
           <error-component v-if="Object.getOwnPropertyNames(errors).length > 1" :berrors="errors"></error-component>
           <el-tabs v-model="tabName" type="card">
             <el-tab-pane label="基本信息" name="basic">
-            <el-form ref="form" :model="asset" label-width="80px">
+            <el-form ref="asset1" :model="asset" label-width="80px" :rules="rules1">
               <el-col :lg="12">
-              <el-form-item label="入账日期">
+              <el-form-item label="入账日期"  prop="post_date_obj">
                 <el-date-picker v-model="asset.post_date_obj" type="date" placeholder="选择日期" @change="postDateChange"></el-date-picker>
               </el-form-item>
               <el-form-item label="展厅">
-                <el-select v-model="asset.type" placeholder="请选择...">
+                <el-select v-model="asset.type" placeholder="请选择..." prop="type">
                     <el-option v-for="item in type.options" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="名称">
+              <el-form-item label="名称" prop="name">
                 <el-input v-model="asset.name" placeholder="名称"></el-input>
               </el-form-item>
-              <el-form-item label="编号">
+              <el-form-item label="编号" prop="serial">
                 <el-input v-model="asset.serial" placeholder="编号"></el-input>
               </el-form-item>
-              <el-form-item label="经费科目">
+              <el-form-item label="经费科目" prop="course">
                 <el-select v-model="asset.course" placeholder="请选择...">
                     <el-option v-for="item in course.options" :label="item.name" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="型号">
+              <el-form-item label="型号" prop="model">
                 <el-input v-model="asset.model" placeholder="型号"></el-input>
               </el-form-item>
-              <el-form-item label="尺寸">
+              <el-form-item label="尺寸" prop="size">
                 <el-input v-model="asset.size" placeholder="尺寸"></el-input>
               </el-form-item>
-              <el-form-item label="领用单位">
+              <el-form-item label="领用单位" prop="comsumer_company">
                 <el-input v-model="asset.consumer_company" placeholder="领用单位"></el-input>
               </el-form-item>
-              <el-form-item label="厂家">
+              <el-form-item label="厂家" prop="factory">
                 <el-input v-model="asset.factory" placeholder="厂家"></el-input>
               </el-form-item>
               </el-col>
               <el-col :lg="12">
-              <el-form-item label="供应商">
+              <el-form-item label="供应商" prop="provider">
                 <el-input v-model="asset.provider" placeholder="供应商"></el-input>
               </el-form-item>
-              <el-form-item label="国别">
+              <el-form-item label="国别" prop="country">
                 <el-select v-model="asset.country" placeholder="国别">
                     <el-option v-for="item in country.options" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="保存地点">
+              <el-form-item label="保存地点" prop="storage_location">
                 <el-select v-model="asset.storage_location" placeholder="保存地点">
                     <el-option v-for="item in storage_location.options" :label="item.name" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="使用方向">
+              <el-form-item label="使用方向" prop="application">
                 <el-select v-model="asset.application" placeholer="使用方向">
                     <el-option v-for="item in application.options" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="分类">
+              <el-form-item label="分类" prop="category_number">
                 <el-select v-model="asset.category_number" placeholder="分类">
                     <el-option v-for="item in category_number.options" :label="item.name" :value="item.value"></el-option>
                 </el-select>
@@ -85,47 +85,47 @@
                 </el-col>
               </el-form>
             </el-tab-pane>
-            <el-tab-pane label="财务信息" name="second">
-                <el-form ref="form" :model="asset" label-width="80px">
+            <el-tab-pane label="财务信息" name="finance">
+                <el-form ref="asset2" :model="asset" label-width="80px" :rules="rules2">
                     <el-col :lg="12">
-                      <el-form-item label="发票号">
+                      <el-form-item label="发票号" prop="invoice">
                         <el-input v-model="asset.invoice" placeholder="发票号"></el-input>
                       </el-form-item>
-                      <el-form-item label="申购单号">
+                      <el-form-item label="申购单号" prop="purchase_number">
                         <el-input v-model="asset.purchase_number" placeholder="申购单号"></el-input>
                       </el-form-item>
-                      <el-form-item label="购置日期">
-                        <el-date-picker v-model="asset.purchase_date" type="date" placeholder="购置日期" @change="purchaseDateChange"></el-date-picker>
+                      <el-form-item label="购置日期" prop="purchase_date_obj">
+                        <el-date-picker v-model="asset.purchase_date_obj" type="date" placeholder="购置日期" @change="purchaseDateChange"></el-date-picker>
                       </el-form-item>
-                      <el-form-item label="经费卡号">
+                      <el-form-item label="经费卡号" prop="card">
                         <el-select v-model="asset.card" placeholder="经费卡号">
                             <el-option v-for="item in card.options" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                       </el-form-item>
-                      <el-form-item label="价格">
-                        <el-input v-model="asset.price" placeholder="价格" type="number"></el-input>
+                      <el-form-item label="价格" prop="price">
+                        <el-input v-model="asset.price" placeholder="价格"></el-input>
                       </el-form-item>
-                      <el-form-item label="数量">
+                      <el-form-item label="数量" prop="amount">
                         <el-input v-model="asset.amount" placeholder="数量" type="number"></el-input>
                       </el-form-item>
-                      <el-form-item label="金额">
-                        <el-input v-model="asset.sum" placeholder="金额" type="number"></el-input>
+                      <el-form-item label="金额" prop="sum">
+                        <el-input v-model="asset.sum" placeholder="金额" :disabled="true"></el-input>
                       </el-form-item>
                       </el-col>
                     </el-form>
             </el-tab-pane>
-            <el-tab-pane label="操作信息" name="third">
-                <el-form ref="form" :model="asset" label-width="80px">
+            <el-tab-pane label="操作信息" name="operate">
+                <el-form ref="asset3" :model="asset" label-width="80px" :rules="rules3">
                   <el-col :lg="12">
-                      <el-form-item label="录入">
+                      <el-form-item label="录入" prop="entry">
                         <el-input v-model="asset.entry" placeholder="录入"></el-input>
                       </el-form-item>
-                      <el-form-item label="领用">
+                      <el-form-item label="领用" prop="consumer_id">
                         <el-select v-model="asset.consumer_id" placeholder="请选择...">
                             <el-option v-for="item in consumer_id.options" :label="item.name" :value="item.id"></el-option>
                         </el-select>
                       </el-form-item>
-                      <el-form-item label="经手">
+                      <el-form-item label="经手" prop="handler_id">
                         <el-select v-model="asset.handler_id" placeholder="请选择...">
                             <el-option v-for="item in handler_id.options" :label="item.name" :value="item.id"></el-option>
                         </el-select>
@@ -259,7 +259,84 @@
                     consumer_id : '',
                     handler_id : ''
                 },
-                errors : {}
+                errors : {},
+                rules1 : {
+                    post_date_obj : [
+                        { type: 'date', required : true, message: '请输入入账日期', trigger: 'blur' },
+                    ],
+                    name : [
+                        { required : true, message: '请输入名称', trigger: 'blur' },
+                        {max: 255, message: '名称不能操作255个字', trigger: 'blur'}
+                    ],
+                    'category_number' : [
+                        {required : true, message: '请选择分类', trigger: 'change'}
+                    ],
+                    serial : [
+                        {max : 10, message: '序列号不能操作10位', trigger: 'blur'}
+                    ],
+                    course : [
+                        {required : true, message : '请输入经费科目', trigger: 'change'}
+                    ],
+                    model : [
+                        {required : true, message : '请输入型号', trigger: 'blur'}
+                    ],
+                    size : [
+                        {required : true, message : '请输入尺寸', trigger: 'blur'}
+                    ],
+                    'consumer_company' : [
+                        {required : true, message : '请输入领用单位', trigger: 'blur'},
+                        {max: 255, message: '领用单位不能操作255个字', trigger: 'blur'}
+                    ],
+                    'factory' : [
+                        {required : true, message : '请输入厂家', trigger: 'blur'},
+                        {max: 255, message: '厂家不能操作255个字', trigger: 'blur'}
+                    ],
+                    'provider' : [
+                        { required : true, message : '请输入供应商', trigger: 'blur' },
+                        { max: 255, message: '供应商不能操作255个字', trigger: 'blur' }
+                    ],
+                    country : [
+                        {required : true, message : '请输入国别', trigger: 'change'}
+                    ],
+                    'storage_location' : [
+                        {required : true, message : '请选择保存地点', trigger: 'change'},
+                    ],
+                    'application' : [
+                        {required : true, message : '请选择使用方向', trigger: 'change'},
+                    ]
+                },
+                rules2 : {
+                    'invoice' : [
+                        {required : true, message : '请输入发票号', trigger: 'blur'},
+                    ],
+                    'purchase_number' : [
+                        {max: 255, message: '申购单号不能操作255个字', trigger: 'blur'}
+                    ],
+                    'purchase_date_obj' : [
+                        { type: 'date', required : true, message: '请输入购置日期', trigger: 'blur' },
+                    ],
+                    card : [
+                        {required : true, message: '请选择经费卡号', trigger: 'change' },
+                    ],
+                    price : [
+                        {required : true, message: '请输入价格', trigger: 'blur' },
+                    ],
+                    amount : [
+                        {required : true, message: '请输入数量', trigger: 'blur' },
+                    ]
+                },
+                rules3 : {
+                    entry : [
+                        {required : true, message: '请输入录入人', trigger : 'blur'},
+                        {max: 255, message: '录入人不能操作255字', trigger: 'blur'}
+                    ],
+                    consumer_id : [
+                        {type: 'number', required : true, message: '请选择领用人', trigger : 'change'},
+                    ],
+                    handler_id : [
+                        {type : 'number', required : true, message: '请选择经手人', trigger : 'change'},
+                    ],
+                }
             }
         },
         mounted() {
@@ -312,16 +389,38 @@
         methods : {
             commit() {
                 //console.log('commit');
-                axios.post('/admin/asset', this.asset)
-                    .then(response => {
-                        //console.log(response);
-                        this.$router.push('/asset');
-                    }).catch(error => {
-                        //console.log(error.response.data);
-                        if(error.response.status == 422) {
-                            this.errors = error.response.data;
-                        }
-                    });
+                this.$refs['asset1'].validate((valid) => {
+                          if (valid) {
+                            //alert('submit');
+                            this.$refs['asset2'].validate((valid) => {
+                                      if (valid) {
+                                        //alert('submit!');
+                                        this.$refs['asset3'].validate((valid) => {
+                                                  if (valid) {
+                                                    //alert('submit!');
+                                                    axios.post('/admin/asset', this.asset)
+                                                        .then(response => {
+                                                            //console.log(response);
+                                                            this.$router.push('/asset');
+                                                        }).catch(error => {
+                                                            //console.log(error.response.data);
+                                                            if(error.response.status == 422) {
+                                                                this.errors = error.response.data;
+                                                            }
+                                                        });
+                                                  }else{
+                                                    this.tabName = 'operate';
+                                                  }
+                                        });
+                                      }else{
+                                        this.tabName = 'finance';
+                                      }
+                            });
+                          }else{
+                            this.tabName = 'basic';
+                          }
+                });
+
             },
 
               handleRemove(file, fileList) {

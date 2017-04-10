@@ -89,12 +89,12 @@ class AssetController extends Controller
     {
         //validate
         $this->validate($request, [
-            'post_date' => 'bail|required|date',
+            'post_date' => 'required|date',
             'name' => 'required|string|max:255',
             'type' => 'required',
             'category_number' => 'required',
             //'image' => 'image',
-            'serial' => 'string|max:255',
+            'serial' => 'nullable|string|max:255',
             'course' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'size' => 'required|string|max:255',
@@ -105,7 +105,7 @@ class AssetController extends Controller
             'storage_location' => 'required|string|max:255',
             'application' => 'required|string|max:255',
             'invoice' => 'required|string|max:255',
-            'purchase_number' => 'string|max:255',
+            'purchase_number' => 'nullable|string|max:255',
             'purchase_date' => 'required|date',
             'card' => 'required|string|max:255',
             'price' => 'required|numeric',
@@ -114,7 +114,7 @@ class AssetController extends Controller
             'entry' => 'required|string|max:255',
             'consumer_id' => 'required|integer|exists:users,id',
             'handler_id' => 'required|integer|exists:users,id',
-            'memo' => 'string|max:2000',
+            'memo' => 'nullable|string|max:2000',
         ]);
         $post_date = $request->input('post_date');
         $type = $request->input('type');
