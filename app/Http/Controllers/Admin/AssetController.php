@@ -261,12 +261,19 @@ class AssetController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $asset = Asset::find($id);
+        //$asset = Asset::find($id);
+        //if($asset->delete()){
+        //    Alog::log('Category', Alog::OPERATE_DELETE, $asset->name, $request->getClientIp());
+        //    return Redirect::back()->with('status', '删除成功');
+        //}else{
+        //    return Redirect::back()->withErrors();
+        //}
+        $asset = Asset::findOrFail($id);
         if($asset->delete()){
             Alog::log('Category', Alog::OPERATE_DELETE, $asset->name, $request->getClientIp());
-            return Redirect::back()->with('status', '删除成功');
+            return $asset;
         }else{
-            return Redirect::back()->withErrors();
+            abort(500);
         }
     }
 

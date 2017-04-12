@@ -36,7 +36,7 @@
             <el-table-column fixed="right" label="操作" width="100">
                 <template scope="scope">
                     <el-button type="text" size="small"><router-link :to="'/asset/' + scope.row.id + '/edit'">编辑</router-link></el-button>
-                    <el-button type="text" size="small">删除</el-button>
+                    <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row.id, list.data)">删除</el-button>
                 </template>
             </el-table-column>
           </el-table>
@@ -143,6 +143,35 @@
                 .catch(error => {
                     console.log(error.response);
                 });
+        },
+        methods : {
+            deleteRow(index, id, data){
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                    axios.delete('/admin/asset/' + id)
+                        .then(response => {
+                          this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                          });
+                          data.splice(index, 1);
+                        }).catch(error => {
+                            if(error.response.status == 404){
+                                this.$message.error('欲删除的资产不存在');
+                            }else if(error.response.status == 500){
+                                this.$message.error('删除失败');
+                            }
+                        });
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                  });
+                });
+            },
         }
     }
 </script>

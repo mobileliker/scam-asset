@@ -60233,6 +60233,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           attrs: {
             "type": "text",
             "size": "small"
+          },
+          on: {
+            "click": function($event) {
+              _vm.deleteRow(scope.$index, scope.row.id, _vm.list.data)
+            }
           }
         }, [_vm._v("删除")])]
       }]
@@ -88259,6 +88264,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }).catch(function (error) {
             console.log(error.response);
         });
+    },
+
+    methods: {
+        deleteRow: function deleteRow(index, id, data) {
+            var _this2 = this;
+
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(function () {
+                axios.delete('/admin/asset/' + id).then(function (response) {
+                    _this2.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    data.splice(index, 1);
+                }).catch(function (error) {
+                    if (error.response.status == 404) {
+                        _this2.$message.error('欲删除的资产不存在');
+                    } else if (error.response.status == 500) {
+                        _this2.$message.error('删除失败');
+                    }
+                });
+            }).catch(function () {
+                _this2.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        }
     }
 };
 
