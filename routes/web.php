@@ -48,6 +48,12 @@ Route::get('/home', 'HomeController@index');
 //user admin
 
 Route::get('admin/vue', 'Admin\AdminController@vue');
+
+Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], function() {
+    Route::post('util/batch-delete/{model}', 'UtilController@batchDelete');
+    Route::delete('util/batch-delete/{model}', 'UtilController@batchDelete');
+});
+
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth'],function() {
 
     Route::post('image/update', 'AdminController@image');

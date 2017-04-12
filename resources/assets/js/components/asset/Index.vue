@@ -22,7 +22,7 @@
             <el-button type="success"><router-link to="/asset/create">添加</router-link></el-button>
         </el-col>
         <el-col :lg="24" class="list">
-          <el-table :data="list.data" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" v-loading="loading" element-loading-text="拼命加载数据中">
+          <el-table :data="list.data" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" v-loading="loading" element-loading-text="拼命加载数据中" @selection-change="handleSelectionChange">
             <el-table-column type="selection"></el-table-column>
             <el-table-column type="index" label="序号" width="70"></el-table-column>
             <el-table-column prop="post_date" label="入账日期" sortable></el-table-column>
@@ -42,7 +42,7 @@
           </el-table>
         </el-col>
         <el-col :lg="24">
-            <el-button type="success">删除</el-button>
+            <el-button type="success" @click="batchDelete">删除</el-button>
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -166,7 +166,13 @@
                     'to' : '',
                     'total' : 0,
                     data : []
-                }
+                },
+                batch : {
+                    asset : [],
+                    params : {
+                        ids : []
+                    }
+                },
             }
         },
         computed : {
@@ -272,6 +278,28 @@
             //console.log(this.search.post_date.value[0]);
             this.search.post_date.post_date_start = val.substring(0,9);
             this.search.post_date.post_date_end = val.substring(13);
+          },
+          handleSelectionChange(val) {
+            //console.log(val);
+            this.batch.asset = val;
+          },
+          batchDelete() {
+            //console.log('batchDelete');
+            var ids = new Array();
+            for(var i in this.batch.asset){
+                //console.log(this.batch.asset[i]);
+                ids.push(this.batch.asset[i].id);
+            }
+            //console.log(ids);
+            this.batch.params.ids = ids;
+            //console.log(this.batch.params);
+            axios.post('/api/util/batch-delete/asset', this.batch.params)
+                .then(response => {
+                    //console.log(response);
+                    this.load();
+                }).catch(error => {
+                    console.log(error);
+                });
           }
         }
     }

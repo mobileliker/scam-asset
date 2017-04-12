@@ -60163,6 +60163,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         order: 'descending'
       },
       "element-loading-text": "拼命加载数据中"
+    },
+    on: {
+      "selection-change": _vm.handleSelectionChange
     }
   }, [_c('el-table-column', {
     attrs: {
@@ -60259,6 +60262,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('el-button', {
     attrs: {
       "type": "success"
+    },
+    on: {
+      "click": _vm.batchDelete
     }
   }, [_vm._v("删除")]), _vm._v(" "), _c('el-pagination', {
     staticClass: "pull-right",
@@ -88280,6 +88286,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 'to': '',
                 'total': 0,
                 data: []
+            },
+            batch: {
+                asset: [],
+                params: {
+                    ids: []
+                }
             }
         };
     },
@@ -88382,6 +88394,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //console.log(this.search.post_date.value[0]);
             this.search.post_date.post_date_start = val.substring(0, 9);
             this.search.post_date.post_date_end = val.substring(13);
+        },
+        handleSelectionChange: function handleSelectionChange(val) {
+            //console.log(val);
+            this.batch.asset = val;
+        },
+        batchDelete: function batchDelete() {
+            var _this3 = this;
+
+            //console.log('batchDelete');
+            var ids = new Array();
+            for (var i in this.batch.asset) {
+                //console.log(this.batch.asset[i]);
+                ids.push(this.batch.asset[i].id);
+            }
+            //console.log(ids);
+            this.batch.params.ids = ids;
+            //console.log(this.batch.params);
+            axios.post('/api/util/batch-delete/asset', this.batch.params).then(function (response) {
+                //console.log(response);
+                _this3.load();
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
     }
 };
