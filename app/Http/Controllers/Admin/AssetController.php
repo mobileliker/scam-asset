@@ -39,7 +39,7 @@ class AssetController extends Controller
             $texts=  explode(' ', $query_text);
             foreach($texts as $text)
             {
-                $assets = $assets->where('name', 'like', '%'.$text.'%');
+                $assets = $assets->where('assets.name', 'like', '%'.$text.'%');
             }
 
         }
@@ -56,14 +56,31 @@ class AssetController extends Controller
 
         $type = $request->input('type');
         if($type != null && $type != ''){
-            $assets = $assets->where('type', '=', $type);
+            $assets = $assets->where('assets.type', '=', $type);
         }
 
         IQuery::ofOrder($assets, $request);
-        
-        $assets = $assets->paginate(10);
+
+        $assets = $assets->join('users as consumers', function($join) {
+            $join->on('consumers.id', '=', 'assets.consumer_id')->whereNull('consumers.deleted_at');
+        });
+        $assets = $assets->join('users as handlers', function($join) {
+            $join->on('handlers.id', '=', 'assets.handler_id')->whereNull('handlers.deleted_at');
+        });
+        $assets = $assets->join('categories', function($join) {
+            $join->on('categories.value', '=', 'assets.category_number')->whereNull('categories.deleted_at')->where('categories.serial', 'like', 'category%');
+        });
+        $assets->select('assets.*', 'consumers.name as consumer_name', 'handlers.name as handler_name', 'categories.name as category_name');
+
+        if($request->paginate != null && $request->paginate != '')
+            $assets = $assets->paginate($request->paginate);
+        else
+            $assets = $assets->paginate(10);
 
         if($request->ajax()){
+            foreach($assets as $asset){
+                $asset->type = Asset::TYPE[$asset->type];
+            }
             return $assets;
         }
 

@@ -60096,12 +60096,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "选择日期范围",
       "picker-options": _vm.search.post_date.pickerOptions
     },
+    on: {
+      "change": _vm.changePostDate
+    },
     model: {
-      value: (_vm.search.post_date),
+      value: (_vm.search.post_date.value),
       callback: function($$v) {
-        _vm.search.post_date = $$v
+        _vm.search.post_date.value = $$v
       },
-      expression: "search.post_date"
+      expression: "search.post_date.value"
     }
   })], 1), _vm._v(" "), _c('el-col', {
     attrs: {
@@ -60143,6 +60146,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "lg": 24
     }
   }, [_c('el-table', {
+    directives: [{
+      name: "loading",
+      rawName: "v-loading",
+      value: (_vm.loading),
+      expression: "loading"
+    }],
     staticStyle: {
       "width": "100%"
     },
@@ -60152,11 +60161,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "default-sort": {
         prop: 'date',
         order: 'descending'
-      }
+      },
+      "element-loading-text": "拼命加载数据中"
     }
   }, [_c('el-table-column', {
     attrs: {
       "type": "selection"
+    }
+  }), _vm._v(" "), _c('el-table-column', {
+    attrs: {
+      "type": "index",
+      "label": "序号",
+      "width": "70"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
@@ -60172,7 +60188,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
-      "prop": "category_number",
+      "prop": "category_name",
       "label": "分类",
       "sortable": ""
     }
@@ -60196,20 +60212,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
-      "prop": "consumer_id",
+      "prop": "consumer_name",
       "label": "领用",
       "sortable": ""
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
-      "prop": "handler_id",
+      "prop": "handler_name",
       "label": "经手",
-      "sortable": ""
-    }
-  }), _vm._v(" "), _c('el-table-column', {
-    attrs: {
-      "prop": "image",
-      "label": "图片",
       "sortable": ""
     }
   }), _vm._v(" "), _c('el-table-column', {
@@ -60253,11 +60263,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("删除")]), _vm._v(" "), _c('el-pagination', {
     staticClass: "pull-right",
     attrs: {
-      "current-page": _vm.currentPage4,
-      "page-sizes": [100, 200, 300, 400],
-      "page-size": 100,
+      "current-page": _vm.list.current_page,
+      "page-sizes": ['10', '15', '20', '50'],
+      "page-size": _vm.list.per_page,
       "layout": "total, sizes, prev, pager, next, jumper",
-      "total": 400
+      "total": _vm.list.total
     },
     on: {
       "size-change": _vm.handleSizeChange,
@@ -61089,16 +61099,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "lg": 21
     }
-  }, [_vm._t("default", [_vm._v("只有在没有要分发的内容时才会显示。")])], 2), _vm._v(" "), _c('el-col', {
-    staticClass: "navbar-fixed-bottom",
-    attrs: {
-      "lg": 24
-    }
-  }, [_c('footer-component', {
-    attrs: {
-      "id": "footer"
-    }
-  })], 1)], 1)
+  }, [_vm._t("default", [_vm._v("只有在没有要分发的内容时才会显示。")])], 2)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -88197,25 +88198,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
     data: function data() {
         return {
+            loading: true,
             search: {
                 type: {
                     value: '',
                     options: [{
-                        value: '',
-                        label: '类型'
-                    }, {
                         value: 1,
                         label: '农业文明史展厅A(单据号为1xxxxxxx)'
+                    }, {
+                        value: 2,
+                        label: '传统农具展厅B(单据号为2xxxxxxx）'
+                    }, {
+                        value: 3,
+                        label: '土壤与岩石展厅C(单据号为3xxxxxxx)'
+                    }, {
+                        value: 4,
+                        label: '植物世界展厅D(单据号为4xxxxxxx)'
+                    }, {
+                        value: 5,
+                        label: '动物世界展厅E(单据号为5xxxxxxx)'
+                    }, {
+                        value: 6,
+                        label: '昆虫世界展厅F(单据号为6xxxxxxx)'
+                    }, {
+                        value: 7,
+                        label: '林业资源与生产展厅G(单据号为7xxxxxxx)'
+                    }, {
+                        value: 8,
+                        label: '南海海洋生物展厅H(单据号为8xxxxxxx)'
+                    }, {
+                        value: 9,
+                        label: '可转让科技成果专题展厅I(单据号为9xxxxxxx)'
                     }]
                 },
                 post_date: {
                     value: '',
+                    post_date_start: '',
+                    post_date_end: '',
                     pickerOptions: {
                         shortcuts: [{
                             text: '最近一周',
@@ -88244,29 +88268,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         }]
                     }
                 },
-                query_text: ''
+                'query_text': ''
             },
             list: {
+                current_page: 1,
+                from: '',
+                'last_page': '',
+                'next_page_url': '',
+                'per_page': 10,
+                'prev_page_url': '',
+                'to': '',
+                'total': 0,
                 data: []
             }
         };
     },
 
+    computed: {
+        options: function options() {
+            return {
+                params: {
+                    paginate: this.list.per_page,
+                    page: this.list.current_page,
+                    type: this.search.type.value,
+                    'post_date_start': this.search.post_date.post_date_start,
+                    'post_date_end': this.search.post_date.post_date_end,
+                    'query_text': this.search.query_text
+                }
+            };
+        }
+    },
+    watch: {
+        'search.type.value': {
+            handler: function handler(val, oldVal) {
+                this.list.current_page = 1;
+                this.load();
+            },
+            deep: true
+        },
+        'search.post_date.value': {
+            handler: function handler(val, oldVal) {
+                this.list.current_page = 1;
+                this.load();
+            },
+            deep: true
+        }
+    },
     components: {
         'content-component': __WEBPACK_IMPORTED_MODULE_0__layouts_Content_vue___default.a
     },
     mounted: function mounted() {
-        var _this = this;
-
-        axios.get('/admin/asset').then(function (response) {
-            console.log(response);
-            _this.list = response.data;
-        }).catch(function (error) {
-            console.log(error.response);
-        });
+        this.load();
     },
 
     methods: {
+        load: function load() {
+            var _this = this;
+
+            this.loading = true;
+
+            axios.get('/admin/asset', this.options).then(function (response) {
+                console.log(response);
+                _this.list = response.data;
+                _this.loading = false;
+            }).catch(function (error) {
+                console.log(error.response);
+            });
+        },
         deleteRow: function deleteRow(index, id, data) {
             var _this2 = this;
 
@@ -88294,6 +88362,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     message: '已取消删除'
                 });
             });
+        },
+        handleSizeChange: function handleSizeChange(val) {
+            this.list.per_page = val;
+            //console.log(`每页 ${val} 条`);
+            this.load();
+        },
+        handleCurrentChange: function handleCurrentChange(val) {
+            this.list.current_page = val;
+            //console.log(`当前页: ${val}`);
+            this.load();
+        },
+        handleIconClick: function handleIconClick() {
+            //console.log('handlerIconClick');
+            this.load();
+        },
+        changePostDate: function changePostDate(val) {
+            //console.log(val);
+            //console.log(this.search.post_date.value[0]);
+            this.search.post_date.post_date_start = val.substring(0, 9);
+            this.search.post_date.post_date_end = val.substring(13);
         }
     }
 };

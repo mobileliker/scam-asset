@@ -12,7 +12,7 @@
             </el-select>
         </el-col>
         <el-col :lg="4">
-            <el-date-picker v-model="search.post_date" type="daterange" align="right" placeholder="选择日期范围" :picker-options="search.post_date.pickerOptions"> </el-date-picker>
+            <el-date-picker v-model="search.post_date.value" type="daterange" align="right" placeholder="选择日期范围" :picker-options="search.post_date.pickerOptions" @change="changePostDate"></el-date-picker>
         </el-col>
         <el-col :lg="4">
             <el-input placeholder="请输入名称进行查询" icon="search" v-model="search.query_text" :on-icon-click="handleIconClick"></el-input>
@@ -22,17 +22,17 @@
             <el-button type="success"><router-link to="/asset/create">添加</router-link></el-button>
         </el-col>
         <el-col :lg="24" class="list">
-          <el-table :data="list.data" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}">
+          <el-table :data="list.data" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" v-loading="loading" element-loading-text="拼命加载数据中">
             <el-table-column type="selection"></el-table-column>
+            <el-table-column type="index" label="序号" width="70"></el-table-column>
             <el-table-column prop="post_date" label="入账日期" sortable></el-table-column>
             <el-table-column prop="type" label="类型" sortable></el-table-column>
-            <el-table-column prop="category_number" label="分类" sortable></el-table-column>
+            <el-table-column prop="category_name" label="分类" sortable></el-table-column>
             <el-table-column prop="name" label="名称" sortable></el-table-column>
             <el-table-column prop="serial" label="编号" sortable></el-table-column>
             <el-table-column prop="sum" label="金额" sortable></el-table-column>
-            <el-table-column prop="consumer_id" label="领用" sortable></el-table-column>
-            <el-table-column prop="handler_id" label="经手" sortable></el-table-column>
-            <el-table-column prop="image" label="图片" sortable></el-table-column>
+            <el-table-column prop="consumer_name" label="领用" sortable></el-table-column>
+            <el-table-column prop="handler_name" label="经手" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
                 <template scope="scope">
                     <el-button type="text" size="small"><router-link :to="'/asset/' + scope.row.id + '/edit'">编辑</router-link></el-button>
@@ -43,15 +43,14 @@
         </el-col>
         <el-col :lg="24">
             <el-button type="success">删除</el-button>
-
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page="currentPage4"
-              :page-sizes="[100, 200, 300, 400]"
-              :page-size="100"
+              :current-page="list.current_page"
+              :page-sizes="['10', '15', '20', '50']"
+              :page-size="list.per_page"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="400" class="pull-right">
+              :total="list.total" class="pull-right">
             </el-pagination>
         </el-col>
     </content-component>
@@ -80,22 +79,53 @@
     export default {
         data() {
             return {
+                loading : true,
                 search : {
-                    type : {
-                        value : '',
+                type : {
+                    value : '',
                         options : [
-                            {
-                                value : '',
-                                label : '类型'
-                            },
                             {
                                 value : 1,
                                 label : '农业文明史展厅A(单据号为1xxxxxxx)'
+                            },
+                            {
+                                value : 2,
+                                label : '传统农具展厅B(单据号为2xxxxxxx）'
+                            },
+                            {
+                                value : 3,
+                                label : '土壤与岩石展厅C(单据号为3xxxxxxx)'
+                            },
+                            {
+                                value : 4,
+                                label : '植物世界展厅D(单据号为4xxxxxxx)'
+                            },
+                            {
+                                value : 5,
+                                label : '动物世界展厅E(单据号为5xxxxxxx)'
+                            },
+                            {
+                                value : 6,
+                                label : '昆虫世界展厅F(单据号为6xxxxxxx)'
+                            },
+                            {
+                                value : 7,
+                                label : '林业资源与生产展厅G(单据号为7xxxxxxx)'
+                            },
+                            {
+                                value : 8,
+                                label : '南海海洋生物展厅H(单据号为8xxxxxxx)'
+                            },
+                            {
+                                value : 9,
+                                label : '可转让科技成果专题展厅I(单据号为9xxxxxxx)'
                             }
                         ]
                     },
                     post_date : {
                         value : '',
+                        post_date_start : '',
+                        post_date_end : '',
                         pickerOptions: {
                           shortcuts: [{
                             text: '最近一周',
@@ -124,27 +154,78 @@
                           }]
                         }
                     },
-                    query_text : ''
+                    'query_text' : ''
                 },
                 list : {
+                    current_page: 1,
+                    from : '',
+                    'last_page' : '',
+                    'next_page_url' : '',
+                    'per_page' : 10,
+                    'prev_page_url' : '',
+                    'to' : '',
+                    'total' : 0,
                     data : []
                 }
             }
+        },
+        computed : {
+            options : function() {
+                return {
+                    params : {
+                        paginate: this.list.per_page,
+                        page: this.list.current_page,
+                        type: this.search.type.value,
+                        'post_date_start' : this.search.post_date.post_date_start,
+                        'post_date_end' : this.search.post_date.post_date_end,
+                        'query_text' : this.search.query_text,
+                    }
+                };
+            },
+        },
+        watch : {
+            'search.type.value' : {
+                handler : function(val, oldVal) {
+                    this.list.current_page = 1;
+                    this.load();
+                },
+                deep : true
+            },
+            'search.post_date.value' : {
+                handler : function(val, oldVal) {
+                    this.list.current_page = 1;
+                    this.load();
+                },
+                deep: true
+            },
+            /*'search.query_text' : {
+                handler : function(val, oldVal) {
+                    this.list.current_page = 1;
+                    this.load();
+                },
+                deep : true
+            },*/
         },
         components : {
             'content-component' : content
         },
         mounted() {
-            axios.get('/admin/asset')
-                .then(response => {
-                    console.log(response);
-                    this.list = response.data;
-                })
-                .catch(error => {
-                    console.log(error.response);
-                });
+            this.load();
         },
         methods : {
+            load() {
+                this.loading = true;
+
+                axios.get('/admin/asset', this.options)
+                    .then(response => {
+                        console.log(response);
+                        this.list = response.data;
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        console.log(error.response);
+                    });
+            },
             deleteRow(index, id, data){
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                   confirmButtonText: '确定',
@@ -172,6 +253,26 @@
                   });
                 });
             },
+          handleSizeChange(val) {
+            this.list.per_page = val;
+            //console.log(`每页 ${val} 条`);
+            this.load();
+          },
+          handleCurrentChange(val) {
+            this.list.current_page = val;
+            //console.log(`当前页: ${val}`);
+            this.load();
+          },
+          handleIconClick() {
+            //console.log('handlerIconClick');
+            this.load();
+          },
+          changePostDate(val) {
+            //console.log(val);
+            //console.log(this.search.post_date.value[0]);
+            this.search.post_date.post_date_start = val.substring(0,9);
+            this.search.post_date.post_date_end = val.substring(13);
+          }
         }
     }
 </script>

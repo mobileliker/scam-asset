@@ -9,9 +9,9 @@
         <el-col class="content" :lg="21">
             <slot>只有在没有要分发的内容时才会显示。</slot>
         </el-col>
-        <el-col :lg="24" class="navbar-fixed-bottom">
+        <!--<el-col :lg="24" class="navbar-fixed-bottom">
             <footer-component id="footer"></footer-component>
-        </el-col>
+        </el-col>-->
     </el-row>
 </template>
 
