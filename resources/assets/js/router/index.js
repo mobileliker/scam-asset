@@ -8,6 +8,7 @@ Vue.use(VueI18n)
 import Index from '../components/Index'
 import AssetIndex from '../components/asset/Index'
 import AssetCreate from '../components/asset/Create'
+import AssetEdit from '../components/asset/Edit'
 import Login from '../components/Auth/Login'
 
 
@@ -17,6 +18,11 @@ export default new Router({
       path: '/',
       name: 'Index',
       component: Index
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/asset',
@@ -29,9 +35,9 @@ export default new Router({
       component: AssetCreate
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
+      path: '/asset/:id/edit',
+      name : 'AssetEdit',
+      component : AssetEdit
     }
   ]
 })

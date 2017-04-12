@@ -232,9 +232,12 @@ class AssetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $asset = Asset::find($id);
+
+        if($request->ajax()) return $asset;
+
         return view(config('app.theme').'.admin.asset.edit')->withAsset($asset);
     }
 

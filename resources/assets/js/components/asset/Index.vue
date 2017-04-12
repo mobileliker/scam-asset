@@ -35,7 +35,7 @@
             <el-table-column prop="image" label="图片" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
                 <template scope="scope">
-                    <el-button type="text" size="small">编辑</el-button>
+                    <el-button type="text" size="small"><router-link :to="'/asset/' + scope.row.id + '/edit'">编辑</router-link></el-button>
                     <el-button type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
@@ -66,7 +66,7 @@
         background-color: #f5f5f5;
         border-radius: 4px;
     }
-    button a{
+    .el-button--success a{
             color: #fff;
     }
     .list {
