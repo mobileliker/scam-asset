@@ -60158,14 +60158,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "data": _vm.list.data,
       "border": "",
-      "default-sort": {
-        prop: 'date',
-        order: 'descending'
-      },
       "element-loading-text": "拼命加载数据中"
     },
     on: {
-      "selection-change": _vm.handleSelectionChange
+      "selection-change": _vm.handleSelectionChange,
+      "sort-change": _vm.sortChange
     }
   }, [_c('el-table-column', {
     attrs: {
@@ -88274,7 +88271,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         }]
                     }
                 },
-                'query_text': ''
+                'query_text': '',
+                '_sort': 'id',
+                '_order': 'desc'
             },
             list: {
                 current_page: 1,
@@ -88305,7 +88304,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     type: this.search.type.value,
                     'post_date_start': this.search.post_date.post_date_start,
                     'post_date_end': this.search.post_date.post_date_end,
-                    'query_text': this.search.query_text
+                    'query_text': this.search.query_text,
+                    '_sort': this.search._sort,
+                    '_order': this.search._order
                 }
             };
         }
@@ -88417,6 +88418,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+        sortChange: function sortChange(val) {
+            //console.log(val);
+            this.search._sort = val.prop;
+            if (val.order == 'descending') this.search._order = 'desc';else this.search._order = 'asc';
+            this.load();
         }
     }
 };

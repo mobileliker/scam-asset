@@ -22,7 +22,7 @@
             <el-button type="success"><router-link to="/asset/create">添加</router-link></el-button>
         </el-col>
         <el-col :lg="24" class="list">
-          <el-table :data="list.data" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" v-loading="loading" element-loading-text="拼命加载数据中" @selection-change="handleSelectionChange">
+          <el-table :data="list.data" border style="width: 100%" v-loading="loading" element-loading-text="拼命加载数据中" @selection-change="handleSelectionChange" @sort-change="sortChange">
             <el-table-column type="selection"></el-table-column>
             <el-table-column type="index" label="序号" width="70"></el-table-column>
             <el-table-column prop="post_date" label="入账日期" sortable></el-table-column>
@@ -154,7 +154,9 @@
                           }]
                         }
                     },
-                    'query_text' : ''
+                    'query_text' : '',
+                    '_sort' : 'id',
+                    '_order' : 'desc'
                 },
                 list : {
                     current_page: 1,
@@ -185,6 +187,8 @@
                         'post_date_start' : this.search.post_date.post_date_start,
                         'post_date_end' : this.search.post_date.post_date_end,
                         'query_text' : this.search.query_text,
+                        '_sort' : this.search._sort,
+                        '_order' : this.search._order
                     }
                 };
             },
@@ -300,6 +304,13 @@
                 }).catch(error => {
                     console.log(error);
                 });
+          },
+          sortChange(val) {
+            //console.log(val);
+            this.search._sort = val.prop;
+            if(val.order == 'descending')  this.search._order = 'desc';
+            else this.search._order = 'asc';
+            this.load();
           }
         }
     }
