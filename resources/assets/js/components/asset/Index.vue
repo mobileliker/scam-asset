@@ -18,7 +18,7 @@
             <el-input placeholder="请输入名称进行查询" icon="search" v-model="search.query_text" :on-icon-click="handleIconClick"></el-input>
         </el-col>
         <el-col :lg="4" class="pull-right">
-            <el-button type="success">导出</el-button>
+            <el-button type="success" @click="exportAsset">导出</el-button>
             <el-button type="success"><router-link to="/asset/create">添加</router-link></el-button>
         </el-col>
         <el-col :lg="24" class="list">
@@ -311,6 +311,13 @@
             if(val.order == 'descending')  this.search._order = 'desc';
             else this.search._order = 'asc';
             this.load();
+          },
+          exportAsset() {
+            window.open("/admin/asset/export", "_blank");
+            //axios.get('/admin/asset/export')
+            //    .then(resposne => {
+            //
+            //    });
           }
         }
     }

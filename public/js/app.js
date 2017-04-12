@@ -60131,6 +60131,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('el-button', {
     attrs: {
       "type": "success"
+    },
+    on: {
+      "click": _vm.exportAsset
     }
   }, [_vm._v("导出")]), _vm._v(" "), _c('el-button', {
     attrs: {
@@ -88424,6 +88427,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.search._sort = val.prop;
             if (val.order == 'descending') this.search._order = 'desc';else this.search._order = 'asc';
             this.load();
+        },
+        exportAsset: function exportAsset() {
+            window.open("/admin/asset/export", "_blank");
+            //axios.get('/admin/asset/export')
+            //    .then(resposne => {
+            //
+            //    });
         }
     }
 };
