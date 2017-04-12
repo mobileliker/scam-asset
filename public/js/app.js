@@ -60229,11 +60229,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "fixed": "right",
       "label": "操作",
-      "width": "100"
+      "width": "150"
     },
     scopedSlots: _vm._u([
       ["default", function(scope) {
         return [_c('el-button', {
+          attrs: {
+            "type": "text",
+            "size": "small"
+          },
+          on: {
+            "click": function($event) {
+              _vm.exportInvoice(scope.row.id)
+            }
+          }
+        }, [_vm._v("导出")]), _vm._v(" "), _c('el-button', {
           attrs: {
             "type": "text",
             "size": "small"
@@ -88204,6 +88214,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
@@ -88434,6 +88445,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //    .then(resposne => {
             //
             //    });
+        },
+        exportInvoice: function exportInvoice(id) {
+            window.open("/admin/asset/" + id + "/export", "_blank");
         }
     }
 };

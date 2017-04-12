@@ -33,8 +33,9 @@
             <el-table-column prop="sum" label="金额" sortable></el-table-column>
             <el-table-column prop="consumer_name" label="领用" sortable></el-table-column>
             <el-table-column prop="handler_name" label="经手" sortable></el-table-column>
-            <el-table-column fixed="right" label="操作" width="100">
+            <el-table-column fixed="right" label="操作" width="150">
                 <template scope="scope">
+                    <el-button type="text" size="small" @click="exportInvoice(scope.row.id)">导出</el-button>
                     <el-button type="text" size="small"><router-link :to="'/asset/' + scope.row.id + '/edit'">编辑</router-link></el-button>
                     <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row.id, list.data)">删除</el-button>
                 </template>
@@ -318,6 +319,9 @@
             //    .then(resposne => {
             //
             //    });
+          },
+          exportInvoice(id) {
+            window.open("/admin/asset/" + id + "/export", "_blank");
           }
         }
     }
