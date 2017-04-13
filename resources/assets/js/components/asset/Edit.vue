@@ -262,9 +262,6 @@
                 },
                 errors : {},
                 rules1 : {
-                    post_date_obj : [
-                        { type: 'date', required : true, message: '请输入入账日期', trigger: 'change' },
-                    ],
                     name : [
                         { required : true, message: '请输入名称', trigger: 'blur' },
                         {max: 255, message: '名称不能操作255个字', trigger: 'blur'}
@@ -320,7 +317,7 @@
                         {required : true, message: '请输入价格', trigger: 'blur' },
                     ],
                     amount : [
-                        {required : true, message: '请输入数量', trigger: 'blur' },
+                        {type: 'number', required : true, message: '请输入数量', trigger: 'blur' },
                     ]
                 },
                 rules3 : {
@@ -449,10 +446,11 @@
         computed: {
             'defaultFileList' : function(){
                 //console.log(this.asset.image);
-                return [{
-                    name : '',
-                    url : '/' + this.asset.image
-                }];
+                if(this.asset.image != null)
+                    return [{
+                        name : '',
+                        url : '/' + this.asset.image
+                    }];
             }
         }
     }

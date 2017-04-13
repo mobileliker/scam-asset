@@ -87986,7 +87986,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             errors: {},
             rules1: {
-                post_date_obj: [{ type: 'date', required: true, message: '请输入入账日期', trigger: 'change' }],
                 name: [{ required: true, message: '请输入名称', trigger: 'blur' }, { max: 255, message: '名称不能操作255个字', trigger: 'blur' }],
                 'category_number': [{ required: true, message: '请选择分类', trigger: 'change' }],
                 serial: [{ max: 10, message: '序列号不能操作10位', trigger: 'blur' }],
@@ -88005,7 +88004,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 'purchase_number': [{ max: 255, message: '申购单号不能操作255个字', trigger: 'blur' }],
                 card: [{ required: true, message: '请选择经费卡号', trigger: 'change' }],
                 price: [{ required: true, message: '请输入价格', trigger: 'blur' }],
-                amount: [{ required: true, message: '请输入数量', trigger: 'blur' }]
+                amount: [{ type: 'number', required: true, message: '请输入数量', trigger: 'blur' }]
             },
             rules3: {
                 entry: [{ required: true, message: '请输入录入人', trigger: 'blur' }, { max: 255, message: '录入人不能操作255字', trigger: 'blur' }],
@@ -88122,7 +88121,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         'defaultFileList': function defaultFileList() {
             //console.log(this.asset.image);
-            return [{
+            if (this.asset.image != null) return [{
                 name: '',
                 url: '/' + this.asset.image
             }];
