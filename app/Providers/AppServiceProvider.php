@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use App\Observers\AssetObserver;
+use App\Asset;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
         //    // $query->time
         //    Log::info($query->sql);
         //});
+
+        //注册观察者
+        Asset::observe(AssetObserver::class);
     }
 
     /**

@@ -207,9 +207,9 @@ class AssetController extends Controller
             //$link = url('s?c='.$asset->serial);
             //IQrcode::generate2($link, $asset->serial);
 
-            if($id == -1) $operate = Alog::OPERATE_CREATE;
-            else $operate = Alog::OPERATE_UPDATE;
-            Alog::log('Asset', $operate, $asset->name, $request->getClientIp());
+//            if($id == -1) $operate = Alog::OPERATE_CREATE;
+//            else $operate = Alog::OPERATE_UPDATE;
+//            Alog::log('Asset', $operate, $asset->name, $request->getClientIp());
 
             return $asset;
             //return Redirect::to('admin/asset')->with('status', '保存成功');
@@ -287,7 +287,7 @@ class AssetController extends Controller
         //}
         $asset = Asset::findOrFail($id);
         if($asset->delete()){
-            Alog::log('Category', Alog::OPERATE_DELETE, $asset->name, $request->getClientIp());
+            //Alog::log('Asset', Alog::OPERATE_DELETE, $asset->name, $request->getClientIp());
             return $asset;
         }else{
             abort(500);
