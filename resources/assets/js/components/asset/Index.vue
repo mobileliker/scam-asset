@@ -231,11 +231,12 @@
                     .then(response => {
                         console.log(response);
                         this.list = response.data;
-                        this.loading = false;
                     })
                     .catch(error => {
                         console.log(error.response);
                     });
+
+                this.loading = false;
             },
             deleteRow(index, id, data){
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = App\User::all();
+        /*$users = App\User::all();
         if($users == null || count($users) == 0){
             $user = new App\User;
             $user->name = 'admin';
@@ -19,6 +19,8 @@ class UsersTableSeeder extends Seeder
             $user->password = bcrypt('123456');
             $user->type = App\User::TYPE_ADMIN;
             $user->save();
-        }
+        }*/
+
+        factory('App\User', 50)->create();
     }
 }
