@@ -1,17 +1,29 @@
 <template>
-    <el-form :model="login">
-        <el-form-item label="邮箱">
-            <el-input v-model="login.email" placeholder="email"></el-input>
-        </el-form-item>
-        <el-form-item label="密码">
-            <el-input v-model="login.password" type="password" placeholder="password"></el-input>
-        </el-form-item>
-        <el-button>重置</el-button>
-        <el-button type="primary" @click="submit">登录</el-button>
-    </el-form>
+    <el-col :lg="8" :offset="8" id="login">
+        <el-card :body-style="{ padding: '10px'}">
+
+        <el-form :model="login">
+            <el-form-item label="邮箱">
+                <el-input v-model="login.email" placeholder="email"></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+                <el-input v-model="login.password" type="password" placeholder="password"></el-input>
+            </el-form-item>
+            <el-form-item label="">
+                <el-checkbox v-model="login.remember">记住密码</el-checkbox>
+            </el-form-item>
+            <el-button>重置</el-button>
+            <el-button type="primary" @click="submit">登录</el-button>
+        </el-form>
+        </el-card>
+    </el-col>
 
 </template>
-<style scope></style>
+<style scope>
+    #login {
+        margin: 500px;
+    }
+</style>
 <script>
 
 export default {
@@ -19,7 +31,8 @@ export default {
         return {
             login : {
                 email: '',
-                 password: ''
+                 password: '',
+                 remember: '',
             }
         }
     },
