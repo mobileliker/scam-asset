@@ -98,6 +98,8 @@ class Invoice extends Model
             $sheet->setCellValue('F6', $application);
             $sheet->setCellValue('I6', $invoice);
             $sheet->setCellValue('B7', $purchase_number);
+            $sheet->setCellValue('B20', $purchase_number);
+            $sheet->setCellValue('B33', $purchase_number);
             $sheet->setCellValue('F7', $purchase_date);
             $sheet->setCellValue('I7', $card);
             $sheet->setCellValue('B8', $price);
