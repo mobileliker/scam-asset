@@ -21,9 +21,13 @@ class AlogController extends Controller
     	//return view(config('app.theme').'.admin.alog.index')->withAlogs($alogs);
 
 
-        $request->flash();
+        //$request->flash();
 
         $alogs = Alog::whereRaw('1 = 1');
+
+        $alogs = $alogs->join('users', function($join) {
+           $join->on('users.id', '=', 'alogs.user_id');
+        })->select('alogs.*', 'users.name as user_name');
 
         //文本查询
         $query_text=$request->input('query_text');
@@ -46,9 +50,19 @@ class AlogController extends Controller
         	$alogs = $alogs->where('operate', $operate);
         }
 
-        IQuery::ofOrder($alogs, $request);
+        $alogs = IQuery::ofOrder($alogs, $request);
 
-        $alogs = $alogs->paginate(10);
+        
+        if($request->paginate != null && $request->paginate != '')
+            $alogs = $alogs->paginate($request->paginate);
+        else
+            $alogs = $alogs->paginate(10);
+
+        foreach($alogs as $alog){
+            $alog->operate = Alog::OPERATE[$alog->operate];
+        }
+
+        if($request->ajax()) return $alogs;
 
         if($alogs == null || count($alogs) == 0){
             return view(config('app.theme').'.admin.alog.index')->withAlogs($alogs)->with('status', '查询结果为空');

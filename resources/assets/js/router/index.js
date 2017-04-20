@@ -11,6 +11,7 @@ import AssetIndex from '../components/asset/Index'
 import AssetCreate from '../components/asset/Create'
 import AssetEdit from '../components/asset/Edit'
 import UserIndex from '../components/user/Index'
+import AlogIndex from '../components/alog/Index'
 
 
 export default new Router({
@@ -44,6 +45,11 @@ export default new Router({
       path : '/user',
       name : 'UserIndex',
       component : UserIndex
+    },
+    {
+      path : '/alog',
+      name : 'AlogIndex',
+      component : AlogIndex
     }
   ]
 })
