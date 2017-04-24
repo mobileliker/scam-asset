@@ -195,6 +195,7 @@ return [
          */
         'Maatwebsite\Excel\ExcelServiceProvider',
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        Zizaco\Entrust\EntrustServiceProvider::class, //角色权限管理
 
         /*
          * Mannal Service Providers
@@ -253,6 +254,7 @@ return [
         //Other Facecade
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class, //角色权限
 
         //mannal facecade
         'IQuery' => App\Facades\IQueryClass::class, //IQuery 别名
