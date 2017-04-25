@@ -1,25 +1,39 @@
 <template>
     <el-menu :router="true" :default-active="$route.path" :unique-opened="true">
         <el-menu-item index="/">首页</el-menu-item>
-            <el-submenu index="2">
-                <template slot="title">固定资产管理</template>
-                <el-menu-item index="/asset">资产管理</el-menu-item>
-                <!--<el-menu-item index="/invoice">单据管理</el-menu-item>-->
-            </el-submenu>
-            <el-submenu index="3">
-                <template slot="title">系统管理</template>
-                <!--<el-menu-item index="/info">配置管理</el-menu-item>-->
-                <!--<el-menu-item index="/category">分类管理</el-menu-item>-->
-                <el-menu-item index="/user">用户管理</el-menu-item>
-                <el-menu-item index="/alog">操作日志</el-menu-item>
-            </el-submenu>
+        <el-submenu v-for="item in menu">
+            <template slot="title">{{item.display_name}}</template>
+            <el-menu-item v-for="item2 in item.data" :index="item2.resource">{{item2.display_name}}</el-menu-item>
+        </el-submenu>
     </el-menu>
 </template>
 <style></style>
 <script>
     export default {
         components : {
-
+        },
+        data()
+        {
+            return {
+                'menu' : [
+                    {
+                        'display_name' : '',
+                        data : [
+                            {
+                                'display_name' : '',
+                                'resource' : ''
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        mounted() {
+            axios.get('/api/user/menu')
+                .then(response =>{
+                    console.log(response.data);
+                    this.menu = response.data;
+                });
         }
     }
 </script>
