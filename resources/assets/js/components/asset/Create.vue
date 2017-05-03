@@ -72,7 +72,7 @@
               <el-form-item label="图片">
                   <el-upload
                     class="upload-demo" :headers = "token"
-                    action="/admin/image/update"
+                    action="/api/image/update"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :on-success="handleSuccess"
@@ -340,32 +340,32 @@
             }
         },
         mounted() {
-            axios.get('/admin/category/course')
+            axios.get('/api/category/course')
                 .then( response => {
                     //console.log(response.data);
                     this.course.options = response.data;
                 });
-            axios.get('/admin/category/storage_location')
+            axios.get('/api/category/storage_location')
                 .then( response => {
                     //console.log(response.data);
                     this.storage_location.options = response.data;
                 });
-            axios.get('/admin/category/application')
+            axios.get('/api/category/application')
                 .then( response => {
                     //console.log(response.data);
                     this.application.options = response.data;
                 });
-            axios.get('/admin/category/category')
+            axios.get('/api/category/category')
                 .then( response => {
                     //console.log(response.data);
                     this.category_number.options = response.data;
                 });
-            axios.get('/admin/category/card')
+            axios.get('/api/category/card')
                 .then( response => {
                     //console.log(response.data);
                     this.card.options = response.data;
                 });
-            axios.get('/admin/user/all')
+            axios.get('/api/user/all')
                 .then( response => {
                     //console.log(response.data);
                     this.consumer_id.options = response.data;
@@ -398,7 +398,7 @@
                                         this.$refs['asset3'].validate((valid) => {
                                                   if (valid) {
                                                     //alert('submit!');
-                                                    axios.post('/admin/asset', this.asset)
+                                                    axios.post('/api/asset', this.asset)
                                                         .then(response => {
                                                             //console.log(response);
                                                             this.$router.push('/asset');

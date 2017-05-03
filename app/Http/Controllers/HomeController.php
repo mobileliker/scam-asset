@@ -16,7 +16,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -26,8 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //return view('home');
-        return Redirect::to('admin');
+        return view('admin-vue');
     }
 
     public function search(Request $request)

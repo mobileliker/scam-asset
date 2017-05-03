@@ -1,7 +1,7 @@
 <template>
     <el-menu :router="true" :default-active="$route.path" :unique-opened="true">
         <el-menu-item index="/">首页</el-menu-item>
-        <el-submenu v-for="item in menu">
+        <el-submenu v-for="(item, index) in menu" :index="index">
             <template slot="title">{{item.display_name}}</template>
             <el-menu-item v-for="item2 in item.data" :index="item2.resource">{{item2.display_name}}</el-menu-item>
         </el-submenu>

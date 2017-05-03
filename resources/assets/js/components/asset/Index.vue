@@ -86,6 +86,10 @@
                     value : '',
                         options : [
                             {
+                                value: '',
+                                label: '全部'
+                            },
+                            {
                                 value : 1,
                                 label : '农业文明史展厅A(单据号为1xxxxxxx)'
                             },
@@ -227,7 +231,7 @@
             load() {
                 this.loading = true;
 
-                axios.get('/admin/asset', this.options)
+                axios.get('/api/asset', this.options)
                     .then(response => {
                         console.log(response);
                         this.list = response.data;
@@ -244,7 +248,7 @@
                   cancelButtonText: '取消',
                   type: 'warning'
                 }).then(() => {
-                    axios.delete('/admin/asset/' + id)
+                    axios.delete('/api/asset/' + id)
                         .then(response => {
                           this.$message({
                             type: 'success',
@@ -315,14 +319,14 @@
             this.load();
           },
           exportAsset() {
-            window.open("/admin/asset/export", "_blank");
-            //axios.get('/admin/asset/export')
+            window.open("/api/asset/export", "_blank");
+            //axios.get('/api/asset/export')
             //    .then(resposne => {
             //
             //    });
           },
           exportInvoice(id) {
-            window.open("/admin/asset/" + id + "/export", "_blank");
+            window.open("/api/asset/" + id + "/export", "_blank");
           }
         }
     }

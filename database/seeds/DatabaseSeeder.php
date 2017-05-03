@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        if(config('app.debug')){
+        if(!config('app.debug')){
             $this->call(UsersTableSeeder::class);
             //$this->call(InfoTableSeeder::class);
             $this->call(CategoryTableSeeder::class);

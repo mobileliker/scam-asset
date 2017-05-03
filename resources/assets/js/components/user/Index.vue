@@ -216,7 +216,7 @@
                 //console.log('load');
                 this.view.table.loading = true;
 
-                axios.get('/admin/user', this.params.index)
+                axios.get('/api/user', this.params.index)
                     .then(response => {
                         //console.log(response);
                         this.list = response.data;
@@ -260,7 +260,7 @@
                   cancelButtonText: '取消',
                   type: 'warning'
                 }).then(() => {
-                    axios.delete('/admin/user/' + id)
+                    axios.delete('/api/user/' + id)
                         .then(response => {
                           this.$message({
                             type: 'success',
@@ -327,7 +327,7 @@
           },
           //显示编辑弹窗
           showEditDialog(index, id) {
-            axios.get('/admin/user/' + id + '/edit')
+            axios.get('/api/user/' + id + '/edit')
                 .then(response => {
                     this.view.dialog.method = 'EDIT';
                     this.view.dialog.title = "编辑用户";
@@ -349,7 +349,7 @@
                     //console.log('validate success');
                     //console.log(this.dialog.model);
                     if(this.view.dialog.method == 'ADD'){
-                        axios.post('/admin/user', this.dialog.model)
+                        axios.post('/api/user', this.dialog.model)
                             .then(response => {
                                 //console.log(response);
                                 this.list.data.unshift(response.data);
@@ -371,7 +371,7 @@
                                 }
                             });
                     } else {
-                        axios.put('/admin/user/' + this.dialog.model.id, this.dialog.model)
+                        axios.put('/api/user/' + this.dialog.model.id, this.dialog.model)
                             .then(response => {
                                 //console.log(response);
                                 console.log(this.list.data[this.view.dialog.index]);

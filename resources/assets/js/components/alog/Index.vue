@@ -116,7 +116,7 @@
                     data : [
                         {
                             'log_time' : '2017-4-19 17:31',
-                            'user_name' : 'admin',
+                            'user_name' : 'api',
                             module : 'Asset',
                             operate : 'ADD',
                             content : 'aaaaaaaaaaaaaaaa'
@@ -154,7 +154,7 @@
             load(){
                 this.view.table.loading = true;
                 //console.log('load');
-                axios.get('/admin/alog', this.params.index)
+                axios.get('/api/alog', this.params.index)
                     .then(response => {
                         //console.log(response);
                         this.list = response.data;
