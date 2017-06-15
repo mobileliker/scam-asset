@@ -42,7 +42,8 @@
                     axios.post('/logout')
                         .then(response => {
                             console.log(response);
-                            this.$router.push('/login');
+                            //this.$router.push('/login');
+                            window.location.href="/";
                         })
                         .catch(error => {
                             console.log(error);
