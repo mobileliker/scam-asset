@@ -22,6 +22,7 @@
 /*****************************************用户测试的路由***************************************************************/
 Route::group(['prefix' => 'test'], function() {
     //Route::get('iqrcode', 'TestController@iqrcode');
+    //Route::post('post-submit', 'TestController@postSubmit');
 });
 Route::group(['prefix' => 'html'], function() {
     //Route::get('auth/login', function() {
@@ -63,6 +64,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
     Route::delete('util/batch-delete/{model}', 'UtilController@batchDelete');//批量删除
     Route::post('util/check/{model}', 'UtilController@check'); //验证
     Route::post('image/update', 'AdminController@image'); //异步上传图片
+
+    //首页模块
+    Route::get('/', 'Indexcontroller@index');
 
     //基础信息接口
     Route::get('user/menu', 'UserController@menu'); //获取用户菜单
