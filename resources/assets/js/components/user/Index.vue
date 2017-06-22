@@ -51,10 +51,17 @@
                 <el-form-item label="密码" prop="password">
                   <el-input v-model="dialog.model.password" placeholder="密码"></el-input>
                 </el-form-item>
+                <!--
                 <el-form-item label="类型" prop="type">
                   <el-select v-model="dialog.model.type" placeholder="类型">
                     <el-option v-for="item in dialog.content.type.options" :label="item.label" :value="item.value"></el-option>
                   </el-select>
+                </el-form-item>
+                -->
+                <el-form-item label="角色" prop="role_ids">
+                     <el-checkbox-group v-model="dialog.model.role_ids">
+                        <el-checkbox v-for="item in dialog.content.role" :label="item.value">{{item.label}}</el-checkbox>
+                      </el-checkbox-group>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
@@ -154,13 +161,24 @@
                                     label : '管理员'
                                 }
                             ]
-                        }
+                        },
+                        role : [
+                            {
+                                value : 1,
+                                label : '用户'
+                            },
+                            {
+                                value : 2,
+                                label : '管理员'
+                            }
+                        ]
                     },
                     model : {
                         name : '',
                         email : '',
                         password : '',
                         type : 1,
+                        role_ids: [],
                     },
                     rules : {
                         name : [
@@ -226,6 +244,12 @@
                     });
 
                 this.view.table.loading = false;
+
+                axios.get('/api/role/all')
+                    .then(response => {
+                        //console.log(response.data);
+                        this.dialog.content.role = response.data;
+                    });
             },
             typeChange() {
                 this.list.current_page = 1;

@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * @version : 2.0
+ * @author: wuzhihui
+ * @date: 2017/6/16
+ * @description:
+ * （1）添加权限控制的中间件
+ */
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
@@ -12,6 +18,10 @@ use IQuery;
 
 class AlogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ability:AlogMethod|Index,true')->only('index');
+    }
     //
     public function index(Request $request)
     {

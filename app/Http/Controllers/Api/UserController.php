@@ -1,15 +1,37 @@
 <?php
 
+/**
+ * @version : 2.0
+ * @author: wuzhihui
+ * @date: 2017/6/16
+ * @description:
+ * （1）添加权限控制的中间件；
+ * （2）edit添加返回用户的所有角色，并去除返回页面的代码，仅保留ajax方式的访问；
+ * （3）storeOrUpdate添加角色的保存功能
+ */
+
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\PermissionCategory, App\Permission, App\User;
+use App\PermissionCategory, App\Permission, App\User, App\Role;
 use Auth;
 use IQuery;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('ability:UserMethod|Method-User-Index,true')->only('index');
+        $this->middleware('ability:UserMethod|Method-User-Store,true')->only('store');
+        $this->middleware('ability:UserMethod|Method-User-Edit,true')->only('edit');
+        $this->middleware('ability:UserMethod|Method-User-Update,true')->only('update');
+        $this->middleware('ability:UserMethod|Method-user-Destroy,true')->only('destroy');
+        $this->middleware('ability:Common|Method-Common-Settings,true')->only('settings');
+        $this->middleware('ability:Common|Method-Common-Menu,true')->only('menu');
+        $this->middleware('ability:Asset|Method-Asset-UserAll,true')->only('all');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -79,14 +101,15 @@ class UserController extends Controller
             'email' => 'required|string|max:255|email|unique:users,email,' . $id,
             'password' => 'required_without:id|string|max:30',
             'password2' => 'same:password',
-            'type' => 'required|integer|in:1,2',
+            //'type' => 'required|integer|in:1,2',
         ]);
 
 
         $name = $request->input('name');
         $email = $request->input('email');
         $password = $request->input('password');
-        $type = $request->input('type');
+        //$type = $request->input('type');
+        $role_ids = $request->role_ids;
 
         if ($id == -1) {
             $user = new User;
@@ -97,10 +120,13 @@ class UserController extends Controller
         $user->name = $name;
         $user->email = $email;
         if ($password != null && $password != '') $user->password = bcrypt($password);
-        $user->type = $type;
+        //$user->type = $type;
 
         if ($user->save()) {
-            $user->type = User::TYPE[$user->type];
+
+            $user->roles()->sync($role_ids);
+
+            //$user->type = User::TYPE[$user->type];
             return $user;
 //            if($id == -1) $operate = Alog::OPERATE_CREATE;
 //            else $operate = Alog::OPERATE_UPDATE;
@@ -136,6 +162,8 @@ class UserController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * v2.0
+     * 添加返回该用户所有角色，并去除返回页面的代码，仅保留ajax方式的访问；
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -144,9 +172,13 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if ($request->ajax()) return $user;
+//        $roles = $user->roles;
+//        $user->roles = $roles;
 
-        return view(config('app.theme') . '.admin.user.edit')->withUser($user);
+        $roles = $user->roles->pluck('id');
+        $user->role_ids = $roles;
+
+        return $user;
     }
 
     /**

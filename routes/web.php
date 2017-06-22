@@ -72,6 +72,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
     Route::get('user/menu', 'UserController@menu'); //获取用户菜单
     Route::get('user/all', 'UserController@all'); //获取所有用户
     Route::get('category/{serial}', 'CategoryController@serial'); //获取分类列表
+    Route::get('role/all', 'RoleController@all'); //获取所有角色
 
     //资产管理模块
     Route::group(['prefix' => 'asset'], function() {
@@ -111,6 +112,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
     Route::group(['prefix' => 'alog'], function() {
         Route::get('', 'AlogController@index');
     });
+
 });
 
 //Route::group([/*'namespace' => 'Home'*/], function() {

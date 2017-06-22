@@ -19,14 +19,13 @@ class AssetController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['ability:Admin|Method-Asset-Index,true'])->only('index');
-        $this->middleware('ability:Admin|User,Method-Asset-Store,true')->only('store');
-        $this->middleware('ability:Admin|User,Method-Asset-Show,true')->only('show');
-        //$this->middleware('ability:Admin|User,Method-Asset-Edit,true')->only('edit');
-        $this->middleware('ability:Admin|User,Method-Asset-Update,true')->only('update');
-        $this->middleware('ability:Admin|User,Method-Asset-Destroy,true')->only('destroy');
-        $this->middleware('ability:Admin|User,Method-Asset-BatchExport,true')->only('batchExport');
-        $this->middleware('ability:Admin|User,Method-Asset-Export,true')->only('export');
+        $this->middleware('ability:Asset|Method-Asset-Index,true')->only('index');
+        $this->middleware('ability:Asset|Method-Asset-Store,true')->only('store');
+        $this->middleware('ability:Asset|Method-Asset-Edit,true')->only('edit');
+        $this->middleware('ability:Asset|Method-Asset-Update,true')->only('update');
+        $this->middleware('ability:Asset|Method-AssetDestroy,true')->only('destroy');
+        $this->middleware('ability:Asset|Method-Asset-Export,true')->only('export');
+        $this->middleware('ability:Asset|Method-Asset-BatchExport,true')->only('batchExport');
     }
     /**
      * Display a listing of the resource.
@@ -108,11 +107,11 @@ class AssetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-        return view(config('app.theme').'.admin.asset.create');
-    }
+//    public function create()
+//    {
+//        //
+//        return view(config('app.theme').'.admin.asset.create');
+//    }
 
     public function storeOrUpdate(Request $request, $id = -1)
     {

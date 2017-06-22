@@ -13,4 +13,9 @@ class TestController extends Controller
         $path = IQrcode::generate('http://www.baidu.com');
         return response()->file($path);
     }
+
+    public function postSubmit()
+    {
+        return 'test postSubmit';
+    }
 }
