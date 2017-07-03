@@ -5,7 +5,6 @@
  * @author : wuzhihui
  * @date : 2017/4/17
  * @description:
- *
  */
 
 namespace App\Providers;

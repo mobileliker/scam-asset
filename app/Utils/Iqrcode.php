@@ -1,10 +1,12 @@
 <?php
-/*
- v1.0
- 功能：二维码工具类
- 作者：wuzhihui
- 日期：2016/8/9
-*/
+
+/**
+ * version 1.0 二维码工具类
+ * author：wuzhihui
+ * date：2016/8/9
+ * description:
+ * 
+ */
 namespace app\Utils;
 use QrCode;
 class IQrcode{

@@ -5,6 +5,7 @@
  * @author: wuzhihui
  * @date: 2016/9/30
  * @description:
+ * （1）将批量删除和验证函数设置为已过时（2017/7/3）
  */
 
 namespace App\Http\Controllers\Api;
@@ -20,6 +21,9 @@ use DB, Log;
 class UtilController extends Controller
 {
     //用于验证某一字段的值是否重复
+    /**
+     * @deprecated
+     */
     public function check(Request $request, $model)
     {
         $table_name = str_plural(str_replace("-","_",ucfirst($model)));
@@ -40,6 +44,9 @@ class UtilController extends Controller
     }
 
     //批量删除
+    /**
+     * @deprecated
+     */
     public function batchDelete(Request $request, $model)
     {
         $ids = $request->input('ids');

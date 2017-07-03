@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @version 2.0
+ * @author: wuzhihui
+ * @date: 2017/7/3
+ * @description:
+ *
+ */
+
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
@@ -7,10 +15,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Category, App\Alog;
-use Redirect;
+use Redirect, DB;
 use IQuery;
-use DB;
+use App\Category, App\Alog;
 
 class CategoryController extends Controller
 {

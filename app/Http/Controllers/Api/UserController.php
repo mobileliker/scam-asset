@@ -8,6 +8,8 @@
  * （1）添加权限控制的中间件；
  * （2）edit添加返回用户的所有角色，并去除返回页面的代码，仅保留ajax方式的访问；
  * （3）storeOrUpdate添加角色的保存功能
+ * （4）setting改为不需要传入id，而是根据当前登录的用户来设置
+ * （5）添加批量删除功能，验证功能（2017/7/3）
  */
 
 namespace App\Http\Controllers\Api;
@@ -20,6 +22,7 @@ use IQuery;
 
 class UserController extends Controller
 {
+    protected $model = User::class;
 
     public function __construct()
     {
@@ -212,9 +215,33 @@ class UserController extends Controller
         }
     }
 
-    public function settings(Request $request, $id)
+    /**
+     * @param Request $request
+     * @param $id
+     * @return string
+     */
+    public function settings(Request $request)
     {
-        $user = User::find($id);
+        return response()->json([
+            'error' => '密码错误'
+        ]);
+
+        $this->validate($request, [
+            'sname' => 'required|max:255',
+            'password' => 'required|max:30',
+            'spassword' => 'string|max:30',
+            'spassword2' => 'same:password',
+        ]);
+
+        $user = Auth::user();
+
+        $cuser = User::where('password', '=', bcrypt($request->password))->where('id', '=', $user->id)->first();
+        if($cuser == null){
+            return response()->json([
+                'error' => '密码错误',
+            ]);
+        }
+
 
         $name = $request->input('sname');
         $password = $request->input('spassword');
@@ -228,6 +255,8 @@ class UserController extends Controller
             return "false";
         }
     }
+
+
     public function menu()
     {
         $user = Auth::user();
@@ -259,5 +288,25 @@ class UserController extends Controller
     {
         $users = User::select('id', 'name')->get();
         return $users;
+    }
+
+    /**
+     * 批量删除功能
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|void
+     */
+    public function batchDelete(Request $request)
+    {
+        return parent::batchDelete($request);
+    }
+
+    /**
+     * 验证功能
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|void
+     */
+    public function check(Request $request)
+    {
+        return parent::check($request);
     }
 }

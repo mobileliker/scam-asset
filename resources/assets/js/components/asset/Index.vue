@@ -303,7 +303,7 @@
             //console.log(ids);
             this.batch.params.ids = ids;
             //console.log(this.batch.params);
-            axios.post('/api/util/batch-delete/asset', this.batch.params)
+            axios.post('/api/asset/batch-delete', this.batch.params)
                 .then(response => {
                     //console.log(response);
                     this.load();

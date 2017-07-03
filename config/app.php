@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @version: v2.0
+ * @author: wuzhihui
+ * @date: 2017/6/20
+ * (1)添加Api授权的service provider；
+ */
+
 return [
 
     /*
@@ -189,6 +196,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        /*
+         * Offered Service Providers
+         */
+        Laravel\Passport\PassportServiceProvider::class, //API授权的Service Provider
 
         /*
          * Other Service Providers

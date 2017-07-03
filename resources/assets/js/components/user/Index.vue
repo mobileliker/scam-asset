@@ -45,8 +45,8 @@
                 <el-form-item label="用户名" prop="name">
                   <el-input v-model="dialog.model.name" placeholder="用户名"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email" :disabled="view.dialog.emailVisible">
-                  <el-input v-model="dialog.model.email" placeholder="邮箱"></el-input>
+                <el-form-item label="邮箱" prop="email">
+                  <el-input :disabled="view.dialog.emailVisible" v-model="dialog.model.email" placeholder="邮箱"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                   <el-input v-model="dialog.model.password" placeholder="密码"></el-input>
@@ -99,6 +99,19 @@
             'error-component' : error
         },
         data() {
+            var checkEmail = (rule, value, callback) => {
+                var parames = {
+                    'field' : 'email',
+                    'value' : value
+                };
+                setTimeout(() => {
+                    axios.post('/api/user/check', parames)
+                        .then(response => {
+                            if(response.data.res == 'true') callback();
+                            else callback(new Error('您输入的邮箱已被使用'));
+                        });
+                }, 1000);
+            };
             return {
                 search : {
                     type : {
@@ -187,7 +200,8 @@
                         ],
                         email : [
                             { required : true, message: '请输入邮箱', trigger: 'blur' },
-                            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+                            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' },
+                            { validator: checkEmail, trigger: 'blur' }
                         ],
                         password : [
                             { min: 8, max: 20, message: '请输入8至20位的用户密码', trigger: 'blur,change' }
@@ -331,7 +345,7 @@
             //console.log(ids);
             this.batch.params.ids = ids;
             console.log(this.batch.params);
-            axios.post('/api/util/batch-delete/user', this.batch.params)
+            axios.post('/api/user/batch-delete', this.batch.params)
                 .then(response => {
                     //console.log(response);
                     this.load();
@@ -348,6 +362,7 @@
             console.log(this.dialog.rules.password.length);
             if(this.dialog.rules.password.length == 1) this.dialog.rules.password.push({ required : true, message: '请输入密码', trigger: 'blur' });
             this.view.dialog.visible = true;
+            this.view.dialog.emailVisible = false;
           },
           //显示编辑弹窗
           showEditDialog(index, id) {
@@ -355,7 +370,7 @@
                 .then(response => {
                     this.view.dialog.method = 'EDIT';
                     this.view.dialog.title = "编辑用户";
-                    this.view.dialog.emailVisible = "false";
+                    this.view.dialog.emailVisible = true;
                     this.dialog.model = response.data;
                     this.view.dialog.index = index;
                     if(this.$refs['modelForm'] != null) this.$refs['modelForm'].resetFields();

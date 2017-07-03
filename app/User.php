@@ -1,15 +1,25 @@
 <?php
 
+/**
+ * @version 2.0
+ * @author: wuzhihui
+ * @date: 2017/7/3
+ * @description:
+ * (1)添加软删除（2017/7/3）
+ */
+
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Zizaco\Entrust\Traits\EntrustUserTrait; //角色权限的trait
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use EntrustUserTrait; // 角色权限的特性
+    use SoftDeletes { SoftDeletes::restore insteadof EntrustUserTrait; } //软删除,restore与EntrustUserTrait冲突
 
     const TYPE_ADMIN = 1;
     const TYPE_USER = 2;
@@ -35,4 +45,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $dates = ['deleted_at'];
 }

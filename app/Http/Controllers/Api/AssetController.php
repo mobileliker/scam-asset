@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @version 2.0
+ * @author: wuzhihui
+ * @date: 2017/7/3
+ * @description:
+ * (1)批量删除方法迁移到把batchDelete；（2017/7/3）
+ */
+
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
@@ -7,15 +15,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Asset, App\Alog, App\Invoice;
-
 use Auth, Redirect;
 use Excel;
 use IQuery, IQrcode;
-use App\User;
+use App\Asset, App\Alog, App\Invoice, App\User;
 
 class AssetController extends Controller
 {
+    protected $model = Asset::class;
 
     public function __construct()
     {
@@ -26,6 +33,7 @@ class AssetController extends Controller
         $this->middleware('ability:Asset|Method-AssetDestroy,true')->only('destroy');
         $this->middleware('ability:Asset|Method-Asset-Export,true')->only('export');
         $this->middleware('ability:Asset|Method-Asset-BatchExport,true')->only('batchExport');
+        $this->middleware('ability:Asset|Method-Asset-BatchDelete,true')->only('batchDelete');
     }
     /**
      * Display a listing of the resource.
@@ -464,6 +472,15 @@ class AssetController extends Controller
 //        $link = url('s?c='.$asset->serial);
 //        return IQrcode::generate($link);
 //    }
+
+    /**
+     * 批量删除功能
+     * @param Request $request
+     */
+    public function batchDelete(Request $request)
+    {
+        return parent::batchDelete($request);
+    }
 
 
 }

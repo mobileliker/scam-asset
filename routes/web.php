@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @version: 2.0 使用API作为前缀，并添加权限控制中间件
+ * @author： wuzhihui
+ * @date： 2017/4/25
+ * @description:
+ *（1）添加批量删除接口到各个模块，并去除原有的通用接口 （2017/7/3）
+ */
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,18 +19,11 @@
 |
 */
 
-/**
- * @version: 2.0 使用API作为前缀，并添加权限控制中间件
- * @author： wuzhihui
- * @date： 2017/4/25
- * @description:
- *
- */
-
 /*****************************************用户测试的路由***************************************************************/
 Route::group(['prefix' => 'test'], function() {
     //Route::get('iqrcode', 'TestController@iqrcode');
     //Route::post('post-submit', 'TestController@postSubmit');
+    //Route::get('batch-delete', 'Api\AssetController@batchDelete');
 });
 Route::group(['prefix' => 'html'], function() {
     //Route::get('auth/login', function() {
@@ -60,10 +61,11 @@ Route::get('/', 'HomeController@index');  //Vue前端框架的入口
 
 Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], function() {
     //通用接口
-    Route::post('util/batch-delete/{model}', 'UtilController@batchDelete'); //批量删除
-    Route::delete('util/batch-delete/{model}', 'UtilController@batchDelete');//批量删除
-    Route::post('util/check/{model}', 'UtilController@check'); //验证
+    //Route::post('util/batch-delete/{model}', 'UtilController@batchDelete'); //批量删除
+    //Route::delete('util/batch-delete/{model}', 'UtilController@batchDelete');//批量删除
+    //Route::post('util/check/{model}', 'UtilController@check'); //验证
     Route::post('image/update', 'AdminController@image'); //异步上传图片
+    Route::put('user/settings', 'UserController@settings'); //用户设置
 
     //首页模块
     Route::get('/', 'Indexcontroller@index');
@@ -76,6 +78,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
 
     //资产管理模块
     Route::group(['prefix' => 'asset'], function() {
+        Route::post('batch-delete', 'AssetController@batchDelete'); //批量删除
         Route::get('', 'AssetController@index');
         Route::post('', 'AssetController@store');
         Route::get('{id}', 'AssetController@show');
@@ -98,14 +101,14 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
 
     //用户管理模块
     Route::group(['prefix' => 'user'], function() {
+        Route::post('batch-delete', 'UserController@batchDelete'); //批量删除
+        Route::post('check', 'UserController@check'); //验证
         Route::get('', 'UserController@index');
         Route::post('', 'UserController@store');
         Route::get('{id}', 'UserController@show');
         Route::get('{id}/edit', 'UserController@edit');
         Route::put('{id}', 'UserController@update');
         Route::delete('{id}', 'UserController@destroy');
-
-        //Route::put('user/{id}/settings', 'UserController@settings');
     });
 
     //操作日志模块

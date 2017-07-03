@@ -22,7 +22,7 @@ class AlogController extends Controller
     {
         $this->middleware('ability:AlogMethod|Index,true')->only('index');
     }
-    //
+    
     public function index(Request $request)
     {
     	//return "admin.alog.index";
