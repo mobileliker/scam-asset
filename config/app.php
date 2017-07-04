@@ -5,6 +5,7 @@
  * @author: wuzhihui
  * @date: 2017/6/20
  * (1)添加Api授权的service provider；
+ * （2）修复key=name被重复定义的错误；（2017/7/4）
  */
 
 return [
@@ -19,7 +20,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => '华南农业博物馆资产管理系统',
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +142,6 @@ return [
     |
     */
     'theme' => 'scama',
-    'name' => '华南农业博物馆资产管理系统',
     'copyright' => '华南农业博物馆筹建办公室',
 
     /*
