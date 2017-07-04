@@ -5,7 +5,7 @@
  * @author: wuzhihui
  * @date: 2017/7/3
  * @description:
- * 
+ * (1)加入CreateFreshApiToken中间件用于Javascript消费API；（2017/7/4）
  */
 
 namespace App\Http;
@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class, //JavaScript消费API
         ],
 
         'api' => [
