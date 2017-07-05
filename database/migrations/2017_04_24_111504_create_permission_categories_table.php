@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @version 1.0 permission category migration
  * @author: wuzhihui
@@ -12,10 +13,13 @@
  * @author: wuzhihui
  * @date: 2017/4/24
  * @description:
- * (1)修改entrust的permissions加入permission_category_id
+ * （1）修改entrust的permissions加入permission_category_id；
+ * （2）优化只有debug模式才执行外键关联；（2017/7/5）
  */
+
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+
 class CreatePermissionCategoriesTable extends Migration
 {
     /**
@@ -36,19 +40,23 @@ class CreatePermissionCategoriesTable extends Migration
             $table->tinyInteger('status')->default(1)->comment('状态'); //状态，0为禁用，1为启用
             $table->softDeletes(); //软删除
             $table->timestamps();
-
-            $table->foreign('pid', $prefix.'permission_categories_pid_foreign')->references('id')->on('permission_categories');
+            if (!config('app.debug')) {  //debug模式才执行外键关联
+                $table->foreign('pid', $prefix . 'permission_categories_pid_foreign')->references('id')->on('permission_categories');
+            }
         });
 
-        Schema::table('permissions', function($table) {
+        Schema::table('permissions', function ($table) {
             $prefix = config('database.connections.mysql.prefix');
             $table->integer('permission_category_id')->unsigned()->after('id')->comment('权限分类id');
             $table->string('resource')->after('display_name')->comment('资源');
             $table->string('method')->after('resource')->default('GET')->comment('方法');
 
-            $table->foreign('permission_category_id', $prefix.'permissions_permission_category_id_foreign')->references('id')->on('permission_categories');
-        });
+            if(!config('app.debug')) { //debug模式才执行外键关联
+                $table->foreign('permission_category_id', $prefix . 'permissions_permission_category_id_foreign')->references('id')->on('permission_categories');
+            }
+            });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -56,9 +64,12 @@ class CreatePermissionCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('permissions', function($table) {
+        Schema::table('permissions', function ($table) {
             $prefix = config('database.connections.mysql.prefix');
-            $table->dropForeign($prefix.'permissions_permission_category_id_foreign');
+
+            if(!config('app.debug')){ //debug模式才执行外键关联
+                $table->dropForeign($prefix . 'permissions_permission_category_id_foreign');
+            }
 
             $table->dropColumn('method');
             $table->dropColumn('resource');
