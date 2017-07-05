@@ -54,7 +54,8 @@ export default {
             axios.post('/login', this.login)
                 .then(response => {
                     //console.log(response);
-                    this.$router.push('/');
+                    //this.$router.push('/');
+                    window.location.href="/";
                 })
                 .catch(error => {
                     //console.log(error);

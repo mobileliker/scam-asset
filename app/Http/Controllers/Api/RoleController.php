@@ -5,7 +5,8 @@
  * @author: wuzhihui
  * @date: 2017/6/19
  * @description:
- * （1）添加获取所有角色
+ * （1）添加获取所有角色；
+ * （2）添加权限控制；（2017/7/5）
  */
 
 namespace App\Http\Controllers\Api;
@@ -16,6 +17,11 @@ use App\Role;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ability:UserMethod|Method-user-Role,true')->only('all');
+    }
+
     /**
      * Display a listing of the resource.
      *

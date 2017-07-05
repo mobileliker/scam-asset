@@ -64,3 +64,13 @@ Route::get('/', 'HomeController@index');  //Vue前端框架的入口
 //Route::group([/*'namespace' => 'Home'*/], function() {
 //    Route::get('s', 'HomeController@search');
 //});
+
+Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], function () {
+    //资产管理模块
+    Route::group(['prefix' => 'asset'], function () {
+        Route::get('export', 'AssetController@batchExport'); //批量导出所有固定资产
+        Route::get('{id}/export', 'AssetController@export'); //导出单据
+    });
+
+
+});

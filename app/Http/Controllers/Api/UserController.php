@@ -34,7 +34,54 @@ class UserController extends Controller
         $this->middleware('ability:Common|Method-Common-Settings,true')->only('settings');
         $this->middleware('ability:Common|Method-Common-Menu,true')->only('menu');
         $this->middleware('ability:Asset|Method-Asset-UserAll,true')->only('all');
+        $this->middleware('ability:UserMethod|Method-User-BatchDelete,true')->only('batchDelete');
+        $this->middleware('ability:UserMethod|Method-User-Check,true')->only('check');
     }
+
+    public function storeOrUpdate(Request $request, $id = -1)
+    {
+        $this->validate($request, [
+            'name' => 'string|max:255',
+            'email' => 'required|string|max:255|email|unique:users,email,' . $id,
+            'password' => 'required_without:id|string|max:30',
+            'password2' => 'same:password',
+            //'type' => 'required|integer|in:1,2',
+        ]);
+
+
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        //$type = $request->input('type');
+        $role_ids = $request->role_ids;
+
+        if ($id == -1) {
+            $user = new User;
+        } else {
+            $user = User::findOrFail($id);
+        }
+
+        $user->name = $name;
+        $user->email = $email;
+        if ($password != null && $password != '') $user->password = bcrypt($password);
+        //$user->type = $type;
+
+        if ($user->save()) {
+
+            $user->roles()->sync($role_ids);
+
+            //$user->type = User::TYPE[$user->type];
+            return $user;
+//            if($id == -1) $operate = Alog::OPERATE_CREATE;
+//            else $operate = Alog::OPERATE_UPDATE;
+//            Alog::log('User', $operate, $user->name.'('.$user->email.')', $request->getClientIp());
+//            return Redirect::to('admin/user')->with('status', '保存成功');
+        } else {
+            abort(500);
+//            return Redirect::back()->withErrors('保存失败');
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -92,54 +139,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view(config('app.theme') . '.admin.user.create');
-    }
+//    public function create()
+//    {
+//        return view(config('app.theme') . '.admin.user.create');
+//    }
 
-    public function storeOrUpdate(Request $request, $id = -1)
-    {
-        $this->validate($request, [
-            'name' => 'string|max:255',
-            'email' => 'required|string|max:255|email|unique:users,email,' . $id,
-            'password' => 'required_without:id|string|max:30',
-            'password2' => 'same:password',
-            //'type' => 'required|integer|in:1,2',
-        ]);
-
-
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        //$type = $request->input('type');
-        $role_ids = $request->role_ids;
-
-        if ($id == -1) {
-            $user = new User;
-        } else {
-            $user = User::findOrFail($id);
-        }
-
-        $user->name = $name;
-        $user->email = $email;
-        if ($password != null && $password != '') $user->password = bcrypt($password);
-        //$user->type = $type;
-
-        if ($user->save()) {
-
-            $user->roles()->sync($role_ids);
-
-            //$user->type = User::TYPE[$user->type];
-            return $user;
-//            if($id == -1) $operate = Alog::OPERATE_CREATE;
-//            else $operate = Alog::OPERATE_UPDATE;
-//            Alog::log('User', $operate, $user->name.'('.$user->email.')', $request->getClientIp());
-//            return Redirect::to('admin/user')->with('status', '保存成功');
-        } else {
-            abort(500);
-//            return Redirect::back()->withErrors('保存失败');
-        }
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -158,10 +162,10 @@ class UserController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+//    public function show($id)
+//    {
+//        //
+//    }
 
     /**
      * Show the form for editing the specified resource.

@@ -5,7 +5,7 @@
  * @author: wuzhihui
  * @date: 2017/7/3
  * @description:
- * 
+ * （1）添加权限控制；（2017/7/5）
  */
 
 namespace App\Http\Controllers\Api;
@@ -16,7 +16,11 @@ use App\User, App\Alog, App\Asset;
 
 class IndexController extends Controller
 {
-    //
+    public function __construct()
+    {
+        $this->middleware('ability:Common|Method-Common-Index,true')->only('index');
+    }
+
     public function index()
     {
 

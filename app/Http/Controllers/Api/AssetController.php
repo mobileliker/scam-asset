@@ -5,7 +5,8 @@
  * @author: wuzhihui
  * @date: 2017/7/3
  * @description:
- * (1)批量删除方法迁移到把batchDelete；（2017/7/3）
+ * （1）批量删除方法迁移到把batchDelete；（2017/7/3）
+ * （2）整理控制器的接口的顺序；（2017/7/5）
  */
 
 namespace App\Http\Controllers\Api;
@@ -35,6 +36,7 @@ class AssetController extends Controller
         $this->middleware('ability:Asset|Method-Asset-BatchExport,true')->only('batchExport');
         $this->middleware('ability:Asset|Method-Asset-BatchDelete,true')->only('batchDelete');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -121,124 +123,6 @@ class AssetController extends Controller
 //        return view(config('app.theme').'.admin.asset.create');
 //    }
 
-    public function storeOrUpdate(Request $request, $id = -1)
-    {
-        //validate
-        $this->validate($request, [
-            'post_date' => 'required|date',
-            'name' => 'required|string|max:255',
-            'type' => 'required',
-            'category_number' => 'required',
-            //'image' => 'image',
-            'serial' => 'nullable|string|max:255',
-            'course' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'size' => 'required|string|max:255',
-            'consumer_company' => 'required|string|max:255',
-            'factory' => 'required|string|max:255',
-            'provider' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'storage_location' => 'required|string|max:255',
-            'application' => 'required|string|max:255',
-            'invoice' => 'required|string|max:255',
-            'purchase_number' => 'nullable|string|max:255',
-            'purchase_date' => 'required|date',
-            'card' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'amount' => 'required|integer|min:0',
-            'sum' => 'required|numeric|min:0',
-            'entry' => 'required|string|max:255',
-            'consumer_id' => 'required|integer|exists:users,id',
-            'handler_id' => 'required|integer|exists:users,id',
-            'memo' => 'nullable|string|max:2000',
-        ]);
-        $post_date = $request->input('post_date');
-        $type = $request->input('type');
-        $category_number = $request->input('category_number');
-        $name = $request->input('name');
-        $serial = $request->input('serial');
-        $course = $request->input('course');
-        $model = $request->input('model');
-        $size = $request->input('size');
-        $consumer_company = $request->input('consumer_company');
-        $factory = $request->input('factory');
-        $provider = $request->input('provider');
-        $country = $request->input('country');
-        $storage_location = $request->input('storage_location');
-        $application = $request->input('application');
-        $invoice = $request->input('invoice');
-        $purchase_number = $request->input('purchase_number');
-        $purchase_date = $request->input('purchase_date');
-        $card = $request->input('card');
-        $price = $request->input('price');
-        $amount = $request->input('amount');
-        $sum = $request->input('sum');
-        $entry = $request->input('entry');
-        $consumer_id = $request->input('consumer_id');
-        $handler_id = $request->input('handler_id');
-        $memo = $request->input('memo');
-
-        if(-1 == $id){
-            $asset = new Asset;
-        }else{
-            $asset = Asset::find($id);
-        }
-
-        /*$file = $request->file('image');
-        if($file != null && $file -> isValid()){
-            //$mimeType = $file -> getMimeType();
-            $entension = $file -> getClientOriginalExtension();
-            $pic_name = md5(date('ymdhis').$file->getClientOriginalName()).'.'.$entension;
-            $path = $file -> move('storage/upload/image', $pic_name);
-            $asset->image = $path;
-        }*/
-        $asset->image = $request->image;
-
-        $asset->post_date = $post_date;
-        $asset->type = $type;
-        $asset->category_number = $category_number;
-        $asset->name = $name;
-        $asset->serial = $serial;
-        $asset->course = $course;
-        $asset->model = $model;
-        $asset->size = $size;
-        $asset->consumer_company = $consumer_company;
-        $asset->factory = $factory;
-        $asset->provider = $provider;
-        $asset->country = $country;
-        $asset->storage_location = $storage_location;
-        $asset->application = $application;
-        $asset->invoice = $invoice;
-        $asset->purchase_number = $purchase_number;
-        $asset->purchase_date = $purchase_date;
-        $asset->card = $card;
-        $asset->price = $price;
-        $asset->amount = $amount;
-        $asset->sum = $sum;
-        $asset->entry = $entry;
-        $asset->consumer_id = $consumer_id;
-        $asset->handler_id = $handler_id;
-        $asset->user_id = Auth::user()->id;
-        $asset->memo = $memo;
-
-        if($asset->save()){
-
-            //$link = url('s?c='.$asset->serial);
-            //IQrcode::generate2($link, $asset->serial);
-
-//            if($id == -1) $operate = Alog::OPERATE_CREATE;
-//            else $operate = Alog::OPERATE_UPDATE;
-//            Alog::log('Asset', $operate, $asset->name, $request->getClientIp());
-
-            return $asset;
-            //return Redirect::to('admin/asset')->with('status', '保存成功');
-        }else{
-            abort(500);
-            //return Redirect::back()->withInput()->withErrors();
-        }
-
-
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -257,10 +141,10 @@ class AssetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+//    public function show($id)
+//    {
+//        //
+//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -482,5 +366,122 @@ class AssetController extends Controller
         return parent::batchDelete($request);
     }
 
+    public function storeOrUpdate(Request $request, $id = -1)
+    {
+        //validate
+        $this->validate($request, [
+            'post_date' => 'required|date',
+            'name' => 'required|string|max:255',
+            'type' => 'required',
+            'category_number' => 'required',
+            //'image' => 'image',
+            'serial' => 'nullable|string|max:255',
+            'course' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'size' => 'required|string|max:255',
+            'consumer_company' => 'required|string|max:255',
+            'factory' => 'required|string|max:255',
+            'provider' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'storage_location' => 'required|string|max:255',
+            'application' => 'required|string|max:255',
+            'invoice' => 'required|string|max:255',
+            'purchase_number' => 'nullable|string|max:255',
+            'purchase_date' => 'required|date',
+            'card' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'amount' => 'required|integer|min:0',
+            'sum' => 'required|numeric|min:0',
+            'entry' => 'required|string|max:255',
+            'consumer_id' => 'required|integer|exists:users,id',
+            'handler_id' => 'required|integer|exists:users,id',
+            'memo' => 'nullable|string|max:2000',
+        ]);
+        $post_date = $request->input('post_date');
+        $type = $request->input('type');
+        $category_number = $request->input('category_number');
+        $name = $request->input('name');
+        $serial = $request->input('serial');
+        $course = $request->input('course');
+        $model = $request->input('model');
+        $size = $request->input('size');
+        $consumer_company = $request->input('consumer_company');
+        $factory = $request->input('factory');
+        $provider = $request->input('provider');
+        $country = $request->input('country');
+        $storage_location = $request->input('storage_location');
+        $application = $request->input('application');
+        $invoice = $request->input('invoice');
+        $purchase_number = $request->input('purchase_number');
+        $purchase_date = $request->input('purchase_date');
+        $card = $request->input('card');
+        $price = $request->input('price');
+        $amount = $request->input('amount');
+        $sum = $request->input('sum');
+        $entry = $request->input('entry');
+        $consumer_id = $request->input('consumer_id');
+        $handler_id = $request->input('handler_id');
+        $memo = $request->input('memo');
 
+        if(-1 == $id){
+            $asset = new Asset;
+        }else{
+            $asset = Asset::find($id);
+        }
+
+        /*$file = $request->file('image');
+        if($file != null && $file -> isValid()){
+            //$mimeType = $file -> getMimeType();
+            $entension = $file -> getClientOriginalExtension();
+            $pic_name = md5(date('ymdhis').$file->getClientOriginalName()).'.'.$entension;
+            $path = $file -> move('storage/upload/image', $pic_name);
+            $asset->image = $path;
+        }*/
+        $asset->image = $request->image;
+
+        $asset->post_date = $post_date;
+        $asset->type = $type;
+        $asset->category_number = $category_number;
+        $asset->name = $name;
+        $asset->serial = $serial;
+        $asset->course = $course;
+        $asset->model = $model;
+        $asset->size = $size;
+        $asset->consumer_company = $consumer_company;
+        $asset->factory = $factory;
+        $asset->provider = $provider;
+        $asset->country = $country;
+        $asset->storage_location = $storage_location;
+        $asset->application = $application;
+        $asset->invoice = $invoice;
+        $asset->purchase_number = $purchase_number;
+        $asset->purchase_date = $purchase_date;
+        $asset->card = $card;
+        $asset->price = $price;
+        $asset->amount = $amount;
+        $asset->sum = $sum;
+        $asset->entry = $entry;
+        $asset->consumer_id = $consumer_id;
+        $asset->handler_id = $handler_id;
+        $asset->user_id = Auth::user()->id;
+        $asset->memo = $memo;
+
+        if($asset->save()){
+
+            //$link = url('s?c='.$asset->serial);
+            //IQrcode::generate2($link, $asset->serial);
+
+//            if($id == -1) $operate = Alog::OPERATE_CREATE;
+//            else $operate = Alog::OPERATE_UPDATE;
+//            Alog::log('Asset', $operate, $asset->name, $request->getClientIp());
+
+            return $asset;
+            //return Redirect::to('admin/asset')->with('status', '保存成功');
+        }else{
+            abort(500);
+            //return Redirect::back()->withInput()->withErrors();
+        }
+
+
+    }
 }

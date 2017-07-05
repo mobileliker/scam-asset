@@ -10,7 +10,8 @@
  * @author: wuzhihui
  * @date: 2017/7/3
  * @description:
- * (1) 图片上传功能
+ * （1） 图片上传功能；
+ * （2）添加权限控制；（2017/7/5）
  */
 
 namespace App\Http\Controllers\Api;
@@ -24,6 +25,11 @@ use Log;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ability:Common|Method-Common-Image,true')->only('image');
+    }
+
     /**
      * 图片上传功能
      * @param Request $request

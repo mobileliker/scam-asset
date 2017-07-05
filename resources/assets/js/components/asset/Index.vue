@@ -320,10 +320,15 @@
           },
           exportAsset() {
             window.open("/api/asset/export", "_blank");
-            //axios.get('/api/asset/export')
-            //    .then(resposne => {
-            //
-            //    });
+
+//              axios({
+//                  method:'get',
+//                  url:'/api/asset/export',
+//                  responseType:'stream'
+//              })
+//                      .then(function(response) {
+//                          response.data.pipe(fs.createWriteStream('1.xls'))
+//                      });
           },
           exportInvoice(id) {
             window.open("/api/asset/" + id + "/export", "_blank");

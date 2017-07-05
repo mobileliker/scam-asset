@@ -33,9 +33,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     //Route::post('util/check/{model}', 'UtilController@check'); //验证
     Route::post('image/update', 'AdminController@image'); //异步上传图片
     Route::put('user/settings', 'UserController@settings'); //用户设置
-
-    //首页模块
-    Route::get('/', 'Indexcontroller@index');
+    Route::get('/', 'Indexcontroller@index'); //首页统计
 
     //基础信息接口
     Route::get('user/menu', 'UserController@menu'); //获取用户菜单
@@ -45,19 +43,18 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
 
     //资产管理模块
     Route::group(['prefix' => 'asset'], function () {
-        Route::post('batch-delete', 'AssetController@batchDelete'); //批量删除
-        Route::get('', 'AssetController@index');
-        Route::post('', 'AssetController@store');
-        Route::get('{id}', 'AssetController@show');
-        Route::get('{id}/edit', 'AssetController@edit');
-        Route::put('{id}', 'AssetController@update');
-        Route::delete('{id}', 'AssetController@destroy');
-
         //Route::put('import', 'AssetController@import'); //导入固定资产的数据
         //Route::get('generate', 'AssetController@generate'); //批量导出所有的单据
         //Route::get('{id}/qrcode', 'AssetController@qrcode'); //生成二维码
-        Route::get('export', 'AssetController@batchExport'); //批量导出所有固定资产
-        Route::get('{id}/export', 'AssetController@export'); //导出单据
+        //Route::get('export', 'AssetController@batchExport'); //批量导出所有固定资产
+       // Route::get('{id}/export', 'AssetController@export'); //导出单据
+        Route::post('batch-delete', 'AssetController@batchDelete'); //批量删除
+
+        Route::get('', 'AssetController@index');
+        Route::post('', 'AssetController@store');
+        Route::get('{id}/edit', 'AssetController@edit');
+        Route::put('{id}', 'AssetController@update');
+        Route::delete('{id}', 'AssetController@destroy');
     });
 
     //单据管理模块
