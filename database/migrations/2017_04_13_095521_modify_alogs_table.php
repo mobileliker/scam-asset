@@ -37,7 +37,7 @@ class ModifyAlogsTable extends Migration
         Alog::whereNull('ip')->update(['ip' => '']);//将ip=null设置为空字符防止回滚失败
 
         Schema::table('alogs', function($table){
-            $table->string('ip')->change(); //设置ip为可空
+            $table->string('ip')->change(); //设置ip为不可空
             $table->string('content', 2000)->change();
         });
     }
