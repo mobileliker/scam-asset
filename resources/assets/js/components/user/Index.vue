@@ -1,3 +1,10 @@
+/**
+ * @version 2.0
+ * @author: wuzhihui
+ * @date: 2017/7/5
+ * description:
+ * （1）去除原有的type；（2017/7/5）
+ */
 <template>
     <content-component id="content">
         <!--user-index-->
@@ -7,11 +14,13 @@
               <el-breadcrumb-item>用户管理</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>
+        <!--
         <el-col :lg="4">
             <el-select v-model="search.type.value" placeholder="类型" @change="typeChange">
                 <el-option v-for="item in search.type.options" :label="item.label" :value="item.value"></el-option>
             </el-select>
         </el-col>
+        -->
         <el-col :lg="4">
             <el-input placeholder="请输入名称进行查询" icon="search" v-model="search.query_text" :on-icon-click="textQuery"></el-input>
         </el-col>
@@ -24,7 +33,7 @@
             <el-table-column type="index" label="序号" width="70"></el-table-column>
             <el-table-column prop="name" label="用户名" sortable></el-table-column>
             <el-table-column prop="email" label="邮箱" sortable></el-table-column>
-            <el-table-column prop="type" label="类型" sortable></el-table-column>
+            <!--<el-table-column prop="type" label="类型" sortable></el-table-column>-->
             <el-table-column fixed="right" label="操作" width="150">
                 <template scope="scope">
                     <el-button type="text" size="small" @click="showEditDialog(scope.$index, scope.row.id)">编辑</el-button>
@@ -101,6 +110,7 @@
         data() {
             var checkEmail = (rule, value, callback) => {
                 var parames = {
+                    'id' : this.dialog.model.id,
                     'field' : 'email',
                     'value' : value
                 };
@@ -144,14 +154,12 @@
                         {
                             id : '1',
                             name : '张三',
-                            email : 'abc@123.com',
-                            type : '管理员',
+                            email : 'abc@123.com'
                         },
                         {
                             id : '1',
                             name : '张三',
-                            email : 'abc@123.com',
-                            type : '管理员',
+                            email : 'abc@123.com'
                         }
                     ]
                 },
