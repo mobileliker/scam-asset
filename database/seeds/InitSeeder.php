@@ -26,8 +26,8 @@ class InitSeeder extends Seeder
         $systemPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Menu-System', 'display_name' => '系统管理', 'pid' => $menuPermissionCategory->id]);
 
         $assetPermission = Permission::firstOrCreate(['name' => 'Menu-Asset-Asset', 'display_name' => '资产管理','resource' => '/asset', 'permission_category_id' => $assetPermissionCategory->id]);
-        $userPermission = Permission::firstOrCreate(['name' => 'Menu-System-User', 'display_name' => '用户管理','resource' => 'user', 'permission_category_id' => $systemPermissionCategory->id]);
-        $alogPermission = Permission::firstOrCreate(['name' => 'Menu-System-Alog', 'display_name' => '操作日志', 'resource' => 'alog','permission_category_id' => $systemPermissionCategory->id]);
+        $userPermission = Permission::firstOrCreate(['name' => 'Menu-System-User', 'display_name' => '用户管理','resource' => '/user', 'permission_category_id' => $systemPermissionCategory->id]);
+        $alogPermission = Permission::firstOrCreate(['name' => 'Menu-System-Alog', 'display_name' => '操作日志', 'resource' => '/alog','permission_category_id' => $systemPermissionCategory->id]);
 
         //功能权限分类以及权限
         $methodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method', 'display_name' => '功能']);
@@ -72,15 +72,15 @@ class InitSeeder extends Seeder
 
         //通用功能角色
         $commonRole = Role::firstOrCreate(['name' => 'Common', 'display_name' => '通用功能角色']);
-        $commonRole->perms()->sync(array($commonSettingsMethodPermission->id, $commonMenuMethodPermission->id, $commonImageMethodPermission->id, $commonIndexMethodPermission->id));
+        $commonRole->perms()->sync(array($commonSettingsMethodPermission->id, $commonMenuMethodPermission->id));
 
         //固定资产管理角色
         $assetRole = Role::firstOrCreate(['name' => 'Asset', 'display_name' => '固定资产管理角色']);
-        $assetRole->perms()->sync(array($assetIndexMethodPermission->id, $assetStoreMethodPermission->id, $assetEditMethodPermission->id, $assetUpdateMethodPermission->id, $assetDestroyMethodPermission->id, $assetExportMethodPermission->id, $assetBatchExportMethodPermission->id, $assetBatchDeleteMethodPermission->id, $assetUserAllMethodPermission->id));
+        $assetRole->perms()->sync(array($assetIndexMethodPermission->id, $assetStoreMethodPermission->id, $assetEditMethodPermission->id, $assetUpdateMethodPermission->id, $assetDestroyMethodPermission->id, $assetExportMethodPermission->id, $assetBatchExportMethodPermission->id, $assetUserAllMethodPermission->id));
 
         //用户管理角色
         $userMethodRole = Role::firstOrCreate(['name' => 'UserMethod', 'display_name' => '用户管理角色']);
-        $userMethodRole->perms()->sync(array($userIndexMethodPermission->id, $userStoreMethodPermission->id, $userEditMethodPermission->id, $userUpdateMethodPermission->id, $userDestroyMethodPermission->id, $userBatchDeleteMethodPermission->id, $userCheckMethodPermission->id, $userRoleMethodPermission->id));
+        $userMethodRole->perms()->sync(array($userIndexMethodPermission->id, $userStoreMethodPermission->id, $userEditMethodPermission->id, $userUpdateMethodPermission->id, $userDestroyMethodPermission->id));
 
         //日志操作角色
         $alogMethodRole = Role::firstOrCreate(['name' => 'AlogMethod', 'display_name' => '日志操作角色']);
