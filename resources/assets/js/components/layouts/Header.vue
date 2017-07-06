@@ -17,6 +17,7 @@
             </el-submenu>
         </el-menu>
         <el-dialog title="用户设置" v-model="dialog.visible" size="small">
+            <error-component v-if="Object.getOwnPropertyNames(dialog.errors).length > 1" :berrors="dialog.errors"></error-component>
             <el-form :model="dialog.model" ref="setting-dialog" :rules="dialog.rules">
                 <el-form-item label="用户名" prop="sname">
                     <el-input v-model="dialog.model.sname" placeholder="用户名"></el-input>
@@ -41,8 +42,11 @@
 <style>
 </style>
 <script>
+    import error from './Error.vue'
+
     export default {
         components : {
+            'error-component' : error
         },
         data() {
           var validatePass2 = (rule, value, callback) => {
@@ -63,20 +67,21 @@
                         spassword2 : ''
                     },
                     rules : {
-                        sname : [
-                            {required : true, message : '请输入用户名', trigger : 'blur'},
-                            {max : 255, message : '用户名不能操作20个字', trigger : 'blur'}
-                        ],
-                        password : [
-                            {required : true, message : '密码不能为空', 'trigger' : 'blur'},
-                        ],
-                        spassword : [
-                            { min: 8, max: 20, message: '请输入8至20位的用户密码', trigger: 'blur,change' }
-                        ],
-                        spassword2 : [
-                            {validator : validatePass2, trigger : 'blur'}
-                        ]
-                    }
+//                        sname : [
+//                            {required : true, message : '请输入用户名', trigger : 'blur'},
+//                            {max : 255, message : '用户名不能操作20个字', trigger : 'blur'}
+//                        ],
+//                        password : [
+//                            {required : true, message : '密码不能为空', 'trigger' : 'blur'},
+//                        ],
+//                        spassword : [
+//                            { min: 8, max: 20, message: '请输入8至20位的用户密码', trigger: 'blur,change' }
+//                        ],
+//                        spassword2 : [
+//                            {validator : validatePass2, trigger : 'blur'}
+//                        ]
+                    },
+                    errors : {},
                 }
             }
         },
@@ -129,7 +134,13 @@
                                     type: 'success',
                                     message: '修改成功'
                                 });
-                            });
+                            })
+                            .catch(error => {
+                                //console.log(error);
+                                if(error.response.status == 422){
+                                    this.dialog.errors = error.response.data;
+                                }
+                        });
                     }//else{
                     //    console.log('valid error');
                     //}

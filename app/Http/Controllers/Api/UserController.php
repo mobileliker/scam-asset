@@ -10,12 +10,14 @@
  * （3）storeOrUpdate添加角色的保存功能
  * （4）setting改为不需要传入id，而是根据当前登录的用户来设置
  * （5）添加批量删除功能，验证功能（2017/7/3）
+ * （6）修改了setting方法，优化了错误的提示；（2017/7/6）
  */
 
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use App\PermissionCategory, App\Permission, App\User, App\Role;
 use Auth;
 use IQuery;
@@ -237,9 +239,12 @@ class UserController extends Controller
         $user = Auth::user();
 
         if(!Hash::check($request->password, $user->getAuthPassword())){
-            return response()->json([
-                'error' => '密码错误',
-            ]);
+            $errors = [
+                'password' => [
+                    'password' => '密码错误'
+                ]
+            ];
+            return new JsonResponse($errors, 422);
         }
 
         $name = $request->input('sname');
@@ -251,7 +256,7 @@ class UserController extends Controller
         if ($user->save()) {
             return $user;
         } else {
-            return "false";
+            abort(500, '保存错误');
         }
     }
 
