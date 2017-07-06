@@ -4,8 +4,9 @@
  * @version: v2.0
  * @author: wuzhihui
  * @date: 2017/6/20
- * (1)添加Api授权的service provider；
+ * （1）添加Api授权的service provider；
  * （2）修复key=name被重复定义的错误；（2017/7/4）
+ * （3）log修改为每日一文件；（2017/7/6）
  */
 
 return [
@@ -130,7 +131,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'), //log文件修改为每日一文件
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 

@@ -5,8 +5,9 @@
  * @author: wuzhihui
  * @date: 2017/7/3
  * @description:
- * (1)添加软删除（2017/7/3）
- * (2)添加Passport的trait（2017/7/4）
+ * （1）添加软删除（2017/7/3）
+ * （2）添加Passport的trait（2017/7/4）
+ * （3）添加Farm的关联函数；（2017/7/6）
  */
 
 namespace App;
@@ -50,4 +51,14 @@ class User extends Authenticatable
     ];
 
     protected $dates = ['deleted_at'];
+
+    public function keepFarms()
+    {
+        return $this->hasMany('App\Farm', 'keeper_id', 'id');
+    }
+
+    public function farms()
+    {
+        return $this->hasMany('App\Farm', 'user_id', 'id');
+    }
 }
