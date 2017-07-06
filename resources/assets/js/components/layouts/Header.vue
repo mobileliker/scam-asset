@@ -119,9 +119,16 @@
                 //console.log('settingSave');
                 this.$refs['setting-dialog'].validate((valid) => {
                     if(valid) {
-                        axios.put('/api/user/setting', this.dialog.model)
+                        axios.put('/api/user/settings', this.dialog.model)
                             .then( response => {
-                                console.log('setting');
+                                //console.log('setting');
+                                //console.log(response.data);
+                                this.name = response.data.name;
+                                this.dialog.visible = false;
+                                this.$message({
+                                    type: 'success',
+                                    message: '修改成功'
+                                });
                             });
                     }//else{
                     //    console.log('valid error');

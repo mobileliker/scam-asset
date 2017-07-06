@@ -19,6 +19,7 @@ use App\Http\Controllers\Controller;
 use App\PermissionCategory, App\Permission, App\User, App\Role;
 use Auth;
 use IQuery;
+use Hash;
 
 class UserController extends Controller
 {
@@ -226,26 +227,20 @@ class UserController extends Controller
      */
     public function settings(Request $request)
     {
-        return response()->json([
-            'error' => '密码错误'
-        ]);
-
         $this->validate($request, [
             'sname' => 'required|max:255',
             'password' => 'required|max:30',
-            'spassword' => 'string|max:30',
-            'spassword2' => 'same:password',
+            'spassword' => 'nullable|string|max:30',
+            'spassword2' => 'nullable|same:spassword',
         ]);
 
         $user = Auth::user();
 
-        $cuser = User::where('password', '=', bcrypt($request->password))->where('id', '=', $user->id)->first();
-        if($cuser == null){
+        if(!Hash::check($request->password, $user->getAuthPassword())){
             return response()->json([
                 'error' => '密码错误',
             ]);
         }
-
 
         $name = $request->input('sname');
         $password = $request->input('spassword');
