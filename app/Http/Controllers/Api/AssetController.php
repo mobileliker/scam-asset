@@ -7,6 +7,7 @@
  * @description:
  * （1）批量删除方法迁移到把batchDelete；（2017/7/3）
  * （2）整理控制器的接口的顺序；（2017/7/5）
+ * （3）优化查询功能，将已被删除的用户也显示出来；（2017/7/6）
  */
 
 namespace App\Http\Controllers\Api;
@@ -83,13 +84,13 @@ class AssetController extends Controller
         IQuery::ofOrder($assets, $request);
 
         $assets = $assets->join('users as consumers', function($join) {
-            $join->on('consumers.id', '=', 'assets.consumer_id')->whereNull('consumers.deleted_at');
+            $join->on('consumers.id', '=', 'assets.consumer_id');
         });
         $assets = $assets->join('users as handlers', function($join) {
-            $join->on('handlers.id', '=', 'assets.handler_id')->whereNull('handlers.deleted_at');
+            $join->on('handlers.id', '=', 'assets.handler_id');
         });
         $assets = $assets->join('categories', function($join) {
-            $join->on('categories.value', '=', 'assets.category_number')->whereNull('categories.deleted_at')->where('categories.serial', 'like', 'category%');
+            $join->on('categories.value', '=', 'assets.category_number')->where('categories.serial', 'like', 'category%');
         });
         $assets->select('assets.*', 'consumers.name as consumer_name', 'handlers.name as handler_name', 'categories.name as category_name');
 
