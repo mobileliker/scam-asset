@@ -67,19 +67,19 @@
                         spassword2 : ''
                     },
                     rules : {
-//                        sname : [
-//                            {required : true, message : '请输入用户名', trigger : 'blur'},
-//                            {max : 255, message : '用户名不能操作20个字', trigger : 'blur'}
-//                        ],
-//                        password : [
-//                            {required : true, message : '密码不能为空', 'trigger' : 'blur'},
-//                        ],
-//                        spassword : [
-//                            { min: 8, max: 20, message: '请输入8至20位的用户密码', trigger: 'blur,change' }
-//                        ],
-//                        spassword2 : [
-//                            {validator : validatePass2, trigger : 'blur'}
-//                        ]
+                        sname : [
+                            {required : true, message : '请输入用户名', trigger : 'blur'},
+                            {max : 255, message : '用户名不能操作20个字', trigger : 'blur'}
+                        ],
+                        password : [
+                            {required : true, message : '密码不能为空', 'trigger' : 'blur'},
+                        ],
+                        spassword : [
+                            { min: 8, max: 20, message: '请输入8至20位的用户密码', trigger: 'blur,change' }
+                        ],
+                        spassword2 : [
+                            {validator : validatePass2, trigger : 'blur'}
+                        ]
                     },
                     errors : {},
                 }
