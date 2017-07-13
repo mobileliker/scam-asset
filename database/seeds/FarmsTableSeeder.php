@@ -46,8 +46,8 @@ class FarmsTableSeeder extends Seeder
                 $description = $cells[6];
                 $size = $cells[7];
                 $serial = $cells[8];
-                $memo = $cells[9];
-                $display = $cells[10];
+                $memo = $cells[11];
+                $display = $cells[12];
                 if ($number > 1) $serial = trim(explode('-', $serial)[0]);
 //                Log::info(
 //                    'row : ' . $row . ','
