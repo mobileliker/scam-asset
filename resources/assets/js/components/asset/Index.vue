@@ -1,3 +1,10 @@
+/**
+ * @version: 2.0
+ * @author: wuzhihui
+ * @date: 2017/7/10
+ * @description:
+ * （1）修复搜索框中日期选择的错误，优化类型选择可清除；（2017/7/10）
+ */
 <template>
     <content-component id="content">
         <el-col :lg="24">
@@ -7,7 +14,7 @@
             </el-breadcrumb>
         </el-col>
         <el-col :lg="4">
-            <el-select v-model="search.type.value" placeholder="类型">
+            <el-select v-model="search.type.value" placeholder="类型" clearable>
                 <el-option v-for="item in search.type.options" :label="item.label" :value="item.value"></el-option>
             </el-select>
         </el-col>
@@ -286,7 +293,7 @@
           changePostDate(val) {
             //console.log(val);
             //console.log(this.search.post_date.value[0]);
-            this.search.post_date.post_date_start = val.substring(0,9);
+            this.search.post_date.post_date_start = val.substring(0,10);
             this.search.post_date.post_date_end = val.substring(13);
           },
           handleSelectionChange(val) {
