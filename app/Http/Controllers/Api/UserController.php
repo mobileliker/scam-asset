@@ -11,6 +11,7 @@
  * （4）setting改为不需要传入id，而是根据当前登录的用户来设置
  * （5）添加批量删除功能，验证功能（2017/7/3）
  * （6）修改了setting方法，优化了错误的提示；（2017/7/6）
+ * （7）添加获取所有用户的方法，添加label和value；（2017/7/10）
  */
 
 namespace App\Http\Controllers\Api;
@@ -290,7 +291,7 @@ class UserController extends Controller
 
     public function all()
     {
-        $users = User::select('id', 'name')->get();
+        $users = User::select('id', 'name', 'id as value', 'name as label')->get();
         return $users;
     }
 

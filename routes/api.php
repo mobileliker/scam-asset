@@ -5,7 +5,8 @@
  * @author : wuzhihui
  * @date: 2017/7/4
  * @description:
- * (1)将所有功能接口转移到API.php；（2017/7/4）
+ * （1）将所有功能接口转移到API.php；（2017/7/4）
+ * （2）添加农具管理的接口；（2017/7/10）
  */
 
 //use Illuminate\Http\Request;
@@ -62,6 +63,20 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         //Route::get('', 'InvoiceController@index');
         //Route::get('{id}/export', 'InvoiceController@export');
     });
+
+    //藏品管理
+    Route::group(['prefix' => 'collection'], function () {
+
+        //农具管理模块
+        Route::group(['prefix' => 'farm'], function () {
+            Route::post('batch-delete', 'FarmController@batchDelete');
+            Route::get('{id}/edit', 'FarmController@edit');
+            Route::put('{id}', 'FarmController@update');
+            Route::delete('{id}', 'FarmController@destroy');
+            Route::resource('/', 'FarmController', ['only' => ['index', 'store']]);
+        });
+    });
+
 
     //用户管理模块
     Route::group(['prefix' => 'user'], function () {
