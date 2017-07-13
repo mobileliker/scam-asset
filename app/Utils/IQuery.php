@@ -10,6 +10,7 @@
  * @author: wuzhihui
  * @date : 2017/4/13
  * @description:
+ * （1）添加页码的设置；（2017/7/10）
  *
  */
 
@@ -37,7 +38,7 @@ class IQuery{
 		$query = $this->ofOrder2($query, $request, $order_params);
 		$query = $this->ofText($query, $request, $text_params);
 		$query = $this->ofStatus($query, $request, $table);
-		$query = $query->paginate(10);
+		$query = $query->paginate($request->paginate);
 		return $query;
 	}
 
