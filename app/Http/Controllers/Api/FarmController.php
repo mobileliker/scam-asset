@@ -6,6 +6,8 @@
  * @author: wuzhihui
  * @date: 2017/7/10
  * @description:
+ * （1）完成农具管理的基本功能；（2017/7/10）
+ * （2）农具导入功能；（2017/7/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -16,6 +18,7 @@ use IQuery;
 use App\Farm;
 use Log;
 use Auth;
+use Excel;
 
 class FarmController extends Controller
 {
@@ -29,6 +32,7 @@ class FarmController extends Controller
         $this->middleware('ability:Farm|Method-Collection-Farm-Update,true')->only('update');
         $this->middleware('ability:Farm|Method-Collection-Farm-destroy,true')->only('destroy');
         $this->middleware('ability:Farm|Method-Collection-Farm-BatchDelete,true')->only('batchDelete');
+        $this->middleware('ability:Farm|Method-Collection-Farm-Import,true')->only('import');
     }
 
 
@@ -51,19 +55,19 @@ class FarmController extends Controller
 //        Log::info($request->all());
 //        return $request->all();
 
-        if($id == -1){
+        if ($id == -1) {
             $farm = new Farm;
-        }else{
+        } else {
             $farm = Farm::findOrFail($id);
         }
 
         $farm->setRawAttributes($request->only(['category', 'name', 'number', 'input_date', 'source', 'description', 'size', 'serial', 'memo', 'display', 'keeper_id', 'asset_id']));
         $farm->user_id = Auth::id();
-        if($id != -1) $farm->id = $id;
+        if ($id != -1) $farm->id = $id;
 
-        if($farm->save()){
+        if ($farm->save()) {
             return $farm;
-        }else{
+        } else {
             abort(500, '保存失败');
         }
     }
@@ -151,10 +155,10 @@ class FarmController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+//    public function show($id)
+//    {
+//        //
+//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -188,15 +192,104 @@ class FarmController extends Controller
     public function destroy($id)
     {
         $farm = Farm::findOrFail($id);
-        if($farm->delete()){
+        if ($farm->delete()) {
             return $farm;
-        }else{
+        } else {
             abort(500, '删除失败');
         }
     }
 
+    /**
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function batchDelete(Request $request)
     {
         return parent::batchDelete($request);
+    }
+
+    /**
+     * 农具导入功能
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function import(Request $request)
+    {
+        //return $request->all();
+
+        $this->validate($request, [
+            'file' => 'required',
+            'type' => 'required|in:ignore,cover',
+        ]);
+
+        $user = Auth::user();
+
+        $path = $request->file;
+        //Log::info($path);
+
+        Excel::load($path, function ($reader) use ($user, $request) {
+            $sheet = $reader->getSheet(0);
+            $sheet_array = $sheet->toArray();
+            foreach ($sheet_array as $row => $cells) {
+                if ($row == 0) continue; //忽略标题行
+                if ($cells[8] == '') continue; //编号不存在则忽略
+//                foreach($cells as $col => $cell){
+//                    Log::info($cell);
+//                }
+                $category = $cells[1];
+                $name = $cells[2];
+                $number = $cells[3];
+                $input_date = str_replace('.', '-', $cells[4]);
+                $source = $cells[5];
+                $description = $cells[6];
+                $size = $cells[7];
+                $serial = $cells[8];
+                $memo = $cells[11];
+                $display = $cells[12];
+                if ($number > 1) $serial = trim(explode('-', $serial)[0]);
+//                Log::info(
+//                    'row : ' . $row . ','
+//                    . 'category : ' . $category . ','
+//                    . 'name : ' . $name . ','
+//                    . 'number : ' . $number . ','
+//                    . 'input_date : ' . $input_date . ','
+//                    . 'source : ' . $source . ','
+//                    . 'description : ' . $description . ','
+//                    . 'size : ' . $size . ','
+//                    . 'serial : ' . $serial . ','
+//                    . 'memo : ' . $memo . ','
+//                    . 'display : ' . $display
+//                );
+
+                while ($number--) {
+                    $farm = Farm::where('serial', '=', $serial)->first();
+                    if($farm == null) $farm = new Farm;
+                    else if($request->type == 'ignore') continue;
+                    $farm->serial = $serial;
+                    $farm->category = $category;
+                    $farm->name = $name;
+                    $farm->input_date = $input_date;
+                    $farm->source = $source;
+                    $farm->description = $description;
+                    $farm->size = $size;
+                    $farm->memo = $memo;
+                    $farm->display = $display;
+                    $farm->keeper_id = $user->id;
+                    $farm->user_id = $user->id;
+                    $farm->save();
+                    //Log::info($farm);
+
+                    $serial = 'A' . (intval(substr($serial, 1)) + 1);
+                }
+
+            }
+        });
+
+        return response()->json([
+            'res' => 'success'
+        ]);
+
+        //TODO 添加数据校验功能
     }
 }

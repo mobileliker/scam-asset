@@ -7,6 +7,7 @@
  * @description:
  * （1）创建系统的初始角色 & 功能;
  * （2）添加农具的相关功能；（2017/7/7）
+ * （3）添加附件上传功能和农具数据导入功能；（2017/7/14）
  */
 
 use Illuminate\Database\Seeder;
@@ -45,6 +46,7 @@ class InitSeeder extends Seeder
         $commonSettingsMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Settings', 'display_name' => '通用功能-Settings', 'resource' => '/api/user/{id}/settings' , 'permission_category_id' => $commonMethodPermissionCategory->id]);
         $commonMenuMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Menu', 'display_name' => '通用功能-Menu','resource' => '/api/user/menu', 'permission_category_id' => $commonMethodPermissionCategory->id]);
         $commonImageMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Image', 'display_name' => '通用功能-Image','resource' => '/api/image/update', 'permission_category_id' => $commonMethodPermissionCategory->id]);
+        $commonFileMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-File', 'display_name' => '通用功能-File', 'resource' => '/api/file/update', 'permission_category_id' => $commonMethodPermissionCategory->id]);
         $commonIndexMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Index', 'display_name' => '通用功能-Index','resource' => '/api', 'permission_category_id' => $commonMethodPermissionCategory->id]);
 
         $assetIndexMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-Index', 'display_name' => '资产管理-Index','resource' => '/api/asset' ,'permission_category_id' => $assetMethodPermissionCategory->id]);
@@ -65,6 +67,7 @@ class InitSeeder extends Seeder
         $farmUpdateMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Update', 'display_name' => '农具管理-Update', 'resource' => '/api/collection/farm/{id}', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
         $farmDestroyMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Destroy', 'display_name' => '农具管理-Destroy', 'resource' => '/api/collection/farm/{id}', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
         $farmBatchDeleteMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-BatchDelete', 'display_name' => '农具管理-BatchDelete', 'resource' => '/api/collection/farm/batch-delete', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
+        $farmImportMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Import', 'display_name' => '农具管理-Import', 'resource' => '/api/collection/farm/import', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
 
         $userIndexMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Index', 'display_name' => '用户管理-Index', 'resource' => '/api/user', 'permission_category_id' => $userMethodPermissionCategory->id ]);
         $userStoreMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Store', 'display_name' => '用户管理-Store', 'resource' => '/api/user', 'permission_category_id' => $userMethodPermissionCategory->id]);
@@ -87,7 +90,7 @@ class InitSeeder extends Seeder
 
         //通用功能角色
         $commonRole = Role::firstOrCreate(['name' => 'Common', 'display_name' => '通用功能角色']);
-        $commonRole->perms()->sync(array($commonSettingsMethodPermission->id, $commonMenuMethodPermission->id, $commonImageMethodPermission->id, $commonIndexMethodPermission->id));
+        $commonRole->perms()->sync(array($commonSettingsMethodPermission->id, $commonMenuMethodPermission->id, $commonImageMethodPermission->id, $commonIndexMethodPermission->id, $commonFileMethodPermission->id));
 
         //固定资产管理角色
         $assetRole = Role::firstOrCreate(['name' => 'Asset', 'display_name' => '固定资产管理角色']);
@@ -95,7 +98,7 @@ class InitSeeder extends Seeder
 
         //农具管理角色
         $farmRole = Role::firstOrCreate(['name' => 'Farm', 'display_name' => '农具管理角色']);
-        $farmRole->perms()->sync(array($farmIndexMethodPermission->id, $farmStoreMethodPermission->id, $farmEditMethodPermission->id, $farmUpdateMethodPermission->id, $farmDestroyMethodPermission->id, $farmBatchDeleteMethodPermission->id));
+        $farmRole->perms()->sync(array($farmIndexMethodPermission->id, $farmStoreMethodPermission->id, $farmEditMethodPermission->id, $farmUpdateMethodPermission->id, $farmDestroyMethodPermission->id, $farmBatchDeleteMethodPermission->id, $farmImportMethodPermission->id));
 
         //用户管理角色
         $userMethodRole = Role::firstOrCreate(['name' => 'UserMethod', 'display_name' => '用户管理角色']);

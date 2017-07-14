@@ -3,6 +3,8 @@
 * @author: wuzhihui
 * @date: 2017/7/10
 * @description:
+* （1）初步完成了农具管理的首页功能；（2017/7/10）
+* （2）完成了农具数据的导入功能；（2017/7/14）
 */
 
 <template>
@@ -40,8 +42,9 @@
         <el-col :lg="4">
             <el-input placeholder="请输入名称、编号、来源或描述进行搜索" icon="search" v-model="search.query_text" :on-icon-click="handleSearchIconClick"></el-input>
         </el-col>
-        <el-col :lg="1" class="pull-right">
-            <el-button type="success"><router-link to="/collection/farm/create">添加</router-link></el-button>
+        <el-col :lg="2" class="pull-right">
+            <router-link to="/collection/farm/create"><el-button type="success">添加</el-button></router-link>
+            <el-button type="success" @click="handleImport">导入</el-button>
         </el-col>
         <el-col :lg="24" class="list">
             <el-table :data="list.data" border style="width: 100%" v-loading="loading" element-loading-text="拼命加载数据中" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
@@ -67,6 +70,30 @@
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="list.current_page" :page-sizes="['10', '15', '20', '50']" :page-size="list.per_page" layout="total, sizes, prev, pager, next, jumper" :total="list.total" class="pull-right">
             </el-pagination>
         </el-col>
+
+        <el-dialog title="导入数据" v-model="dialog.import.visible" size="small">
+            <error-component v-if="Object.getOwnPropertyNames(dialog.import.errors).length > 1" :berrors="dialog.import.errors"></error-component>
+            <el-form v-model="dialog.import.model" ref="ImportModel" :rules="dialog.import.rules">
+                <span>导入方式：</span>
+                <el-radio class="radio" v-model="dialog.import.model.type" label="cover">覆盖</el-radio>
+                <el-radio class="radio" v-model="dialog.import.model.type" label="ignore">忽略</el-radio>
+                <el-upload
+                        class="upload-demo"
+                        :headers = "token"
+                        drag
+                        accept = "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        action="/api/file/update"
+                        :on-success="handleSuccess">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件，且不超过500kb</div>
+                </el-upload>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialog.import.visible=false">取消</el-button>
+                <el-button type="primary" @click="handleImportSave" element-loading-text="导入中..." v-loading.fullscreen.lock="fullscreenLoading">导入</el-button>
+            </div>
+        </el-dialog>
     </content-component>
 </template>
 
@@ -87,13 +114,17 @@
 
 <script>
     import content from '../../layouts/Content.vue'
+    import error from '../../layouts/Error.vue'
     export default {
         components : {
-            'content-component' : content
+            'content-component' : content,
+            'error-component' : error
         },
         data() {
             return {
+                token: {'X-CSRF-TOKEN': window.Laravel.csrfToken},
                 loading : true,
+                fullscreenLoading : false,
                 search : {
                     category : {
                         value : '',
@@ -259,6 +290,16 @@
                     farm : [],
                     params : {
                         ids: []
+                    }
+                },
+                dialog : {
+                    import : {
+                        visible : false,
+                        errors : {},
+                        model : {
+                            file : [],
+                            type : 'cover',
+                        }
                     }
                 }
             }
@@ -429,7 +470,40 @@
             handleCurrentChange (val) {
                 this.list.current_page = val;
                 this.load();
-            }
+            },
+
+            //导入数据
+            handleImport() {
+                //console.log('handleImport');
+                this.dialog.import.visible = true;
+            },
+
+            //导入数据按钮
+            handleImportSave() {
+                //console.log('handleImportSave');
+                this.fullscreenLoading = true;
+                axios.post('/api/collection/farm/import', this.dialog.import.model)
+                        .then(response => {
+                    //console.log(response.data);
+                    this.$message('导入成功');
+                    this.fullscreenLoading = false;
+                    this.dialog.import.visible = false;
+                    this.load();
+                }).catch(error => {
+                    if(error.response.status == 422){
+                        this.dialog.import.errors = error.response.data;
+                    }else{
+                        this.$message.error('导入失败');
+                    }
+                    this.fullscreenLoading = false;
+                });
+            },
+
+            //处理附件上传结果
+            handleSuccess(response, file, fileList){
+                //console.log(response);
+                this.dialog.import.model.file = response.url;
+            },
         }
     }
 </script>
