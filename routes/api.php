@@ -8,6 +8,7 @@
  * （1）将所有功能接口转移到API.php；（2017/7/4）
  * （2）添加农具管理的接口；（2017/7/10）
  * （3）添加上传附件的接口；（2017/7/14）
+ * （4）添加农具图片管理的相关接口（2017/9/15）
  */
 
 //use Illuminate\Http\Request;
@@ -71,6 +72,10 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
 
         //农具管理模块
         Route::group(['prefix' => 'farm'], function () {
+
+            Route::get('{id}/image', 'FarmController@showImage');
+            Route::post('{id}/image', 'FarmController@saveImage');
+            Route::delete('/{farm_id}/image/{id}', 'FarmController@deleteImage');
             Route::post('import', 'FarmController@import'); //导入数据
             Route::post('batch-delete', 'FarmController@batchDelete');
             Route::get('{id}/edit', 'FarmController@edit');

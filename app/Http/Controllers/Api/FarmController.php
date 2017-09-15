@@ -8,10 +8,13 @@
  * @description:
  * （1）完成农具管理的基本功能；（2017/7/10）
  * （2）农具导入功能；（2017/7/14）
+ * （3）修改固定资产编号对应Serial字段；(2017/9/5)
+ * （4）添加图片管理的相关接口；（2017/9/15）
  */
 
 namespace App\Http\Controllers\Api;
 
+use App\CollectionImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use IQuery;
@@ -19,9 +22,13 @@ use App\Farm;
 use Log;
 use Auth;
 use Excel;
+//use App\Traits\AttachmentTraits;
 
 class FarmController extends Controller
 {
+//    use AttachmentTraits;
+//    private $attachementPath = 'collection/farm';
+
     protected $model = Farm::class;
 
     public function __construct()
@@ -50,7 +57,7 @@ class FarmController extends Controller
             'memo' => 'nullable|string|max:2000',
             'display' => 'required|string|max:255',
             'keeper_id' => 'required|integer|exists:users,id,deleted_at,NULL',
-            'asset_id' => 'nullable|exists:assets,id,deleted_at,NULL'
+            'asset_id' => 'nullable|exists:assets,serial,deleted_at,NULL'
         ]);
 //        Log::info($request->all());
 //        return $request->all();
@@ -291,5 +298,79 @@ class FarmController extends Controller
         ]);
 
         //TODO 添加数据校验功能
+
+    }
+
+    /**
+     * 保存一张图片
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveImage(Request $request, $id)
+    {
+        $farm = Farm::findOrFail($id);
+
+        $file = $request->file('file');
+        if ($file != null && $file->isValid()) {
+            //$mimeType = $file -> getMimeType();
+            $entension = $file->getClientOriginalExtension();
+            //$pic_name = md5(date('ymdhis') . $file->getClientOriginalName()) . '.' . $entension;
+            $pic_name = date('Ymdhis') . substr(md5(date('ymdhis') . $file->getClientOriginalName()), 0, 4) . '.' . $entension;
+            $path = $file->move('Storage/' . $this->getPath(), $pic_name);
+            $path = studly_case(str_replace("\\", "/", ucfirst($path)));
+
+            $collectionImage = new CollectionImage;
+            $collectionImage->path = $path;
+            $collectionImage->thumb = $path;
+            $collectionImage->collectible_type = Farm::class;
+            $collectionImage->collectible_id = $farm->id;
+            if($collectionImage->save()) {
+                //Log::info($path);
+                return response()->json([
+                    'name' => $pic_name,
+                    'url' => '' . $path
+                ]);
+                //return url($path);
+                //return response()->file($path);
+            } else {
+                abort(500, '保存失败');
+            }
+
+
+        } else {
+            abort(500, '上传失败');
+        }
+    }
+
+    /**
+     * 显示一张图片
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function showImage(Request $request, $id)
+    {
+        return Farm::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover')->get();
+    }
+
+    /**
+     * 删除一张图片
+     * @param Request $request
+     * @param $farm_id
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteImage(Request $request, $farm_id, $id)
+    {
+        $image = Farm::findOrFail($farm_id)->images()->where('id', '=', $id)->firstOrFail();
+
+        if($image->delete()) {
+            return response()->json([
+                'res' => true,
+            ]);
+        }else{
+            abort(500, '删除失败');
+        }
     }
 }

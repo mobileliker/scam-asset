@@ -6,6 +6,8 @@
  * @author： wuzhihui
  * @date: 2017/7/6
  * @description:
+ * （1）基本功能；
+ * （2）Farm图片的关联函数；（2017/9/15）
  */
 
 namespace App;
@@ -33,5 +35,9 @@ class Farm extends Model
     {
         return $this->belongsto('App\Asset', 'asset_id', 'id');
     }
-    
+
+    public function images()
+    {
+        return $this->morphMany('App\CollectionImage', 'collectible');
+    }
 }
