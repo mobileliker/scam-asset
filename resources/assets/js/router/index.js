@@ -24,64 +24,70 @@ import AlogIndex from '../components/alog/Index'
 import AuthIndex from '../components/passport/Index'
 import CollectionFarmIndex from '../components/collection/farm/Index'
 import CollectionFarmCreate from '../components/collection/farm/Create'
+import CollectionFarmShow from '../components/collection/farm/Show'
 
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Index',
-      component: Index
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/asset',
-      name: 'AssetIndex',
-      component: AssetIndex
-    },
-    {
-      path: '/asset/create',
-      name: 'AssetCreate',
-      component: AssetCreate
-    },
-    {
-      path: '/asset/:id/edit',
-      name : 'AssetEdit',
-      component : AssetEdit
-    },
-    {
-      path : '/user',
-      name : 'UserIndex',
-      component : UserIndex
-    },
-    {
-      path : '/alog',
-      name : 'AlogIndex',
-      component : AlogIndex
-    },
-    {
-      path : '/auth',
-      name :  'AuthIndex',
-      component : AuthIndex
-    },
-    {
-      path : '/collection/farm',
-      name : 'CollectionFarmIndex',
-      component : CollectionFarmIndex
-    },
-    {
-      path : '/collection/farm/create',
-      name : 'CollectionFarmCreate',
-      component : CollectionFarmCreate
-    },
-    {
-      path : '/collection/farm/:id/edit',
-      name : 'CollectionFarmEdit',
-      component : CollectionFarmCreate
-    }
-  ]
+    routes: [
+        {
+            path: '/',
+            name: 'Index',
+            component: Index
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: Login
+        },
+        {
+            path: '/asset',
+            name: 'AssetIndex',
+            component: AssetIndex
+        },
+        {
+            path: '/asset/create',
+            name: 'AssetCreate',
+            component: AssetCreate
+        },
+        {
+            path: '/asset/:id/edit',
+            name: 'AssetEdit',
+            component: AssetEdit
+        },
+        {
+            path: '/user',
+            name: 'UserIndex',
+            component: UserIndex
+        },
+        {
+            path: '/alog',
+            name: 'AlogIndex',
+            component: AlogIndex
+        },
+        {
+            path: '/auth',
+            name: 'AuthIndex',
+            component: AuthIndex
+        },
+        {
+            path: '/collection/farm',
+            name: 'CollectionFarmIndex',
+            component: CollectionFarmIndex
+        },
+        {
+            path: '/collection/farm/create',
+            name: 'CollectionFarmCreate',
+            component: CollectionFarmCreate
+        },
+        {
+            path: '/collection/farm/:id/edit',
+            name: 'CollectionFarmEdit',
+            component: CollectionFarmCreate
+        },
+        {
+            path : '/collection/farm/:id',
+            name : 'CollectionFarmShow',
+            component : CollectionFarmShow
+        }
+    ]
 })

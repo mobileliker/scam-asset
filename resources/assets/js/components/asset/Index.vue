@@ -4,6 +4,7 @@
  * @date: 2017/7/10
  * @description:
  * （1）修复搜索框中日期选择的错误，优化类型选择可清除；（2017/7/10）
+ * （2）修复搜索框中日期选择的清除后无法重新加载数据的错误；（2017/7/14）
  */
 <template>
     <content-component id="content">
@@ -213,13 +214,13 @@
                 },
                 deep : true
             },
-            'search.post_date.value' : {
-                handler : function(val, oldVal) {
-                    this.list.current_page = 1;
-                    this.load();
-                },
-                deep: true
-            },
+//            'search.post_date.value' : {
+//                handler : function(val, oldVal) {
+//                    this.list.current_page = 1;
+//                    this.load();
+//                },
+//                deep: true
+//            },
             /*'search.query_text' : {
                 handler : function(val, oldVal) {
                     this.list.current_page = 1;
@@ -295,6 +296,8 @@
             //console.log(this.search.post_date.value[0]);
             this.search.post_date.post_date_start = val.substring(0,10);
             this.search.post_date.post_date_end = val.substring(13);
+            this.list.current_page = 1;
+            this.load();
           },
           handleSelectionChange(val) {
             //console.log(val);

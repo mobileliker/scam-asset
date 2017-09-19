@@ -1,3 +1,11 @@
+/**
+ * 菜单页面
+ * @version : 2.0
+ * @author : wuzhihui
+ * @date : 2017/7/14
+ * @description:
+ * （1）注释掉多余的测试语句；（2017/7/14）
+ */
 <template>
     <el-menu :router="true" :default-active="$route.path" :unique-opened="true">
         <el-menu-item index="/">首页</el-menu-item>
@@ -31,7 +39,7 @@
         mounted() {
             axios.get('/api/user/menu')
                 .then(response =>{
-                    console.log(response.data);
+                    //console.log(response.data);
                     this.menu = response.data;
                 });
         }

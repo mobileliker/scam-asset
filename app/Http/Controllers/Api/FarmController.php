@@ -10,6 +10,7 @@
  * （2）农具导入功能；（2017/7/14）
  * （3）修改固定资产编号对应Serial字段；(2017/9/5)
  * （4）添加图片管理的相关接口；（2017/9/15）
+ * （5）添加获取相关农具的接口； （2017/9/19）
  */
 
 namespace App\Http\Controllers\Api;
@@ -22,6 +23,7 @@ use App\Farm;
 use Log;
 use Auth;
 use Excel;
+
 //use App\Traits\AttachmentTraits;
 
 class FarmController extends Controller
@@ -86,6 +88,7 @@ class FarmController extends Controller
      */
     public function index(Request $request)
     {
+        //Log::info($request->all());
         //Log::info($request->all());
 
         $lists = Farm::leftJoin('users as keepers', 'farms.keeper_id', '=', 'keepers.id')
@@ -162,10 +165,10 @@ class FarmController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-//    public function show($id)
-//    {
-//        //
-//    }
+    public function show($id)
+    {
+        return Farm::findOrFail($id);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -271,8 +274,8 @@ class FarmController extends Controller
 
                 while ($number--) {
                     $farm = Farm::where('serial', '=', $serial)->first();
-                    if($farm == null) $farm = new Farm;
-                    else if($request->type == 'ignore') continue;
+                    if ($farm == null) $farm = new Farm;
+                    else if ($request->type == 'ignore') continue;
                     $farm->serial = $serial;
                     $farm->category = $category;
                     $farm->name = $name;
@@ -317,7 +320,7 @@ class FarmController extends Controller
             $entension = $file->getClientOriginalExtension();
             //$pic_name = md5(date('ymdhis') . $file->getClientOriginalName()) . '.' . $entension;
             $pic_name = date('Ymdhis') . substr(md5(date('ymdhis') . $file->getClientOriginalName()), 0, 4) . '.' . $entension;
-            $path = $file->move('Storage/' . $this->getPath(), $pic_name);
+            $path = $file->move('Storage/upload/image', $pic_name);
             $path = studly_case(str_replace("\\", "/", ucfirst($path)));
 
             $collectionImage = new CollectionImage;
@@ -325,7 +328,7 @@ class FarmController extends Controller
             $collectionImage->thumb = $path;
             $collectionImage->collectible_type = Farm::class;
             $collectionImage->collectible_id = $farm->id;
-            if($collectionImage->save()) {
+            if ($collectionImage->save()) {
                 //Log::info($path);
                 return response()->json([
                     'name' => $pic_name,
@@ -351,7 +354,7 @@ class FarmController extends Controller
      */
     public function showImage(Request $request, $id)
     {
-        return Farm::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover')->get();
+        return Farm::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
     }
 
     /**
@@ -365,12 +368,28 @@ class FarmController extends Controller
     {
         $image = Farm::findOrFail($farm_id)->images()->where('id', '=', $id)->firstOrFail();
 
-        if($image->delete()) {
+        if ($image->delete()) {
             return response()->json([
                 'res' => true,
             ]);
-        }else{
+        } else {
             abort(500, '删除失败');
         }
+    }
+
+    public function relate(Request $request, $id)
+    {
+        $lists = Farm::leftJoin('users as keepers', 'farms.keeper_id', '=', 'keepers.id')
+            ->leftJoin('users', 'farms.user_id', '=', 'users.id')
+            ->select('farms.id', 'farms.input_date', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user')
+            ->where('farms.id', '!=', $id);
+
+        if ($request->query_text != null && $request->query_text != '') {
+            $lists = $lists->where('farms.name', 'like', '%' . $request->query_text . '%');
+        }
+
+        $lists = $lists->orderBy('id', 'desc')->take(50)->get();
+
+        return $lists;
     }
 }

@@ -52,13 +52,18 @@
                 <el-table-column type="index" label="序号" width="70"></el-table-column>
                 <el-table-column prop="input_date" label="入库时间" sortable></el-table-column>
                 <el-table-column prop="category" label="分类" sortable></el-table-column>
-                <el-table-column prop="name" label="名称" sortable></el-table-column>
+                <el-table-column prop="name" label="名称" sortable>
+                    <template scope="scope">
+                        <router-link :to="'/collection/farm/' + scope.row.id">{{scope.row.name}}</router-link>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="serial" label="编号" sortable></el-table-column>
                 <el-table-column prop="source" label="来源" sortable></el-table-column>
                 <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
                 <el-table-column prop="user" label="编辑人" sortable></el-table-column>
-                <el-table-column  fixed="right" label="操作" width="150">
+                <el-table-column  fixed="right" label="操作" width="200">
                     <template scope="scope">
+                        <el-button type="text" size="small" @click="handleImageClick(scope.row.id)">图片管理</el-button>
                         <el-button type="text" size="small"><router-link :to="'/collection/farm/' + scope.row.id + '/edit'">编辑</router-link></el-button>
                         <el-button type="text" size="small" @click="handleDeleteRow(scope.$index, scope.row.id, list.data)">删除</el-button>
                     </template>
@@ -94,6 +99,7 @@
                 <el-button type="primary" @click="handleImportSave" element-loading-text="导入中..." v-loading.fullscreen.lock="fullscreenLoading">导入</el-button>
             </div>
         </el-dialog>
+        <szy-image-dialog :prefix="dialog.image.prefix" :data="dialog.image.data" v-model="dialog.image.visible"></szy-image-dialog>
     </content-component>
 </template>
 
@@ -115,10 +121,12 @@
 <script>
     import content from '../../layouts/Content.vue'
     import error from '../../layouts/Error.vue'
+    import szyImageDialog from '../../Basic/Dialog/SzyImageDialog.vue'
     export default {
         components : {
             'content-component' : content,
-            'error-component' : error
+            'error-component' : error,
+            'szy-image-dialog' : szyImageDialog
         },
         data() {
             return {
@@ -300,6 +308,16 @@
                             file : [],
                             type : 'cover',
                         }
+                    },
+                    image : {
+                        visible : false,
+                        prefix : '',
+                        data : [],
+                        modal : false
+                    },
+                    imageView : {
+                        visible : false,
+                        url : ''
                     }
                 }
             }
@@ -503,6 +521,12 @@
             handleSuccess(response, file, fileList){
                 //console.log(response);
                 this.dialog.import.model.file = response.url;
+            },
+
+            handleImageClick(id) {
+                this.dialog.image.prefix = 'api/collection/farm/' + id;
+
+                this.dialog.image.visible = true;
             },
         }
     }

@@ -4,6 +4,7 @@
  * @date: 2017/7/5
  * description:
  * （1）去除原有的type；（2017/7/5）
+ * （2）去除用户列表的范例数据；（2017/7/14）
  */
 <template>
     <content-component id="content">
@@ -151,16 +152,16 @@
                     'to' : '',
                     'total' : 0,
                     data : [
-                        {
-                            id : '1',
-                            name : '张三',
-                            email : 'abc@123.com'
-                        },
-                        {
-                            id : '1',
-                            name : '张三',
-                            email : 'abc@123.com'
-                        }
+//                        {
+//                            id : '1',
+//                            name : '张三',
+//                            email : 'abc@123.com'
+//                        },
+//                        {
+//                            id : '1',
+//                            name : '张三',
+//                            email : 'abc@123.com'
+//                        }
                     ]
                 },
                 batch : {

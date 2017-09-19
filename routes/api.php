@@ -75,11 +75,13 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
 
             Route::get('{id}/image', 'FarmController@showImage');
             Route::post('{id}/image', 'FarmController@saveImage');
+            Route::get('{id}/relate', 'FarmController@relate');
             Route::delete('/{farm_id}/image/{id}', 'FarmController@deleteImage');
             Route::post('import', 'FarmController@import'); //导入数据
             Route::post('batch-delete', 'FarmController@batchDelete');
             Route::get('{id}/edit', 'FarmController@edit');
             Route::put('{id}', 'FarmController@update');
+            Route::get('{id}', 'FarmController@show');
             Route::delete('{id}', 'FarmController@destroy');
             Route::resource('/', 'FarmController', ['only' => ['index', 'store']]);
         });
