@@ -63,7 +63,7 @@ class ImportCollectionImageCommand extends Command
                         $entension = strrchr($file, '.');
                         $pic_name = date('Ymdhis') . substr(md5(date('ymdhis') . $file), 0, 4) . $entension;
 
-                        $path2 = 'Storage/collection/farm/' . $pic_name;
+                        $path2 = 'storage/collection/farm/' . $pic_name;
                         rename($path . '/' . $file, public_path('storage/collection/farm/') . $pic_name);
                         $collectionImage = new \App\CollectionImage;
                         $collectionImage->path = $path2;
