@@ -12,6 +12,7 @@
  * （4）添加图片管理的相关接口；（2017/9/15）
  * （5）添加获取相关农具的接口； （2017/9/19）
  * （6）修复导入时编号的错误； （2017/9/20）
+ * （7）修复Storage大小写的错误；（2017/9/20）
  */
 
 namespace App\Http\Controllers\Api;
@@ -321,7 +322,7 @@ class FarmController extends Controller
             $entension = $file->getClientOriginalExtension();
             //$pic_name = md5(date('ymdhis') . $file->getClientOriginalName()) . '.' . $entension;
             $pic_name = date('Ymdhis') . substr(md5(date('ymdhis') . $file->getClientOriginalName()), 0, 4) . '.' . $entension;
-            $path = $file->move('Storage/upload/image', $pic_name);
+            $path = $file->move('storage/upload/image', $pic_name);
             $path = studly_case(str_replace("\\", "/", ucfirst($path)));
 
             $collectionImage = new CollectionImage;
