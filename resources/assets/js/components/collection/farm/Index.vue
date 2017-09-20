@@ -459,37 +459,20 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-//                    axios.delete('/api/collection/farm/' + id)
-//                        .then(response => {
-//                            this.$message({
-//                                type : 'success',
-//                                message : '删除成功'
-//                            });
-//                            data.splice(index, 1);
-//                        }).catch(error => {
-//                            if(error.response.status == 404){
-//                                this.$message.error('欲删除的农具不存在');
-//                            }else{
-//                                this.$message.error('删除失败');
-//                            }
-//                        });
-                    axios({
-                        method: 'delete',
-                        url: '/api/collection/farm/' + id,
-                    })
+                    axios.post('/api/collection/farm/' + id + '/delete')
                         .then(response => {
                             this.$message({
-                                type: 'success',
-                                message: '删除成功'
+                                type : 'success',
+                                message : '删除成功'
                             });
                             data.splice(index, 1);
                         }).catch(error => {
-                        if (error.response.status == 404) {
-                            this.$message.error('欲删除的农具不存在');
-                        } else {
-                            this.$message.error('删除失败');
-                        }
-                    });
+                            if(error.response.status == 404){
+                                this.$message.error('欲删除的农具不存在');
+                            }else{
+                                this.$message.error('删除失败');
+                            }
+                        });
                 }).catch(() => {
                     this.$message({
                         type: 'info',

@@ -58,6 +58,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         Route::post('', 'AssetController@store');
         Route::get('{id}/edit', 'AssetController@edit');
         Route::put('{id}', 'AssetController@update');
+        Route::post('{id}/delete', 'AssetController@destroy');
         Route::delete('{id}', 'AssetController@destroy');
     });
 
@@ -82,7 +83,8 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
             Route::get('{id}/edit', 'FarmController@edit');
             Route::put('{id}', 'FarmController@update');
             Route::get('{id}', 'FarmController@show');
-            //Route::delete('{id}', 'FarmController@destroy');
+            Route::get('{id}/delete', 'FarmController@destroy');
+            Route::delete('{id}', 'FarmController@destroy');
             Route::resource('/', 'FarmController', ['only' => ['index', 'store']]);
         });
     });
@@ -97,6 +99,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         Route::get('{id}', 'UserController@show');
         Route::get('{id}/edit', 'UserController@edit');
         Route::put('{id}', 'UserController@update');
+        Route::post('{id}/delete', 'UserController@destroy');
         Route::delete('{id}', 'UserController@destroy');
     });
 
