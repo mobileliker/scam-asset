@@ -73,4 +73,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
     });
 
 
+    Route::delete('collection/farm/{id}', 'FarmController@destroy');
+
+
 });
