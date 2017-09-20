@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8768e45ed77673f4bd34bc3b7893abda",
-    "content-hash": "1a6aae642fd7ac4d7a971496df17a3df",
+    "hash": "8d9c3dc633bb148f022b6dc31f0b78bc",
+    "content-hash": "cea705beb9753808b99721f4615598ed",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1157,16 +1157,16 @@
         },
         {
             "name": "laravel/passport",
-            "version": "v2.0.11",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/passport.git",
-                "reference": "1e6f56ccf42255e8479d0dcd695619dab6613313"
+                "reference": "d19a6b60503cb416fe55507684699de35239681f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/laravel/passport/1e6f56ccf42255e8479d0dcd695619dab6613313.zip",
-                "reference": "1e6f56ccf42255e8479d0dcd695619dab6613313",
+                "url": "https://files.phpcomposer.com/files/laravel/passport/d19a6b60503cb416fe55507684699de35239681f.zip",
+                "reference": "d19a6b60503cb416fe55507684699de35239681f",
                 "shasum": ""
             },
             "require": {
@@ -1180,7 +1180,7 @@
                 "illuminate/encryption": "~5.4",
                 "illuminate/http": "~5.4",
                 "illuminate/support": "~5.4",
-                "league/oauth2-server": "~5.0",
+                "league/oauth2-server": "^6.0",
                 "php": ">=5.6.4",
                 "phpseclib/phpseclib": "^2.0",
                 "symfony/psr-http-message-bridge": "~1.0",
@@ -1222,7 +1222,7 @@
                 "oauth",
                 "passport"
             ],
-            "time": "2017-06-14 21:58:27"
+            "time": "2017-08-04 14:03:52"
         },
         {
             "name": "laravel/tinker",
@@ -1480,16 +1480,16 @@
         },
         {
             "name": "league/oauth2-server",
-            "version": "5.1.5",
+            "version": "6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server.git",
-                "reference": "8e5df6d6286d0010861a708b70f00345d074bce9"
+                "reference": "925776958fc3f5278e74363663c20147af32b668"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/thephpleague/oauth2-server/8e5df6d6286d0010861a708b70f00345d074bce9.zip",
-                "reference": "8e5df6d6286d0010861a708b70f00345d074bce9",
+                "url": "https://files.phpcomposer.com/files/thephpleague/oauth2-server/925776958fc3f5278e74363663c20147af32b668.zip",
+                "reference": "925776958fc3f5278e74363663c20147af32b668",
                 "shasum": ""
             },
             "require": {
@@ -1498,7 +1498,7 @@
                 "lcobucci/jwt": "^3.1",
                 "league/event": "^2.1",
                 "paragonie/random_compat": "^2.0",
-                "php": ">=5.5.9",
+                "php": ">=5.6.0",
                 "psr/http-message": "^1.0"
             },
             "replace": {
@@ -1506,19 +1506,10 @@
                 "lncd/oauth2": "*"
             },
             "require-dev": {
-                "indigophp/hash-compat": "^1.1",
                 "phpunit/phpunit": "^4.8 || ^5.0",
                 "zendframework/zend-diactoros": "^1.0"
             },
-            "suggest": {
-                "indigophp/hash-compat": "Polyfill for hash_equals function for PHP 5.5"
-            },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-V5-WIP": "5.0-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "League\\OAuth2\\Server\\": "src/"
@@ -1553,7 +1544,7 @@
                 "secure",
                 "server"
             ],
-            "time": "2017-07-11 06:31:36"
+            "time": "2017-08-03 15:09:23"
         },
         {
             "name": "maatwebsite/excel",
