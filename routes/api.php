@@ -83,7 +83,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
             Route::get('{id}/edit', 'FarmController@edit');
             Route::put('{id}', 'FarmController@update');
             Route::get('{id}', 'FarmController@show');
-            Route::get('{id}/delete', 'FarmController@destroy');
+            Route::post('{id}/delete', 'FarmController@destroy');
             Route::delete('{id}', 'FarmController@destroy');
             Route::resource('/', 'FarmController', ['only' => ['index', 'store']]);
         });
