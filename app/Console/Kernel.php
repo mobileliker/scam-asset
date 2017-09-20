@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'App\Console\Commands\GenerateQrcode', //二维码生成的命令行工具
+        Commands\ImportCollectionImageCommand::class, //导入图片
     ];
 
     /**

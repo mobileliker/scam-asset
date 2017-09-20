@@ -7,6 +7,7 @@
  * @date : 2017/9/6
  * @description :
  * （1）基本功能；（2017/9/6）
+ * （2）添加Hash字段；（2017/9/20）
  */
 
 use Illuminate\Support\Facades\Schema;
@@ -28,6 +29,7 @@ class CreateCollectionImagesTable extends Migration
             $table->integer('collectible_id')->comment('藏品id');
             $table->string('path')->comment('路径');
             $table->string('thumb')->comment('缩略图');
+            $table->string('hash')->nullable();
             $table->tinyInteger('cover')->comment('封面')->default(0); //0代表非封面，1代表封面
             $table->tinyInteger('status')->default(1)->comment('状态'); //状态，0为禁用，1为启用
             $table->softDeletes(); //软删除

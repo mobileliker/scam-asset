@@ -11,6 +11,7 @@
  * （3）修改固定资产编号对应Serial字段；(2017/9/5)
  * （4）添加图片管理的相关接口；（2017/9/15）
  * （5）添加获取相关农具的接口； （2017/9/19）
+ * （6）修复导入时编号的错误； （2017/9/20）
  */
 
 namespace App\Http\Controllers\Api;
@@ -290,7 +291,7 @@ class FarmController extends Controller
                     $farm->save();
                     //Log::info($farm);
 
-                    $serial = 'A' . (intval(substr($serial, 1)) + 1);
+                    $serial = 'A0' . (intval(substr($serial, 1)) + 1);
                 }
 
             }
