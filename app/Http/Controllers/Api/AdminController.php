@@ -47,7 +47,7 @@ class AdminController extends Controller
             $entension = $file->getClientOriginalExtension();
             $pic_name = md5(date('ymdhis') . $file->getClientOriginalName()) . '.' . $entension;
             $path = $file->move('storage/upload/image/', $pic_name);
-            $path = str_replace("\\", "/", ucfirst($path));
+            $path = lcfirst(str_replace("\\", "/", ucfirst($path)));
             //Log::info($path);
             return response()->json([
                 'name' => $pic_name,
@@ -72,7 +72,7 @@ class AdminController extends Controller
             $entension = $file->getClientOriginalExtension();
             $name = md5(date('ymdhis').$file->getClientOriginalName()) . '.' . $entension;
             $path = $file->move('storage/upload/attachment/', $name);
-            $path = str_replace("\\", "/", ucfirst($path));
+            $path = lcfirst(str_replace("\\", "/", ucfirst($path)));
             return response()->json([
                 'name' => $name,
                 'url' => ''.$path,
