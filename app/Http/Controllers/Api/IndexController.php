@@ -6,6 +6,7 @@
  * @date: 2017/7/3
  * @description:
  * （1）添加权限控制；（2017/7/5）
+ * （2）Index函数添加农具的相关统计数据；（2017/9/30）
  */
 
 namespace App\Http\Controllers\Api;
@@ -13,6 +14,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User, App\Alog, App\Asset;
+use App\Farm;
+use App\CollectionImage;
 
 class IndexController extends Controller
 {
@@ -35,15 +38,23 @@ class IndexController extends Controller
 //                        year_add : 500
 //                    }
 
-        $userTotal = User::count();
-        $alogTotal = Alog::count();
-        $assetNumber = Asset::count();
-        $assetSum = Asset::sum('sum');
-
         $year = date('Y');
         $month = date('m');
+        $userTotal = User::count();
+        $alogTotal = Alog::count();
+
+
+        $assetNumber = Asset::count();
+        $assetSum = Asset::sum('sum');
         $assetMonthAdd = Asset::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
         $assetYearAdd = Asset::whereYear('created_at', $year)->count();
+
+        $farmNumber = Farm::count();
+        $farmMonthAdd = Farm::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
+        $farmYearAdd = Farm::whereYear('created_at', $year)->count();
+        $farmImageMonthAdd = CollectionImage::where('collectible_type', Farm::class)->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
+        $farmImageYearAdd = CollectionImage::where('collectible_type', Farm::class)->whereYear('created_at', $year)->count();
+
         $total = [
           'system' => [
               'user_total' => $userTotal,
@@ -54,6 +65,13 @@ class IndexController extends Controller
                 'sum' => $assetSum,
                 'month_add' => $assetMonthAdd,
                 'year_add' => $assetYearAdd
+            ],
+            'farm' => [
+                'number' => $farmNumber,
+                'month_add' => $farmMonthAdd,
+                'year_add' => $farmYearAdd,
+                'image_month_add' => $farmImageMonthAdd,
+                'image_year_add' => $farmImageYearAdd,
             ]
         ];
         return response()->json($total);

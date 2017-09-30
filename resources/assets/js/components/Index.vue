@@ -1,3 +1,12 @@
+/**
+* @version 2.0
+* @author: wuzhihui
+* @date: 2017/9/30
+* @description:
+* （1）基本功能；
+* （2）添加农具的相关统计数据；（2017/9/30）
+*/
+
 <template>
     <content-component>
         <el-col :lg="24">
@@ -22,8 +31,20 @@
                   </div>
                   <p>总数量：{{total.asset.number}}</p>
                   <p>总金额：{{total.asset.sum}}</p>
-                  <p>本月新增新增数量：{{total.asset.month_add}}</p>
+                  <p>本月新增数量：{{total.asset.month_add}}</p>
                   <p>本年新增数量：{{total.asset.year_add}}</p>
+                </el-card>
+            </el-col>
+            <el-col :lg="4" class="box-card">
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <h3>农具</h3>
+                    </div>
+                    <p>总数量：{{total.farm.number}}</p>
+                    <p>本月新增新增数量：{{total.farm.month_add}}</p>
+                    <p>本年新增数量：{{total.farm.year_add}}</p>
+                    <p>本月图片新增数量：{{total.farm.image_month_add}}</p>
+                    <p>本年图片新增数量：{{total.farm.image_year_add}}</p>
                 </el-card>
             </el-col>
         </el-col>
@@ -46,14 +67,21 @@
             return {
                 total : {
                     system : {
-                        user_total : '50',
-                        alog_total : '200',
+                        user_total : '',
+                        alog_total : '',
                     },
                     asset : {
-                        number : '200',
-                        sum : '2000',
-                        month_add : '10',
-                        year_add : 500
+                        number : '',
+                        sum : '',
+                        month_add : '',
+                        year_add : '',
+                    },
+                    farm : {
+                        number : '1',
+                        month_add : '3',
+                        year_add : '4',
+                        image_month_add : '5',
+                        image_year_add : '6'
                     }
                 },
             }
