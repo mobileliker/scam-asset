@@ -7,6 +7,7 @@
  * （1）添加Api授权的service provider；
  * （2）修复key=name被重复定义的错误；（2017/7/4）
  * （3）log修改为每日一文件；（2017/7/6）
+ * （4）添加Laravel Debugbar（2017/9/30）
  */
 
 return [
@@ -209,6 +210,7 @@ return [
         'Maatwebsite\Excel\ExcelServiceProvider',
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class, //角色权限管理
+        Barryvdh\Debugbar\ServiceProvider::class, //Laravel-Debugbar
 
         /*
          * Mannal Service Providers
@@ -268,6 +270,7 @@ return [
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class, //角色权限
+        'Debugbar' => Barryvdh\Debugbar\Facade::class, //Laravel Debugbar
 
         //mannal facecade
         'IQuery' => App\Facades\IQueryClass::class, //IQuery 别名
