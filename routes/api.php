@@ -9,6 +9,8 @@
  * （2）添加农具管理的接口；（2017/7/10）
  * （3）添加上传附件的接口；（2017/7/14）
  * （4）添加农具图片管理的相关接口（2017/9/15）
+ * (5) 修复delete无法使用的错误；（2017/9/30）
+ * (6) 整理api.php，使用resource+only替代逐条撰写；(2017/9/30)
  */
 
 //use Illuminate\Http\Request;
@@ -53,14 +55,8 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         //Route::get('export', 'AssetController@batchExport'); //批量导出所有固定资产
        // Route::get('{id}/export', 'AssetController@export'); //导出单据
         Route::post('batch-delete', 'AssetController@batchDelete'); //批量删除
-
-        Route::get('', 'AssetController@index');
-        Route::post('', 'AssetController@store');
-        Route::get('{id}/edit', 'AssetController@edit');
-        Route::put('{id}', 'AssetController@update');
-        Route::post('{id}/delete', 'AssetController@destroy');
-        Route::delete('{id}', 'AssetController@destroy');
     });
+    Route::resource('asset', 'AssetController', ['only' => [ 'index', 'store', 'update', 'destroy','edit']]);
 
     //单据管理模块
     Route::group(['prefix' => 'invoice'], function () {
@@ -73,20 +69,15 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
 
         //农具管理模块
         Route::group(['prefix' => 'farm'], function () {
-
             Route::get('{id}/image', 'FarmController@showImage');
             Route::post('{id}/image', 'FarmController@saveImage');
             Route::get('{id}/relate', 'FarmController@relate');
             Route::delete('/{farm_id}/image/{id}', 'FarmController@deleteImage');
+
             Route::post('import', 'FarmController@import'); //导入数据
             Route::post('batch-delete', 'FarmController@batchDelete');
-            Route::get('{id}/edit', 'FarmController@edit');
-            Route::put('{id}', 'FarmController@update');
-            Route::get('{id}', 'FarmController@show');
-            Route::post('{id}/delete', 'FarmController@destroy');
-            Route::delete('{id}', 'FarmController@destroy');
-            Route::resource('/', 'FarmController', ['only' => ['index', 'store']]);
         });
+        Route::resource('farm', 'FarmController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
     });
 
 
@@ -94,19 +85,12 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::post('batch-delete', 'UserController@batchDelete'); //批量删除
         Route::post('check', 'UserController@check'); //验证
-        Route::get('', 'UserController@index');
-        Route::post('', 'UserController@store');
-        Route::get('{id}', 'UserController@show');
-        Route::get('{id}/edit', 'UserController@edit');
-        Route::put('{id}', 'UserController@update');
-        Route::post('{id}/delete', 'UserController@destroy');
-        Route::delete('{id}', 'UserController@destroy');
     });
+    Route::resource('user', 'UserController', ['only' => ['index', 'store', 'show', 'edit', 'update', 'destroy']]);
 
 
     //操作日志模块
     Route::group(['prefix' => 'alog'], function () {
         Route::get('', 'AlogController@index');
     });
-
 });

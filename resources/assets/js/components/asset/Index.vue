@@ -256,7 +256,7 @@
                   cancelButtonText: '取消',
                   type: 'warning'
                 }).then(() => {
-                    axios.post('/api/asset/' + id + '/delete')
+                    axios.delete('/api/asset/' + id)
                         .then(response => {
                           this.$message({
                             type: 'success',

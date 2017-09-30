@@ -459,7 +459,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.post('/api/collection/farm/' + id + '/delete')
+                    axios.delete('/api/collection/farm/' + id)
                         .then(response => {
                             this.$message({
                                 type : 'success',
