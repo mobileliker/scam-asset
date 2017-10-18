@@ -259,7 +259,7 @@
                         {required : true, message : '请选择展示区域', trigger : 'change'}
                     ],
                     asset_id : [
-                        {max : '255', message : '固定资产编号不能超过', trigger : 'blur'}
+                        {max : '255', message : '固定资产编号不能超过255', trigger : 'blur'}
                     ],
                     memo: [
                         {max: 2000, message: '备注不能超过2000个字', trigger: 'blur'}

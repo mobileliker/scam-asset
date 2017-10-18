@@ -11,6 +11,7 @@
  * （4）添加农具图片管理的相关接口（2017/9/15）
  * (5) 修复delete无法使用的错误；（2017/9/30）
  * (6) 整理api.php，使用resource+only替代逐条撰写；(2017/9/30)
+ * （7）添加岩石管理的相关接口；（2017/10/18）
  */
 
 //use Illuminate\Http\Request;
@@ -78,6 +79,9 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
             Route::post('batch-delete', 'FarmController@batchDelete');
         });
         Route::resource('farm', 'FarmController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+        //岩石模块
+        Route::resource('rock', 'RockController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
     });
 
 
