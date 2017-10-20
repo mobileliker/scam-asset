@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use IQuery;
 use Auth;
+use Log;
+use Excel;
 
 class RockController extends Controller
 {
@@ -29,7 +31,7 @@ class RockController extends Controller
             'ename' => 'nullable|string|max:255',
             'input_date' => 'required|date',
             'serial' => 'required|string|max:255',
-            'classification' => 'nullable|integer|min:0',
+            'classification' => 'nullable|string|max:255',
             'feature' => 'nullable|string|max:255',
             'origin' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:2000',
@@ -67,7 +69,7 @@ class RockController extends Controller
         $lists = Rock::leftJoin('users as keepers', 'rocks.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'rocks.user_id', '=', 'users.id')
             ->leftJoin('rock_categories', 'rock_categories.id', '=', 'rocks.category_id')
-            ->select('rocks.id', 'rocks.input_date', 'rocks.category_id', 'rock_categories.name as category_name', 'rocks.name', 'rocks.ename', 'rocks.serial', 'rocks.keeper_id', 'keepers.name as keeper', 'rocks.user_id', 'users.name as user');
+            ->select('rocks.id', 'rocks.input_date', 'rocks.category_id', 'rocks.category as category', 'rocks.name', 'rocks.ename', 'rocks.serial', 'rocks.keeper_id', 'keepers.name as keeper', 'rocks.user_id', 'users.name as user');
 
 
 
@@ -84,10 +86,14 @@ class RockController extends Controller
             else $lists = $lists->whereNotNull('rocks.asset_id');
         }
 
+        if($request->category != null && $request->category != '') {
+            $lists = $lists->where('rocks.category', '=', $request->category);
+        }
+
         $order_params = [
             'id' => 'rocks.id',
             'input_date' => 'rocks.input_date',
-            'category_name' => 'rock_categories.name',
+            'category' => 'rocks.category',
             'name' => 'rocks.name',
             'ename' => 'rocks.ename',
             'serial' => 'rocks.serial',
@@ -179,5 +185,101 @@ class RockController extends Controller
     public function batchDelete(Request $request)
     {
         return parent::batchDelete($request);
+    }
+
+    /**
+     * 岩石导入功能
+     * 
+     */
+    public function import(Request $request)
+    {
+        //Log::info('import');
+        $this->validate($request, [
+            'file' => 'required',
+            'type' => 'required|in:ignore,cover',
+        ]);
+
+        $user = Auth::user();
+
+        $path = $request->file;
+
+        Excel::load($path, function($reader) use ($user, $request) {
+
+            // $categories = [
+            //     1 => '岩石',
+            //     2 => '矿物',
+            //     3 => '化石',
+            // ];
+            $categories = array();
+            $categories[0] = '岩石';
+            $categories[1] = '矿物';
+            $categories[2] = '化石';
+
+            for($i = 1; $i <= 3; $i++) {
+
+                $sheet = $reader->getSheet($i);
+                $sheet_array = $sheet->toArray();
+                foreach ($sheet_array as $row => $cells) {
+                    if ($row == 0 || $row == 1) continue; //忽略标题行和表头
+                    if ($cells[4] == '') continue; //编号不存在则忽略
+
+                    // foreach($cells as $col => $cell) {
+                    //     Log::info($col . ' : ' .$cell);
+                    // }
+
+                    $input_date = $cells[1];
+                    $name = $cells[2];
+                    $ename = $cells[3];
+                    $serial = $cells[4];
+                    $classification = $cells[5];
+                    $feature = $cells[6];
+                    //$category_name = $cells[7];
+                    $size = $cells[8];
+                    $storage = $cells[9];
+                    $origin = $cells[10];
+                    $description = $cells[11];
+                    $memo = $cells[12];
+
+                    $serials = explode('-', $serial);
+                    //Log::info($serials);
+                    //Log::info(count($serials));
+
+                    if(count($serials) > 1){       
+                        $serial = intval(substr(trim($serials[0]), 2));
+                        $serial_end = intval(substr(trim($serials[1]), 2));
+                    } else {
+                        $serial = intval(substr(trim($serial), 2));
+                        $serial_end = $serial;
+                    }
+
+                    while($serial <= $serial_end) {
+                        $rock = Rock::where('serial', '=', 'C0' . $serial)->first();
+                        if($rock == null) $rock = new Rock;
+                        else if($request->type == 'ignore') continue;
+
+                        Log::info($i .'~' . $cells[0] . '~' . $input_date . '~' . $name);
+                        $input_dates = explode('-', $input_date);
+                        $rock->input_date = '20' . $input_dates[2] . '-' . $input_dates[0] . '-' . $input_dates[1];
+                        $rock->name = $name;
+                        $rock->ename = $ename;
+                        $rock->serial = 'C0' . $serial;
+                        $rock->classification = $classification;
+                        $rock->feature = $feature;
+                        $rock->size = $size;
+                        $rock->storage = $storage;
+                        $rock->origin = $origin;
+                        $rock->description = $description;
+                        $rock->memo = $memo;
+                        $rock->keeper_id = $user->id;
+                        $rock->user_id = $user->id;
+                        $rock->category = $categories[$i - 1];
+                        $rock->save();
+
+                        $serial = $serial + 1;
+                    }
+                }
+            }
+
+        });
     }
 }

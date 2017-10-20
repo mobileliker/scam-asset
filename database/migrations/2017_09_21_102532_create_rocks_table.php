@@ -27,6 +27,7 @@ class CreateRocksTable extends Migration
         $prefix = config('database.connections.mysql.prefix');
         Schema::create('rocks', function (Blueprint $table) use ($prefix){
             $table->increments('id');
+            $table->string('category')->default('其他')->comment('种类');
             $table->integer('category_id')->unsigned()->nullable()->comment('类别');
             $table->string('name')->comment('名称');
             $table->string('ename')->nullable()->comment('英文名');
@@ -35,6 +36,8 @@ class CreateRocksTable extends Migration
             $table->string('classification')->nullable()->comment('分类');
             $table->string('feature')->nullable()->comment('特征');
             $table->string('origin')->nullable()->comment('产地');
+            $table->string('size')->nullable()->comment('尺寸');
+            $table->string('storage')->nullable()->comment('存放地点');
             $table->text('description')->nullable()->comment('描述');
             $table->integer('keeper_id')->unsigned()->nullable()->comment('保管人');
             $table->integer('user_id')->unsigned()->comment('最近编辑人');

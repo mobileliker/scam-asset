@@ -81,6 +81,11 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         Route::resource('farm', 'FarmController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
         //岩石模块
+        Route::group(['prefix' => 'rock'], function () {
+
+            Route::post('import', 'RockController@import');
+            Route::post('batch-delete', 'RockController@batchDelete');
+        });
         Route::resource('rock', 'RockController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
     });
 
