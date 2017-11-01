@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @version: 1.0
+ * @author: wuzhihui
+ * @date: 2017/7/3
+ * @description:
+ * （1）注释提供的命令行范例；
+ * （2）添加二维码生成的命令行工具；
+ */
+
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -13,8 +22,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
-        'App\Console\Commands\GenerateQrcode',
+        'App\Console\Commands\GenerateQrcode', //二维码生成的命令行工具
+        Commands\ImportCollectionImageCommand::class, //导入图片
     ];
 
     /**

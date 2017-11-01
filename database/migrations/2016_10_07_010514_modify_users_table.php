@@ -30,7 +30,7 @@ class ModifyUsersTable extends Migration
         //
         Schema::table('users', function ($table) {
             $table->dropColumn('type');
-            $table->dropColum('deleted_at');
+            $table->dropColumn('deleted_at');
        });
     }
 }

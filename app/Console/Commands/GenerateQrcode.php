@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @version: 1.0 批量生成固定自唱二维码的命令行工具
+ * @author: wuzhihui
+ * @date: 2017/7/3
+ * @description:
+ *
+ */
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -33,9 +41,9 @@ class GenerateQrcode extends Command
     }
 
     /**
-     * Execute the console command.
+     *  批量生成固定自唱二维码的命令行工具
      *
-     * @return mixed
+     * @return null
      */
     public function handle()
     {

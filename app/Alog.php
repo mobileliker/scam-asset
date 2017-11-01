@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @version 2.0
+ * @author: wuzhihui
+ * @date: 2017/7/3
+ * @description:
+ * 
+ */
+
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +40,7 @@ class Alog extends Model
     	return $this->belongsTo('App\User', 'user_id', 'id');
     }
 
-    public static function log($module, $operate, $content, $ip)
+    public static function log($module, $operate, $content, $ip = null)
     {
 		return Alog::create([
 			'log_time' => date('Y-m-d H:i:s',time()),
@@ -43,4 +51,6 @@ class Alog extends Model
 			'ip' => $ip,
 		]);
     }
+
+
 }

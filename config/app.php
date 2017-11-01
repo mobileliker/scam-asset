@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * @version: v2.0
+ * @author: wuzhihui
+ * @date: 2017/6/20
+ * （1）添加Api授权的service provider；
+ * （2）修复key=name被重复定义的错误；（2017/7/4）
+ * （3）log修改为每日一文件；（2017/7/6）
+ * （4）添加Laravel Debugbar（2017/9/30）
+ */
+
 return [
 
     /*
@@ -12,7 +22,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => '华南农业博物馆资产管理系统',
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +132,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'), //log文件修改为每日一文件
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
@@ -134,9 +144,7 @@ return [
     |
     */
     'theme' => 'scama',
-    'name' => '华南农业博物馆资产管理系统',
     'copyright' => '华南农业博物馆筹建办公室',
-
 
     /*
     |--------------------------------------------------------------------------
@@ -180,8 +188,7 @@ return [
         /*
          * Package Service Providers...
          */
-
-        //
+        Laravel\Tinker\TinkerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -193,17 +200,23 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /*
+         * Offered Service Providers
+         */
+        Laravel\Passport\PassportServiceProvider::class, //API授权的Service Provider
+
+        /*
          * Other Service Providers
          */
         'Maatwebsite\Excel\ExcelServiceProvider',
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        Zizaco\Entrust\EntrustServiceProvider::class, //角色权限管理
+        Barryvdh\Debugbar\ServiceProvider::class, //Laravel-Debugbar
 
         /*
          * Mannal Service Providers
          */
         App\Providers\IQueryServiceProvider::class, //注册iquery
         App\Providers\IQrcodeServiceProvider::class,
-
     ],
 
     /*
@@ -223,6 +236,7 @@ return [
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
         'Blade' => Illuminate\Support\Facades\Blade::class,
+        'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
         'Bus' => Illuminate\Support\Facades\Bus::class,
         'Cache' => Illuminate\Support\Facades\Cache::class,
         'Config' => Illuminate\Support\Facades\Config::class,
@@ -255,6 +269,8 @@ return [
         //Other Facecade
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class, //角色权限
+        'Debugbar' => Barryvdh\Debugbar\Facade::class, //Laravel Debugbar
 
         //mannal facecade
         'IQuery' => App\Facades\IQueryClass::class, //IQuery 别名

@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * @version 2.0
+ * @author: wuzhihui
+ * @date: 2017/7/3
+ * @description:
+ * 
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Redirect;
 use App\Asset;
+
 
 class HomeController extends Controller
 {
@@ -15,7 +23,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -25,8 +33,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //return view('home');
-        return Redirect::to('admin');
+        return view('admin-vue');
     }
 
     public function search(Request $request)

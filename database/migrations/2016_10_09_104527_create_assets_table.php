@@ -15,7 +15,7 @@ class CreateAssetsTable extends Migration
     {
         Schema::create('assets', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('post_date'); //入账日期
+            $table->dateTimeTz('post_date'); //入账日期
             //$table->integer('number')->unique(); //单据号
             $table->tinyInteger('type');//类型
             $table->string('category_number'); //分类

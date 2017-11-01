@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @version: 2.0
+ * @author: wuzhihui
+ * @date: 2017/7/4
+ * @description:
+ * （1）设置 api 认证 guard 的 driver 选项为 passport；（2017/7/4）
+ */
+
 return [
 
     /*
@@ -42,7 +50,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'passport', //设置 api 认证 guard 的 driver 选项为 passport
             'provider' => 'users',
         ],
     ],
