@@ -7,6 +7,7 @@
  * @description:
  * （1）添加权限控制；（2017/7/5）
  * （2）Index函数添加农具的相关统计数据；（2017/9/30）
+ * （3）Index函数添加岩石相关的统计数据；（2017/11/1）
  */
 
 namespace App\Http\Controllers\Api;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\User, App\Alog, App\Asset;
 use App\Farm;
 use App\CollectionImage;
+use App\Rock;
 
 class IndexController extends Controller
 {
@@ -55,6 +57,13 @@ class IndexController extends Controller
         $farmImageMonthAdd = CollectionImage::where('collectible_type', Farm::class)->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
         $farmImageYearAdd = CollectionImage::where('collectible_type', Farm::class)->whereYear('created_at', $year)->count();
 
+        $rockNumber = Rock::count();
+        $rockMonthAdd = Rock::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
+        $rockYearAdd = Rock::whereYear('created_at', $year)->count();
+        $rockImageMonthAdd = CollectionImage::where('collectible_type', Rock::class)->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
+        $rockImageYearAdd = CollectionImage::where('collectible_type', Rock::class)->whereYear('created_at', $year)->count();
+
+
         $total = [
           'system' => [
               'user_total' => $userTotal,
@@ -72,6 +81,13 @@ class IndexController extends Controller
                 'year_add' => $farmYearAdd,
                 'image_month_add' => $farmImageMonthAdd,
                 'image_year_add' => $farmImageYearAdd,
+            ],
+            'rock' => [
+                'number' => $rockNumber,
+                'month_add' => $rockMonthAdd,
+                'year_add' => $rockYearAdd,
+                'image_month_add' => $rockImageMonthAdd,
+                'image_year_add' => $rockImageYearAdd,
             ]
         ];
         return response()->json($total);

@@ -5,6 +5,7 @@
 * @description:
 * （1）基本功能；
 * （2）添加农具的相关统计数据；（2017/9/30）
+* （3）添加岩石相关的统计数据；（2017/11/1）
 */
 
 <template>
@@ -47,6 +48,18 @@
                     <p>本年图片新增数量：{{total.farm.image_year_add}}</p>
                 </el-card>
             </el-col>
+            <el-col :lg="4" class="box-card">
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <h3>岩石</h3>
+                    </div>
+                    <p>总数量：{{total.rock.number}}</p>
+                    <p>本月新增新增数量：{{total.rock.month_add}}</p>
+                    <p>本年新增数量：{{total.rock.year_add}}</p>
+                    <p>本月图片新增数量：{{total.rock.image_month_add}}</p>
+                    <p>本年图片新增数量：{{total.rock.image_year_add}}</p>
+                </el-card>
+            </el-col>
         </el-col>
     </content-component>
 </template>
@@ -77,6 +90,13 @@
                         year_add : '',
                     },
                     farm : {
+                        //number : '1',
+                        //month_add : '3',
+                        //year_add : '4',
+                        //image_month_add : '5',
+                        //image_year_add : '6'
+                    },
+                    rock : {
                         number : '1',
                         month_add : '3',
                         year_add : '4',

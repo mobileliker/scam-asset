@@ -28,7 +28,7 @@ import CollectionFarmCreate from '../components/collection/farm/Create'
 import CollectionFarmShow from '../components/collection/farm/Show'
 import CollectionRockIndex from '../components/collection/rock/Index'
 import CollectionRockCreate from '../components/collection/rock/Create'
-
+import CollectionRockShow from '../components/collection/rock/Show'
 
 export default new Router({
     routes: [
@@ -106,6 +106,11 @@ export default new Router({
             path : '/collection/rock/:id/edit',
             name : 'CollectionRockEdit',
             component : CollectionRockCreate
+        },
+        {
+            path : '/collection/rock/:id',
+            name : 'CollectionRockShow',
+            component : CollectionRockShow
         }
     ]
 })

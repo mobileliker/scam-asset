@@ -83,6 +83,11 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         //岩石模块
         Route::group(['prefix' => 'rock'], function () {
 
+            Route::get('{id}/image', 'RockController@showImage');
+            Route::post('{id}/image', 'RockController@saveImage');
+            Route::get('{id}/relate', 'RockController@relate');
+            Route::delete('/{rock_id}/image/{id}', 'RockController@deleteImage');
+
             Route::post('import', 'RockController@import');
             Route::post('batch-delete', 'RockController@batchDelete');
         });

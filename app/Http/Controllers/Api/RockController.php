@@ -7,6 +7,7 @@
  * @date : 2017/10/18
  * @description :
  * (1) 完成基本功能；（2017/10/18）
+ * （2）添加图片相关的功能；（2017/11/1）
  */
 
 namespace App\Http\Controllers\Api;
@@ -18,6 +19,7 @@ use IQuery;
 use Auth;
 use Log;
 use Excel;
+use App\CollectionImage;
 
 class RockController extends Controller
 {
@@ -282,4 +284,98 @@ class RockController extends Controller
 
         });
     }
+
+        /**
+     * 显示一张图片
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function showImage(Request $request, $id)
+    {
+        return Rock::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
+    }
+
+
+    /**
+     * 保存一张图片
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveImage(Request $request, $id)
+    {
+        $rock = Rock::findOrFail($id);
+
+        $file = $request->file('file');
+        if ($file != null && $file->isValid()) {
+            //$mimeType = $file -> getMimeType();
+            $entension = $file->getClientOriginalExtension();
+            //$pic_name = md5(date('ymdhis') . $file->getClientOriginalName()) . '.' . $entension;
+            $pic_name = date('Ymdhis') . substr(md5(date('ymdhis') . $file->getClientOriginalName()), 0, 4) . '.' . $entension;
+            $path = $file->move('storage/upload/image', $pic_name);
+            $path = studly_case(str_replace("\\", "/", ucfirst($path)));
+
+            $collectionImage = new CollectionImage;
+            $collectionImage->path = $path;
+            $collectionImage->thumb = $path;
+            $collectionImage->collectible_type = Rock::class;
+            $collectionImage->collectible_id = $rock->id;
+            if ($collectionImage->save()) {
+                //Log::info($path);
+                return response()->json([
+                    'name' => $pic_name,
+                    'url' => '' . $path
+                ]);
+                //return url($path);
+                //return response()->file($path);
+            } else {
+                abort(500, '保存失败');
+            }
+
+
+        } else {
+            abort(500, '上传失败');
+        }
+    }
+
+      /**
+     * 删除一张图片
+     * @param Request $request
+     * @param $rock_id
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteImage(Request $request, $rock_id, $id)
+    {
+        $image = Rock::findOrFail($rock_id)->images()->where('id', '=', $id)->firstOrFail();
+
+        if ($image->delete()) {
+            return response()->json([
+                'res' => true,
+            ]);
+        } else {
+            abort(500, '删除失败');
+        }
+    }
+
+
+
+    public function relate(Request $request, $id)
+    {
+        $lists = Rock::leftJoin('users as keepers', 'rocks.keeper_id', '=', 'keepers.id')
+            ->leftJoin('users', 'rocks.user_id', '=', 'users.id')
+            ->select('rocks.id', 'rocks.input_date', 'rocks.category', 'rocks.name', 'rocks.serial', 'rocks.ename', 'rocks.keeper_id', 'keepers.name as keeper', 'rocks.user_id', 'rocks.name as user')
+            ->where('rocks.id', '!=', $id);
+
+        if ($request->query_text != null && $request->query_text != '') {
+            $lists = $lists->where('rocks.name', 'like', '%' . $request->query_text . '%');
+        }
+
+        $lists = $lists->orderBy('id', 'desc')->take(50)->get();
+
+        return $lists;
+    }
+
+
 }

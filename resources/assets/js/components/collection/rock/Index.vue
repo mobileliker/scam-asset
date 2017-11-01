@@ -108,6 +108,9 @@
                 </el-button>
             </div>
         </el-dialog>
+
+        <szy-image-dialog :prefix="dialog.image.prefix" :data="dialog.image.data"
+                          v-model="dialog.image.visible"></szy-image-dialog>
     </content-component>
 </template>
 
@@ -129,10 +132,14 @@
 
 <script>
     import content from '../../layouts/Content.vue'
+    import error from '../../layouts/Error.vue'
+    import szyImageDialog from '../../Basic/Dialog/SzyImageDialog.vue'
 
     export default {
         components: {
-            'content-component': content
+            'content-component': content,
+            'error-component': error,
+            'szy-image-dialog': szyImageDialog
         },
         data() {
             return {
@@ -220,6 +227,16 @@
                             type: 'cover',
                         }
                     },
+                    image: {
+                        visible: false,
+                        prefix: '',
+                        data: [],
+                        modal: false
+                    },
+                    imageView: {
+                        visible: false,
+                        url: ''
+                    }
                 }
             }
         },
@@ -304,8 +321,10 @@
                 // TODO
             },
             handleImageClick(id) { //图片管理
-                console.log('handleImageClick');
-                // TODO
+                //console.log('handleImageClick');
+                this.dialog.image.prefix = 'api/collection/rock/' + id;
+
+                this.dialog.image.visible = true;
             },
             handleDeleteRow(index, id, data) {
                 //console.log('handleDeleteRow');
