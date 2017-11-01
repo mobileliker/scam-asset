@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
  * @date : 2017/11/1
  * @description : 
  * (1)修复生产环境无法正确执行InitSeeder的错误；（2017/11/1）
+ **/
 
 class DatabaseSeeder extends Seeder
 {
