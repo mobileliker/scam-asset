@@ -32,6 +32,7 @@ class InitSeeder extends Seeder
         $assetPermission = Permission::firstOrCreate(['name' => 'Menu-Asset-Asset', 'display_name' => '资产管理','resource' => '/asset', 'permission_category_id' => $assetPermissionCategory->id]);
         $farmPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Farm', 'display_name' => '农具管理', 'resource' => '/collection/farm', 'permission_category_id' => $collectionPermissionCategory->id]);
         $rockPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Rock', 'display_name' => '岩石管理', 'resource' => '/collection/rock', 'permission_category_id' => $collectionPermissionCategory->id]);
+        $plantPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Plant', 'display_name' => '植物管理', 'resource' => '/collection/plant', 'permission_category_id' => $collectionPermissionCategory->id]);
         $userPermission = Permission::firstOrCreate(['name' => 'Menu-System-User', 'display_name' => '用户管理','resource' => '/user', 'permission_category_id' => $systemPermissionCategory->id]);
         $alogPermission = Permission::firstOrCreate(['name' => 'Menu-System-Alog', 'display_name' => '操作日志', 'resource' => '/alog','permission_category_id' => $systemPermissionCategory->id]);
 
@@ -84,11 +85,11 @@ class InitSeeder extends Seeder
 
         //普通用户角色
         $userRole = Role::firstOrCreate(['name' => 'User', 'display_name' => '单位用户']);
-        $userRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id));
+        $userRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id));
 
         //管理员用户角色
         $adminRole = Role::firstOrCreate(['name' => 'Admin', 'display_name' => '管理员']);
-        $adminRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $userPermission->id, $alogPermission->id));
+        $adminRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $userPermission->id, $alogPermission->id));
 
         //通用功能角色
         $commonRole = Role::firstOrCreate(['name' => 'Common', 'display_name' => '通用功能角色']);

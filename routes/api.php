@@ -92,6 +92,8 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
             Route::post('batch-delete', 'RockController@batchDelete');
         });
         Route::resource('rock', 'RockController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+        Route::resource('plant', 'PlantController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
     });
 
 

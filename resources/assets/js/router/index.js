@@ -29,6 +29,8 @@ import CollectionFarmShow from '../components/collection/farm/Show'
 import CollectionRockIndex from '../components/collection/rock/Index'
 import CollectionRockCreate from '../components/collection/rock/Create'
 import CollectionRockShow from '../components/collection/rock/Show'
+import CollectionPlantIndex from '../components/collection/plant/Index'
+import CollectionPlantCreate from '../components/collection/plant/Create'
 
 export default new Router({
     routes: [
@@ -111,6 +113,21 @@ export default new Router({
             path : '/collection/rock/:id',
             name : 'CollectionRockShow',
             component : CollectionRockShow
+        },
+        {
+            path : '/collection/plant',
+            name : 'CollectionPlantIndex',
+            component : CollectionPlantIndex
+        },
+        {
+            path : '/collection/plant/create',
+            name : 'CollectionPlantCreate',
+            component : CollectionPlantCreate
+        },
+        {
+            path : '/collection/plant/:id/edit',
+            name : 'CollectionPlantEdit',
+            component : CollectionPlantCreate
         }
     ]
 })

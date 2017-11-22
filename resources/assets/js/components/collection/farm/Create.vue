@@ -49,7 +49,7 @@
                                 <el-input v-model="farm.serial" placeholder="编号"></el-input>
                             </el-form-item>
                             <el-form-item label="数量" prop="number">
-                                <el-input v-model="farm.number" placeholder="number" :disabled="true"></el-input>
+                                <el-input v-model="farm.number" placeholder="数量" :disabled="true"></el-input>
                             </el-form-item>
                             <el-form-item label="展示区域" prop="display">
                                 <el-select v-model="farm.display" clearable placeholder="展示区域" prop="display">
@@ -288,7 +288,7 @@
                 }
         }).
             catch((error) => {
-                this.$message.error('获取所有用户失败');
+                this.$message.error('获取所有用户信息失败');
         });
         },
         methods: {
@@ -308,7 +308,7 @@
                         if(this.$route.name == 'CollectionFarmEdit'){
                             axios.put('/api/collection/farm/' + this.$route.params.id, this.farm)
                                     .then(response => {
-                                console.log(response.data);
+                                //console.log(response.data);
                                 this.$message('保存成功');
                                 this.$router.push('/collection/farm');
                             }).catch(error => {
