@@ -259,7 +259,7 @@ class RockController extends Controller
                         if($rock == null) $rock = new Rock;
                         else if($request->type == 'ignore') continue;
 
-                        Log::info($i .'~' . $cells[0] . '~' . $input_date . '~' . $name);
+                        //Log::info($i .'~' . $cells[0] . '~' . $input_date . '~' . $name);
                         $input_dates = explode('-', $input_date);
                         $rock->input_date = '20' . $input_dates[2] . '-' . $input_dates[0] . '-' . $input_dates[1];
                         $rock->name = $name;

@@ -93,6 +93,15 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         });
         Route::resource('rock', 'RockController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
+        Route::group(['prefix' => 'plant'], function () {
+            Route::get('{id}/image', 'PlantController@showImage');
+            Route::post('{id}/image', 'PlantController@saveImage');
+            Route::get('{id}/relate', 'PlantController@relate');
+            Route::delete('{plant_id}/image/{id}', 'PlantController@deleteImage');
+
+            Route::post('import', 'PlantController@import');
+            Route::post('batch-delete', 'PlantController@batchDelete');
+        });
         Route::resource('plant', 'PlantController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
     });
 

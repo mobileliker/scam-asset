@@ -31,7 +31,7 @@ class CreatePlantsTable extends Migration
             $table->string('genus')->nullable()->comment('属');
             $table->string('name')->comment('名称');
             $table->string('latin')->nullable()->comment('拉丁名');
-            $table->integer('number')->unsigned()->nullable()->comment('数量');
+            $table->integer('number')->unsigned()->default(1)->comment('数量');
             $table->string('size')->nullable()->comment('尺寸');
             $table->string('type')->nullable()->comment('类型');
             $table->string('origin')->nullable()->comment('产地');
