@@ -31,6 +31,7 @@ import CollectionRockCreate from '../components/collection/rock/Create'
 import CollectionRockShow from '../components/collection/rock/Show'
 import CollectionPlantIndex from '../components/collection/plant/Index'
 import CollectionPlantCreate from '../components/collection/plant/Create'
+import CollectionPlantShow from '../components/collection/plant/Show'
 
 export default new Router({
     routes: [
@@ -128,6 +129,11 @@ export default new Router({
             path : '/collection/plant/:id/edit',
             name : 'CollectionPlantEdit',
             component : CollectionPlantCreate
+        },
+        {
+            path : '/collection/plant/:id',
+            name : 'CollectionPlantIndex',
+            component : CollectionPlantShow
         }
     ]
 })

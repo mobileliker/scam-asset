@@ -382,7 +382,7 @@ class PlantController extends Controller
     {
         $lists = Plant::leftJoin('users as keepers', 'plants.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'plants.user_id', '=', 'users.id')
-            ->select('plants.id', 'plants.input_date', 'plants.category', 'plants.name', 'plants.serial', 'plants.latin', 'plants.keeper_id', 'keepers.name as keeper', 'plants.user_id', 'palnts.name as user')
+            ->select('plants.id', 'plants.input_date', 'plants.category', 'plants.name', 'plants.serial', 'plants.latin', 'plants.source', 'plants.keeper_id', 'keepers.name as keeper', 'plants.user_id', 'users.name as user')
             ->where('plants.id', '!=', $id);
 
         if ($request->query_text != null && $request->query_text != '') {

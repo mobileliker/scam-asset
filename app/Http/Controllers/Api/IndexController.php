@@ -18,6 +18,7 @@ use App\User, App\Alog, App\Asset;
 use App\Farm;
 use App\CollectionImage;
 use App\Rock;
+use App\Plant;
 
 class IndexController extends Controller
 {
@@ -64,11 +65,17 @@ class IndexController extends Controller
         $rockImageYearAdd = CollectionImage::where('collectible_type', Rock::class)->whereYear('created_at', $year)->count();
 
 
+        $plantNumber = Plant::count();
+        $plantMonthAdd = Plant::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
+        $plantYearAdd = Plant::whereYear('created_at', $year)->count();
+        $plantImageMonthAdd = CollectionImage::where('collectible_type', Plant::class)->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
+        $plantImageYearAdd = CollectionImage::where('collectible_type', Plant::class)->whereYear('created_at', $year)->count();
+
         $total = [
-          'system' => [
-              'user_total' => $userTotal,
-              'alog_total' => $alogTotal,
-          ],
+            'system' => [
+                'user_total' => $userTotal,
+                'alog_total' => $alogTotal,
+            ],
             'asset' => [
                 'number' => $assetNumber,
                 'sum' => $assetSum,
@@ -88,6 +95,13 @@ class IndexController extends Controller
                 'year_add' => $rockYearAdd,
                 'image_month_add' => $rockImageMonthAdd,
                 'image_year_add' => $rockImageYearAdd,
+            ],
+            'plant' => [
+                'number' => $plantNumber,
+                'month_add' => $plantMonthAdd,
+                'year_add' => $plantYearAdd,
+                'image_month_add' => $plantImageMonthAdd,
+                'image_year_add' => $plantImageYearAdd,
             ]
         ];
         return response()->json($total);

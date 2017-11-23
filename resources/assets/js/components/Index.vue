@@ -60,6 +60,18 @@
                     <p>本年图片新增数量：{{total.rock.image_year_add}}</p>
                 </el-card>
             </el-col>
+            <el-col :lg="4" class="box-card">
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <h3>植物</h3>
+                    </div>
+                    <p>总数量：{{total.plant.number}}</p>
+                    <p>本月新增新增数量：{{total.plant.month_add}}</p>
+                    <p>本年新增数量：{{total.plant.year_add}}</p>
+                    <p>本月图片新增数量：{{total.plant.image_month_add}}</p>
+                    <p>本年图片新增数量：{{total.plant.image_year_add}}</p>
+                </el-card>
+            </el-col>
         </el-col>
     </content-component>
 </template>
@@ -79,30 +91,30 @@
         data() {
             return {
                 total : {
-                    system : {
-                        user_total : '',
-                        alog_total : '',
-                    },
-                    asset : {
-                        number : '',
-                        sum : '',
-                        month_add : '',
-                        year_add : '',
-                    },
-                    farm : {
-                        //number : '1',
-                        //month_add : '3',
-                        //year_add : '4',
-                        //image_month_add : '5',
-                        //image_year_add : '6'
-                    },
-                    rock : {
-                        number : '1',
-                        month_add : '3',
-                        year_add : '4',
-                        image_month_add : '5',
-                        image_year_add : '6'
-                    }
+//                    system : {
+//                        user_total : '',
+//                        alog_total : '',
+//                    },
+//                    asset : {
+//                        number : '',
+//                        sum : '',
+//                        month_add : '',
+//                        year_add : '',
+//                    },
+//                    farm : {
+//                        //number : '1',
+//                        //month_add : '3',
+//                        //year_add : '4',
+//                        //image_month_add : '5',
+//                        //image_year_add : '6'
+//                    },
+//                    rock : {
+////                        number : '1',
+////                        month_add : '3',
+////                        year_add : '4',
+////                        image_month_add : '5',
+////                        image_year_add : '6'
+//                    }
                 },
             }
         },
