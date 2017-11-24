@@ -36,12 +36,28 @@
                   <p>本年新增数量：{{total.asset.year_add}}</p>
                 </el-card>
             </el-col>
+
+            <el-col :lg="4" class="box-card">
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <h3>藏品总统计</h3>
+                    </div>
+                    <p>总数量：{{total.collection.number}}</p>
+                    <p>图片总数量：{{total.collection.image_number}}</p>
+                    <p>本月新增新增数量：{{total.collection.month_add}}</p>
+                    <p>本年新增数量：{{total.collection.year_add}}</p>
+                    <p>本月图片新增数量：{{total.collection.image_month_add}}</p>
+                    <p>本年图片新增数量：{{total.collection.image_year_add}}</p>
+                </el-card>
+            </el-col>
+
             <el-col :lg="4" class="box-card">
                 <el-card>
                     <div slot="header" class="clearfix">
                         <h3>农具</h3>
                     </div>
                     <p>总数量：{{total.farm.number}}</p>
+                    <p>图片总数量：{{total.farm.image_number}}</p>
                     <p>本月新增新增数量：{{total.farm.month_add}}</p>
                     <p>本年新增数量：{{total.farm.year_add}}</p>
                     <p>本月图片新增数量：{{total.farm.image_month_add}}</p>
@@ -54,6 +70,7 @@
                         <h3>岩石</h3>
                     </div>
                     <p>总数量：{{total.rock.number}}</p>
+                    <p>图片总数量：{{total.rock.image_number}}</p>
                     <p>本月新增新增数量：{{total.rock.month_add}}</p>
                     <p>本年新增数量：{{total.rock.year_add}}</p>
                     <p>本月图片新增数量：{{total.rock.image_month_add}}</p>
@@ -66,6 +83,7 @@
                         <h3>植物</h3>
                     </div>
                     <p>总数量：{{total.plant.number}}</p>
+                    <p>图片总数量：{{total.plant.image_number}}</p>
                     <p>本月新增新增数量：{{total.plant.month_add}}</p>
                     <p>本年新增数量：{{total.plant.year_add}}</p>
                     <p>本月图片新增数量：{{total.plant.image_month_add}}</p>
