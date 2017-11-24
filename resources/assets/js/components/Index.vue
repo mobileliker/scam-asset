@@ -123,7 +123,11 @@
                 .then(response => {
                     //console.log(response.data);
                     this.total = response.data;
-                });
+                }).catch(error => {
+                    if(error.response.status == 401){
+                        this.$router.push('/login');
+                    }
+            });
         },
         methods : {
         }
