@@ -11,8 +11,10 @@
 华南农业博物馆筹建办公室资产管理系统基于Laravel，同样使用[MIT license](http://opensource.org/licenses/MIT).
 
 ## 更新
-v2.0.2 ing
-- 新增土壤、动物管理；
+v2.0.2(dev) ing
+- <del>新增土壤管理；</del>
+- 新增动物管理；
+- <del>修改了首页页面布局；</del>
 
 v2.0.1(dev)  2017/11/24
 - 新增了农具、岩石、植物管理的基本功能；
