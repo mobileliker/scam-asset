@@ -7,6 +7,7 @@
  * @date : 2017/11/22
  * @description :
  * (1)基本功能； （2017/11/22）
+ * (2)修改storeOrUpdate函数中latin写成ename的错误；（2017/11/29）
  */
 
 namespace App\Http\Controllers\Api;
@@ -207,7 +208,7 @@ class PlantController extends Controller
             'input_date' => 'plants.input_date',
             'category' => 'plants.category',
             'name' => 'plants.name',
-            'ename' => 'plants.lating',
+            'latin' => 'plants.latin',
             'serial' => 'plants.serial',
             'source' => 'plants.source',
             'keeper' => 'keepers.name',
