@@ -9,6 +9,11 @@
  * （2）Index函数添加农具的相关统计数据；（2017/9/30）
  * （3）Index函数添加岩石相关的统计数据；（2017/11/1）
  * （4）优化了Index的统计功能，精简了代码：（2017/11/24）
+ * @version : 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/11/29
+ * @description :
+ * (1)添加段面土壤标本和纸盒标本统计；（2017/11/29）
  */
 
 namespace App\Http\Controllers\Api;
@@ -61,6 +66,8 @@ class IndexController extends Controller
         $prefixs[] = 'farm';
         $prefixs[] = 'rock';
         $prefixs[] = 'plant';
+        $prefixs[] = 'soilBig';
+        $prefixs[] = 'soilSmall';
 
         $numberSum = 0;
         $imageNumberSum = 0;
@@ -106,67 +113,6 @@ class IndexController extends Controller
             'image_year_add' => $imageYearAddSum,
         ];
 
-//
-//        $farmNumber = Farm::count();
-//        $farmMonthAdd = Farm::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
-//        $farmYearAdd = Farm::whereYear('created_at', $year)->count();
-//        $farmImageMonthAdd = CollectionImage::where('collectible_type', Farm::class)->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
-//        $farmImageYearAdd = CollectionImage::where('collectible_type', Farm::class)->whereYear('created_at', $year)->count();
-//
-//        $rockNumber = Rock::count();
-//        $rockMonthAdd = Rock::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
-//        $rockYearAdd = Rock::whereYear('created_at', $year)->count();
-//        $rockImageMonthAdd = CollectionImage::where('collectible_type', Rock::class)->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
-//        $rockImageYearAdd = CollectionImage::where('collectible_type', Rock::class)->whereYear('created_at', $year)->count();
-//
-//
-//        $plantNumber = Plant::count();
-//        $plantMonthAdd = Plant::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
-//        $plantYearAdd = Plant::whereYear('created_at', $year)->count();
-//        $plantImageMonthAdd = CollectionImage::where('collectible_type', Plant::class)->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
-//        $plantImageYearAdd = CollectionImage::where('collectible_type', Plant::class)->whereYear('created_at', $year)->count();
-
-        //$collectionNumber = $farmNumber + $rockNumber + $plantNumber;
-
-//        $total = [
-//            'system' => [
-//                'user_total' => $userTotal,
-//                'alog_total' => $alogTotal,
-//            ],
-//            'asset' => [
-//                'number' => $assetNumber,
-//                'sum' => $assetSum,
-//                'month_add' => $assetMonthAdd,
-//                'year_add' => $assetYearAdd
-//            ],
-////            'collection' => [
-////                'number' => $assetNumber,
-////                'sum' => $assetSum,
-////                'month_add' => $assetMonthAdd,
-////                'year_add' => $assetYearAdd
-////            ],
-//            'farm' => [
-//                'number' => $farmNumber,
-//                'month_add' => $farmMonthAdd,
-//                'year_add' => $farmYearAdd,
-//                'image_month_add' => $farmImageMonthAdd,
-//                'image_year_add' => $farmImageYearAdd,
-//            ],
-//            'rock' => [
-//                'number' => $rockNumber,
-//                'month_add' => $rockMonthAdd,
-//                'year_add' => $rockYearAdd,
-//                'image_month_add' => $rockImageMonthAdd,
-//                'image_year_add' => $rockImageYearAdd,
-//            ],
-//            'plant' => [
-//                'number' => $plantNumber,
-//                'month_add' => $plantMonthAdd,
-//                'year_add' => $plantYearAdd,
-//                'image_month_add' => $plantImageMonthAdd,
-//                'image_year_add' => $plantImageYearAdd,
-//            ]
-//        ];
         return response()->json($total);
     }
 }

@@ -6,6 +6,7 @@
  * @date : 2017/11/22
  * @description :
  * (1)基本功能；（2017/11/22）
+ * (2)修复外键命名的错误；（2017/11/24）
  */
 
 use Illuminate\Support\Facades\Schema;
@@ -49,9 +50,9 @@ class CreatePlantsTable extends Migration
             $table->timestamps();
 
             if (config('app.debug')) {
-                $table->foreign('keeper_id', $prefix . 'rocks_keeper_foreign')->references('id')->on('users');
-                $table->foreign('user_id', $prefix . 'rocks_user_id_foreign')->references('id')->on('users');
-                $table->foreign('asset_id', $prefix . 'rocks_asset_id_foreign')->references('id')->on('users');
+                $table->foreign('keeper_id', $prefix . 'plants_keeper_foreign')->references('id')->on('users');
+                $table->foreign('user_id', $prefix . 'plants_user_id_foreign')->references('id')->on('users');
+                $table->foreign('asset_id', $prefix . 'plants_asset_id_foreign')->references('id')->on('users');
             }
         });
     }

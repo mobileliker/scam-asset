@@ -32,6 +32,9 @@ import CollectionRockShow from '../components/collection/rock/Show'
 import CollectionPlantIndex from '../components/collection/plant/Index'
 import CollectionPlantCreate from '../components/collection/plant/Create'
 import CollectionPlantShow from '../components/collection/plant/Show'
+import CollectionSoilIndex from '../components/collection/soil/Index'
+import CollectionSoilCreate from '../components/collection/soil/Create'
+import CollectionSoilShow from '../components/collection/soil/Show'
 
 export default new Router({
     routes: [
@@ -134,6 +137,26 @@ export default new Router({
             path : '/collection/plant/:id',
             name : 'CollectionPlantIndex',
             component : CollectionPlantShow
+        },
+        {
+          path : '/collection/soil',
+          name : 'CollectionSoilIndex',
+          component : CollectionSoilIndex
+        },
+        {
+          path : '/collection/soil/create',
+          name : 'CollectionSoilCreate',
+          component : CollectionSoilCreate
+        },
+        {
+          path : '/collection/soil/:id/edit',
+          name : 'CollectionSoilEdit',
+          component : CollectionSoilCreate
+        },
+        {
+          path : '/collection/soil/:id',
+          name : 'CollectionSoilShow',
+          component : CollectionSoilShow
         }
     ]
 })

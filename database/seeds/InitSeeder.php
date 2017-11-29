@@ -9,6 +9,12 @@
  * （2）添加农具的相关功能；（2017/7/7）
  * （3）添加附件上传功能和农具数据导入功能；（2017/7/14）
  * （4）添加岩石管理的功能菜单；（2017/9/21）
+ *
+ * @version : 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/11/24
+ * @description :
+ * (1)添加土壤管理的菜单权限；（2017/11/27）
  */
 
 use Illuminate\Database\Seeder;
@@ -33,6 +39,7 @@ class InitSeeder extends Seeder
         $farmPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Farm', 'display_name' => '农具管理', 'resource' => '/collection/farm', 'permission_category_id' => $collectionPermissionCategory->id]);
         $rockPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Rock', 'display_name' => '岩石管理', 'resource' => '/collection/rock', 'permission_category_id' => $collectionPermissionCategory->id]);
         $plantPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Plant', 'display_name' => '植物管理', 'resource' => '/collection/plant', 'permission_category_id' => $collectionPermissionCategory->id]);
+        $soilPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Soil', 'display_name' => '土壤管理', 'resource' => '/collection/soil', 'permission_category_id' => $collectionPermissionCategory->id]);
         $userPermission = Permission::firstOrCreate(['name' => 'Menu-System-User', 'display_name' => '用户管理','resource' => '/user', 'permission_category_id' => $systemPermissionCategory->id]);
         $alogPermission = Permission::firstOrCreate(['name' => 'Menu-System-Alog', 'display_name' => '操作日志', 'resource' => '/alog','permission_category_id' => $systemPermissionCategory->id]);
 
@@ -43,7 +50,7 @@ class InitSeeder extends Seeder
         $collectionMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-Collection', 'display_name' => '藏品管理模块', 'pid' => $methodPermissionCategory->id]); //藏品管理
         $collectionFarmMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-Collection-Farm', 'display_name' => '农具管理模块', 'pid' => $collectionMethodPermissionCategory->id]); //农具管理
 
-        $userMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-User', 'display_name' => '用户管理模块', 'pid' => $methodPermissionCategory->id]); 
+        $userMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-User', 'display_name' => '用户管理模块', 'pid' => $methodPermissionCategory->id]);
         $alogMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-Alog', 'display_name' => '日志模块', 'pid' => $methodPermissionCategory->id]);
 
         $commonSettingsMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Settings', 'display_name' => '通用功能-Settings', 'resource' => '/api/user/{id}/settings' , 'permission_category_id' => $commonMethodPermissionCategory->id]);
@@ -85,11 +92,11 @@ class InitSeeder extends Seeder
 
         //普通用户角色
         $userRole = Role::firstOrCreate(['name' => 'User', 'display_name' => '单位用户']);
-        $userRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id));
+        $userRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $soilPermission->id));
 
         //管理员用户角色
         $adminRole = Role::firstOrCreate(['name' => 'Admin', 'display_name' => '管理员']);
-        $adminRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $userPermission->id, $alogPermission->id));
+        $adminRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $soilPermission->id, $userPermission->id, $alogPermission->id));
 
         //通用功能角色
         $commonRole = Role::firstOrCreate(['name' => 'Common', 'display_name' => '通用功能角色']);

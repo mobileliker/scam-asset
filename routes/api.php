@@ -12,6 +12,12 @@
  * (5) 修复delete无法使用的错误；（2017/9/30）
  * (6) 整理api.php，使用resource+only替代逐条撰写；(2017/9/30)
  * （7）添加岩石管理的相关接口；（2017/10/18）
+ *
+ * @version : 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/11/27
+ * @description :
+ * (1)添加土壤相关的的接口；（2017/11/27）
  */
 
 //use Illuminate\Http\Request;
@@ -93,6 +99,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         });
         Route::resource('rock', 'RockController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
+        //植物模块
         Route::group(['prefix' => 'plant'], function () {
             Route::get('{id}/image', 'PlantController@showImage');
             Route::post('{id}/image', 'PlantController@saveImage');
@@ -103,6 +110,29 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
             Route::post('batch-delete', 'PlantController@batchDelete');
         });
         Route::resource('plant', 'PlantController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+        //土壤模块
+        Route::group(['prefix' => 'soil'], function () {
+            Route::get('{id}/image', 'SoilController@showImage');
+            Route::post('{id}/image', 'SoilController@saveImage');
+            Route::get('{id}/relate', 'SoilController@relate');
+            Route::delete('{soil_id}/image/{id}', 'soilController@deleteImage');
+
+            Route::post('import', 'SoilController@import');
+            Route::post('batch-delete', 'SoilController@batchDelete');
+
+        });
+        Route::resource('soil', 'SoilController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+        Route::get('soil/{soil_id}/soil-big/{id}/image', 'SoilBigController@showImage');
+        Route::post('soil/{soil_id}/soil-big/{id}/image', 'SoilBigController@saveImage');
+        Route::delete('soil/{soil_id}/soil-big/{soilBig_id}/image/{id}', 'soilBigController@deleteImage');
+        Route::resource('soil/{soil_id}/soil-big', 'SoilBigController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
+
+        Route::get('soil/{soil_id}/soil-small/{id}/image', 'SoilSmallController@showImage');
+        Route::post('soil/{soil_id}/soil-small/{id}/image', 'SoilSmallController@saveImage');
+        Route::delete('soil/{soil_id}/soil-small/{soilSmall_id}/image/{id}', 'soilSmallController@deleteImage');
+        Route::resource('soil/{soil_id}/soil-small', 'SoilSmallController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
     });
 
 
