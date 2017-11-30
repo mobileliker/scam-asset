@@ -6,6 +6,7 @@
  * @description:
  * （1）添加农具管理的路由；（2017/7/11）
  * （2）添加岩石管理的路由；（2017/10/18）
+ * （3）添加动物管理的路由；（2017/11/30）
  */
 
 import Vue from 'vue'
@@ -35,6 +36,9 @@ import CollectionPlantShow from '../components/collection/plant/Show'
 import CollectionSoilIndex from '../components/collection/soil/Index'
 import CollectionSoilCreate from '../components/collection/soil/Create'
 import CollectionSoilShow from '../components/collection/soil/Show'
+import CollectionAnimalIndex from '../components/collection/animal/Index'
+import CollectionAnimalCreate from '../components/collection/animal/Create'
+import CollectionAnimalShow from '../components/collection/animal/Show'
 
 export default new Router({
     routes: [
@@ -157,6 +161,26 @@ export default new Router({
           path : '/collection/soil/:id',
           name : 'CollectionSoilShow',
           component : CollectionSoilShow
-        }
+        },
+        {
+          path : '/collection/animal',
+          name : 'CollectionAnimalIndex',
+          component : CollectionAnimalIndex
+        },
+        {
+          path : '/collection/animal/create',
+          name : 'CollectionAnimalCreate',
+          component : CollectionAnimalCreate
+        },
+        {
+          path : '/collection/animal/:id/edit',
+          name : 'CollectionAnimalEdit',
+          component : CollectionAnimalCreate
+        },
+        {
+          path : '/collection/animal/:id',
+          name : 'CollectionAnimalShow',
+          component : CollectionAnimalShow
+        },
     ]
 })

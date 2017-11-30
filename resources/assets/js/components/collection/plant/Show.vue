@@ -3,7 +3,7 @@
         <el-col :lg="24">
             <el-breadcrumb id="breadcrumb" separtor="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{path : '/collection/plant'}">农具管理</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{path : '/collection/plant'}">植物管理</el-breadcrumb-item>
                 <el-breadcrumb-item>查看</el-breadcrumb-item>
             </el-breadcrumb>
             <el-col :lg="24">
@@ -51,7 +51,7 @@
             <el-col :lg="24">
                 <el-card>
                     <div slot="header">
-                        <span>相似农具</span>
+                        <span>相似植物</span>
                     </div>
 
                     <el-table :data="list.data" border style="width: 100%">

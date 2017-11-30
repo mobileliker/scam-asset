@@ -100,6 +100,19 @@
           <el-col :lg="4" class="box-card">
               <el-card>
                   <div slot="header" class="clearfix">
+                      <h3>动物</h3>
+                  </div>
+                  <p>总数量：{{total.animal.number}}</p>
+                  <p>图片总数量：{{total.animal.image_number}}</p>
+                  <p>本月新增新增数量：{{total.animal.month_add}}</p>
+                  <p>本年新增数量：{{total.animal.year_add}}</p>
+                  <p>本月图片新增数量：{{total.animal.image_month_add}}</p>
+                  <p>本年图片新增数量：{{total.animal.image_year_add}}</p>
+              </el-card>
+          </el-col>
+          <el-col :lg="4" class="box-card">
+              <el-card>
+                  <div slot="header" class="clearfix">
                       <h3>段面土壤标本</h3>
                   </div>
                   <p>总数量：{{total.soilBig.number}}</p>

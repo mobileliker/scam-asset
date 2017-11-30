@@ -15,6 +15,7 @@
  * @date : 2017/11/24
  * @description :
  * (1)添加土壤管理的菜单权限；（2017/11/27）
+ * (2)添加动物管理的菜单权限；（2017/11/30）
  */
 
 use Illuminate\Database\Seeder;
@@ -40,6 +41,7 @@ class InitSeeder extends Seeder
         $rockPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Rock', 'display_name' => '岩石管理', 'resource' => '/collection/rock', 'permission_category_id' => $collectionPermissionCategory->id]);
         $plantPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Plant', 'display_name' => '植物管理', 'resource' => '/collection/plant', 'permission_category_id' => $collectionPermissionCategory->id]);
         $soilPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Soil', 'display_name' => '土壤管理', 'resource' => '/collection/soil', 'permission_category_id' => $collectionPermissionCategory->id]);
+        $animalPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Animal', 'display_name' => '动物管理', 'resource' => '/collection/animal', 'permission_category_id' => $collectionPermissionCategory->id]);
         $userPermission = Permission::firstOrCreate(['name' => 'Menu-System-User', 'display_name' => '用户管理','resource' => '/user', 'permission_category_id' => $systemPermissionCategory->id]);
         $alogPermission = Permission::firstOrCreate(['name' => 'Menu-System-Alog', 'display_name' => '操作日志', 'resource' => '/alog','permission_category_id' => $systemPermissionCategory->id]);
 
@@ -92,11 +94,11 @@ class InitSeeder extends Seeder
 
         //普通用户角色
         $userRole = Role::firstOrCreate(['name' => 'User', 'display_name' => '单位用户']);
-        $userRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $soilPermission->id));
+      $userRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $soilPermission->id, $animalPermission->id));
 
         //管理员用户角色
         $adminRole = Role::firstOrCreate(['name' => 'Admin', 'display_name' => '管理员']);
-        $adminRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $soilPermission->id, $userPermission->id, $alogPermission->id));
+        $adminRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $soilPermission->id, $animalPermission->id, $userPermission->id, $alogPermission->id));
 
         //通用功能角色
         $commonRole = Role::firstOrCreate(['name' => 'Common', 'display_name' => '通用功能角色']);

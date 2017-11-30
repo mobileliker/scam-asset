@@ -39,8 +39,8 @@ class CreateSoilsTable extends Migration
             $table->string('vegetation')->nullable()->comment('植被');
             $table->string('use_status')->nullable()->comment('利用状况');
             $table->string('depth')->nullable()->comment('土层深度');
-            $table->text('description')->nullable()->comment('描述');
             $table->string('collecter')->nullable()->comment('采集人');
+            $table->text('description')->nullable()->comment('描述');
             $table->string('memo')->nullable()->comment('备注');
 
             $table->integer('keeper_id')->unsigned()->nullable()->comment('保管人');

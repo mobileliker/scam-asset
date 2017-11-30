@@ -14,6 +14,7 @@
  * @date : 2017/11/29
  * @description :
  * (1)添加段面土壤标本和纸盒标本统计；（2017/11/29）
+ * (2)添加动物标本的统计；（2017/11/30）
  */
 
 namespace App\Http\Controllers\Api;
@@ -66,6 +67,7 @@ class IndexController extends Controller
         $prefixs[] = 'farm';
         $prefixs[] = 'rock';
         $prefixs[] = 'plant';
+        $prefixs[] = 'animal';
         $prefixs[] = 'soilBig';
         $prefixs[] = 'soilSmall';
 

@@ -17,7 +17,8 @@
  * @author : wuzhihui
  * @date : 2017/11/27
  * @description :
- * (1)添加土壤相关的的接口；（2017/11/27）
+ * (1)添加土壤相关的接口；（2017/11/27）
+ * (2)添加动物相关的接口；（2017/11/30）
  */
 
 //use Illuminate\Http\Request;
@@ -133,6 +134,21 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         Route::post('soil/{soil_id}/soil-small/{id}/image', 'SoilSmallController@saveImage');
         Route::delete('soil/{soil_id}/soil-small/{soilSmall_id}/image/{id}', 'soilSmallController@deleteImage');
         Route::resource('soil/{soil_id}/soil-small', 'SoilSmallController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
+
+
+        //植物模块
+        Route::group(['prefix' => 'animal'], function () {
+            Route::get('{id}/image', 'AnimalController@showImage');
+            Route::post('{id}/image', 'AnimalController@saveImage');
+            Route::get('{id}/relate', 'AnimalController@relate');
+            Route::delete('{animal_id}/image/{id}', 'AnimalController@deleteImage');
+
+            Route::post('import', 'AnimalController@import');
+            Route::post('batch-delete', 'AnimalController@batchDelete');
+        });
+        Route::resource('animal', 'AnimalController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+
     });
 
 
