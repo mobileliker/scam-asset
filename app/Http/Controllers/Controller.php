@@ -6,6 +6,12 @@
  * @date： 2017/7/3
  * @description:
  * （1）添加批量删除和验证的方法；（2017/7/3）
+ *
+ * @version : 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/12/1
+ * @description:
+ * （1）添加批量删除的日志事件；（2017/12/1）
  */
 
 namespace App\Http\Controllers;
@@ -39,12 +45,19 @@ class Controller extends BaseController
 
         DB::beginTransaction();
         $res = $model->destroy($ids);
-        if($res == count($ids)){
+        if ($res == count($ids)) {
             DB::commit();
+
+            $models = explode('\\', $this->model);
+            $eventModelName = 'App\\Events\\' . $models[count($models) - 1] . 'Event';
+            $eventClass = new ReflectionClass($eventModelName);
+            //\Log::info($eventModelName);
+            event($eventClass->newInstance('batchDelete', $request->getClientIp(), $ids));
+
             return response()->json([
                 'res' => 'true'
             ]);
-        }else{
+        } else {
             DB::rollBack();
             return response()->json([
                 'res' => 'false'
@@ -68,11 +81,11 @@ class Controller extends BaseController
         $field = $request->field;
         $value = $request->value;
         $res = $model->where($field, $value);
-        if($id != null && $id != ""){
+        if ($id != null && $id != "") {
             $res = $res->where('id', '!=', $id);
         }
         $res = $res->first();
-        if($res != null) return response()->json([
+        if ($res != null) return response()->json([
             'res' => 'false'
         ]);
         else return response()->json([

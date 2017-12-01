@@ -1,3 +1,13 @@
+/**
+ * 日志功能首页
+ * @version : 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/11/30
+ * @description :
+ * （1）基本功能；
+ *  (2) 修改列表的版式；（2017/11/30）
+ *
+
 <template>
     <content-component id="content">
         <!--alog-index-->
@@ -23,10 +33,10 @@
         <el-col :lg="24" class="list">
             <el-table :data="list.data" border style="width: 100%" v-loading="view.table.loading" element-loading-text="拼命加载数据中" @sort-change="sortChange">
                 <el-table-column type="index" label="序号" width="70"></el-table-column>
-                <el-table-column label="时间" prop="log_time" sortable width="120"></el-table-column>
+                <el-table-column label="时间" prop="log_time" sortable width="200"></el-table-column>
                 <el-table-column label="用户名" prop="user_name" sortable width="120"></el-table-column>
-                <el-table-column label="模块" prop="module" sortable width="70"></el-table-column>
-                <el-table-column label="操作" prop="operate" sortable width="70"></el-table-column>
+                <el-table-column label="模块" prop="module" sortable width="100"></el-table-column>
+                <el-table-column label="操作" prop="operate" sortable width="100"></el-table-column>
                 <el-table-column label="内容" prop="content" sortable></el-table-column>
             </el-table>
         </el-col>
@@ -66,16 +76,7 @@
                 search : {
                     module : {
                         value : '',
-                        options : [
-                            {
-                                label : 'Asset',
-                                value : 'Asset'
-                            },
-                            {
-                                label : 'User',
-                                value : 'User'
-                            }
-                        ]
+                        options : []
                     },
                     operate : {
                         value : '',
@@ -99,6 +100,30 @@
                             {
                                 label : '查看',
                                 value : 4
+                            },
+                            {
+                                label : '登录',
+                                value : 5
+                            },
+                            {
+                                label : '退出',
+                                value : 6
+                            },
+                            {
+                                label : '批量删除',
+                                value : 7
+                            },
+                            {
+                                label : '导入',
+                                value : 8
+                            },
+                            {
+                                label : '保存图片',
+                                value : 9
+                            },
+                            {
+                                label : '删除图片',
+                                value : 10
                             }
                         ]
                     },
@@ -148,6 +173,11 @@
             }
         },
         mounted() {
+            axios.get('/api/alog/all-module')
+                .then((response) => {
+                    this.search.module.options = response.data;
+                });
+
             this.load();
         },
         methods : {

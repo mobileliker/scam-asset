@@ -19,6 +19,7 @@
  * @description :
  * (1)添加土壤相关的接口；（2017/11/27）
  * (2)添加动物相关的接口；（2017/11/30）
+ * （3）新增了获取所有日志模块的接口：（2017/12/1）
  */
 
 //use Illuminate\Http\Request;
@@ -162,6 +163,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
 
     //操作日志模块
     Route::group(['prefix' => 'alog'], function () {
+        Route::get('all-module', 'AlogController@allModule');
         Route::get('', 'AlogController@index');
     });
 });

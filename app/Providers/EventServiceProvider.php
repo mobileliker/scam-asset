@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * 事件容器
+ * @version : 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/11/30
+ * @description :
+ * (1)添加日志事件；（2017/11/30）
+ */
+
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Event;
@@ -13,9 +22,34 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
+        //'App\Events\SomeEvent' => [
+        //    'App\Listeners\EventListener',
+        //],
+        'App\Events\AuthEvent' => [ //用户登录、用户退出事件
+            'App\Listeners\AuthEventListener'
         ],
+        'App\Events\FarmEvent' => [ //农具管理的事件
+            'App\Listeners\FarmEventListener'
+        ],
+        'App\Events\RockEvent' => [ //岩石管理的事件
+            'App\Listeners\RockEventListener'
+        ],
+        'App\Events\PlantEvent' => [ //植物管理的事件
+            'App\Listeners\PlantEventListener'
+        ],
+        'App\Events\AnimalEvent' => [ //动物管理的事件
+            'App\Listeners\AnimalEventListener'
+        ],
+        'App\Events\SoilEvent' => [ //土壤管理的事件
+            'App\Listeners\SoilEventListener'
+        ],
+        'App\Events\SoilBigEvent' => [ //土壤段面管理的事件
+            'App\Listeners\SoilBigEventListener'
+        ],
+        'App\Events\SoilSmallEvent' => [ //土壤纸盒管理的事件
+            'App\Listeners\SoilSmallEventListener'
+        ],
+
     ];
 
     /**

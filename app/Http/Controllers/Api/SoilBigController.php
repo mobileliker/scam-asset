@@ -7,6 +7,7 @@
  * @date : 2017/11/29
  * @description :
  * (1)基本功能；（2017/11/29）
+ * (2)添加日志记录；（2017/12/1）
  */
 
 namespace App\Http\Controllers\Api;
@@ -18,33 +19,36 @@ use App\SoilBig;
 use IQuery;
 use App\Soil;
 use App\CollectionImage;
+use App\Events\SoilBigEvent;
+use App\Alog;
 
 class SoilBigController extends Controller
 {
     public function storeOrUpdate(Request $request, $soil_id, $id = -1)
     {
-      $this->validate($request, [
-        'serial' => 'nullable|string|max:255',
-        'storage' => 'nullable|string|max:255'
-      ]);
+        $this->validate($request, [
+            'serial' => 'nullable|string|max:255',
+            'storage' => 'nullable|string|max:255'
+        ]);
 
 
-      if($id == -1) {
+        if ($id == -1) {
             Soil::findOrFail($soil_id);
             $soilBig = new SoilBig;
             $soilBig->soil_id = $soil_id;
-      } else {
-        $soilBig = SoilBig::where('soil_id', '=', $soil_id)->findOrFail($id);
-      }
+        } else {
+            $soilBig = SoilBig::where('soil_id', '=', $soil_id)->findOrFail($id);
+        }
 
-      $soilBig->serial = $request->serial;
-      $soilBig->storage = $request->storage;
+        $soilBig->serial = $request->serial;
+        $soilBig->storage = $request->storage;
 
-      if($soilBig->save()) {
-        return $soilBig;
-      } else {
-        abort(500, '保存失败');
-      }
+        if ($soilBig->save()) {
+            event(new SoilBigEvent(Alog::getOperate($id), $request->getClientIp(), $soilBig)); //添加日志记录
+            return $soilBig;
+        } else {
+            abort(500, '保存失败');
+        }
     }
 
     /**
@@ -84,7 +88,7 @@ class SoilBigController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $soil_id)
@@ -106,7 +110,7 @@ class SoilBigController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($soil_id, $id)
@@ -118,8 +122,8 @@ class SoilBigController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $soil_id, $id)
@@ -130,31 +134,31 @@ class SoilBigController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($soil_id, $id)
+    public function destroy(Request $request, $soil_id, $id)
     {
-          $soilBig = SoilBig::where('soil_id', '=', $soil_id)->findOrFail($id);
-          if($soilBig->delete()) {
+        $soilBig = SoilBig::where('soil_id', '=', $soil_id)->findOrFail($id);
+        if ($soilBig->delete()) {
+            event(new SoilBigEvent('destroy', $request->getClientIp(), $soilBig));
             return $soilBig;
-          } else {
+        } else {
             abort(500, '删除失败');
-          }
+        }
     }
 
 
-
-            /**
-             * 显示一张图片
-             * @param Request $request
-             * @param $id
-             * @return mixed
-             */
-            public function showImage(Request $request, $soil_id, $id)
-            {
-                return Soilbig::where('soil_id', '=', $soil_id)->findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
-            }
+    /**
+     * 显示一张图片
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function showImage(Request $request, $soil_id, $id)
+    {
+        return Soilbig::where('soil_id', '=', $soil_id)->findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
+    }
 
     /**
      * 保存一张图片
@@ -182,6 +186,8 @@ class SoilBigController extends Controller
             $collectionImage->collectible_id = $soil->id;
             if ($collectionImage->save()) {
                 //Log::info($path);
+                $collectionImage->collectible;
+                event(new SoilBigEvent('saveImage', $request->getClientIp(), $collectionImage)); //添加日记事件
                 return response()->json([
                     'name' => $pic_name,
                     'url' => '' . $path,
@@ -200,23 +206,25 @@ class SoilBigController extends Controller
     }
 
 
-            /**
-             * 删除一张图片
-             * @param Request $request
-             * @param $rock_id
-             * @param $id
-             * @return \Illuminate\Http\JsonResponse
-             */
-            public function deleteImage(Request $request, $soil_id, $soilBig_id, $id)
-            {
-                $image = SoilBig::where('soil_id', '=', $soil_id)->findOrFail($soilBig_id)->images()->where('id', '=', $id)->firstOrFail();
+    /**
+     * 删除一张图片
+     * @param Request $request
+     * @param $rock_id
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteImage(Request $request, $soil_id, $soilBig_id, $id)
+    {
+        $image = SoilBig::where('soil_id', '=', $soil_id)->findOrFail($soilBig_id)->images()->where('id', '=', $id)->firstOrFail();
 
-                if ($image->delete()) {
-                    return response()->json([
-                        'res' => true,
-                    ]);
-                } else {
-                    abort(500, '删除失败');
-                }
-            }
+        if ($image->delete()) {
+            $image->collectible;
+            event(new SoilBigEvent('deleteImage', $request->getClientIp(), $image)); //添加日记事件
+            return response()->json([
+                'res' => true,
+            ]);
+        } else {
+            abort(500, '删除失败');
+        }
+    }
 }

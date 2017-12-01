@@ -13,11 +13,19 @@
  * （5）添加获取相关农具的接口； （2017/9/19）
  * （6）修复导入时编号的错误； （2017/9/20）
  * （7）修复Storage大小写的错误；（2017/9/20）
+ *
+ * @version : 2.0.2
+ * @author ： wuzhihui
+ * @date : 2017/12/1
+ * @description:
+ * (1)添加日志记录；（2017/12/1）
+ * （2）格式化代码；（2017/12/1）
  */
 
 namespace App\Http\Controllers\Api;
 
 use App\CollectionImage;
+use App\Events\FarmEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use IQuery;
@@ -25,6 +33,7 @@ use App\Farm;
 use Log;
 use Auth;
 use Excel;
+use App\Alog;
 
 //use App\Traits\AttachmentTraits;
 
@@ -77,6 +86,7 @@ class FarmController extends Controller
         if ($id != -1) $farm->id = $id;
 
         if ($farm->save()) {
+            event(new FarmEvent(Alog::getOperate($id), $request->getClientIp(), $farm)); //添加日志记录
             return $farm;
         } else {
             abort(500, '保存失败');
@@ -201,10 +211,11 @@ class FarmController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $farm = Farm::findOrFail($id);
         if ($farm->delete()) {
+            event(new FarmEvent('destroy', $request->getClientIp(), $farm));
             return $farm;
         } else {
             abort(500, '删除失败');
@@ -292,6 +303,8 @@ class FarmController extends Controller
                     $farm->save();
                     //Log::info($farm);
 
+                    event(new FarmEvent('import', $request->getClientIp(), $farm)); //添加导入日记记录
+
                     $serial = 'A0' . (intval(substr($serial, 1)) + 1);
                 }
 
@@ -331,7 +344,9 @@ class FarmController extends Controller
             $collectionImage->collectible_type = Farm::class;
             $collectionImage->collectible_id = $farm->id;
             if ($collectionImage->save()) {
-                //Log::info($path);
+                $collectionImage->collectible;
+                event(new FarmEvent('saveImage', $request->getClientIp(), $collectionImage)); //添加日记事件
+
                 return response()->json([
                     'name' => $pic_name,
                     'url' => '' . $path
@@ -371,6 +386,8 @@ class FarmController extends Controller
         $image = Farm::findOrFail($farm_id)->images()->where('id', '=', $id)->firstOrFail();
 
         if ($image->delete()) {
+            $image->collectible;
+            event(new FarmEvent('deleteImage', $request->getClientIp(), $image)); //添加日记事件
             return response()->json([
                 'res' => true,
             ]);

@@ -8,6 +8,12 @@
  * @description :
  * (1) 完成基本功能；（2017/10/18）
  * （2）添加图片相关的功能；（2017/11/1）
+ *
+ * @version : 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/12/1
+ * @description :
+ * (1)添加日志记录；（2017/12/1）
  */
 
 namespace App\Http\Controllers\Api;
@@ -20,6 +26,8 @@ use Auth;
 use Log;
 use Excel;
 use App\CollectionImage;
+use App\Events\RockEvent;
+use App\Alog;
 
 class RockController extends Controller
 {
@@ -51,9 +59,10 @@ class RockController extends Controller
         $rock->setRawAttributes($request->only(['name', 'category_id', 'ename', 'input_date', 'serial', 'classification', 'feature', 'origin', 'description', 'keeper_id', 'asset_id', 'memo']));
         $rock->user_id = Auth::id();
 
-        if($id != -1) $rock->id = $id;
+        if ($id != -1) $rock->id = $id;
 
-        if($rock->save()) {
+        if ($rock->save()) {
+            event(new RockEvent(Alog::getOperate($id), $request->getClientIp(), $rock)); //添加日志记录
             return $rock;
         } else {
             abort(500, '保存失败');
@@ -74,7 +83,6 @@ class RockController extends Controller
             ->select('rocks.id', 'rocks.input_date', 'rocks.category_id', 'rocks.category as category', 'rocks.name', 'rocks.ename', 'rocks.serial', 'rocks.keeper_id', 'keepers.name as keeper', 'rocks.user_id', 'users.name as user');
 
 
-
         if ($request->keeper_id != null && $request->keeper_id != '') {
             $lists = $lists->where('rocks.keeper_id', '=', $request->keeper_id);
         }
@@ -88,7 +96,7 @@ class RockController extends Controller
             else $lists = $lists->whereNotNull('rocks.asset_id');
         }
 
-        if($request->category != null && $request->category != '') {
+        if ($request->category != null && $request->category != '') {
             $lists = $lists->where('rocks.category', '=', $request->category);
         }
 
@@ -126,7 +134,7 @@ class RockController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -137,7 +145,7 @@ class RockController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -148,7 +156,7 @@ class RockController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -159,8 +167,8 @@ class RockController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -171,14 +179,15 @@ class RockController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $rock = Rock::findOrFail($id);
-        if($rock->delete()) {
-            return $rock;
+        $obj = Rock::findOrFail($id);
+        if ($obj->delete()) {
+            event(new RockEvent('destroy', $request->getClientIp(), $obj));
+            return $obj;
         } else {
             abort(500, '删除失败');
         }
@@ -191,7 +200,7 @@ class RockController extends Controller
 
     /**
      * 岩石导入功能
-     * 
+     *
      */
     public function import(Request $request)
     {
@@ -205,7 +214,7 @@ class RockController extends Controller
 
         $path = $request->file;
 
-        Excel::load($path, function($reader) use ($user, $request) {
+        Excel::load($path, function ($reader) use ($user, $request) {
 
             // $categories = [
             //     1 => '岩石',
@@ -217,7 +226,7 @@ class RockController extends Controller
             $categories[1] = '矿物';
             $categories[2] = '化石';
 
-            for($i = 1; $i <= 3; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
 
                 $sheet = $reader->getSheet($i);
                 $sheet_array = $sheet->toArray();
@@ -246,7 +255,7 @@ class RockController extends Controller
                     //Log::info($serials);
                     //Log::info(count($serials));
 
-                    if(count($serials) > 1){       
+                    if (count($serials) > 1) {
                         $serial = intval(substr(trim($serials[0]), 2));
                         $serial_end = intval(substr(trim($serials[1]), 2));
                     } else {
@@ -254,10 +263,10 @@ class RockController extends Controller
                         $serial_end = $serial;
                     }
 
-                    while($serial <= $serial_end) {
+                    while ($serial <= $serial_end) {
                         $rock = Rock::where('serial', '=', 'C0' . $serial)->first();
-                        if($rock == null) $rock = new Rock;
-                        else if($request->type == 'ignore') continue;
+                        if ($rock == null) $rock = new Rock;
+                        else if ($request->type == 'ignore') continue;
 
                         //Log::info($i .'~' . $cells[0] . '~' . $input_date . '~' . $name);
                         $input_dates = explode('-', $input_date);
@@ -276,6 +285,7 @@ class RockController extends Controller
                         $rock->user_id = $user->id;
                         $rock->category = $categories[$i - 1];
                         $rock->save();
+                        event(new RockEvent('import', $request->getClientIp(), $rock)); //添加导入日记记录
 
                         $serial = $serial + 1;
                     }
@@ -285,7 +295,7 @@ class RockController extends Controller
         });
     }
 
-        /**
+    /**
      * 显示一张图片
      * @param Request $request
      * @param $id
@@ -323,6 +333,8 @@ class RockController extends Controller
             $collectionImage->collectible_id = $rock->id;
             if ($collectionImage->save()) {
                 //Log::info($path);
+                $collectionImage->collectible;
+                event(new RockEvent('saveImage', $request->getClientIp(), $collectionImage)); //添加日记事件
                 return response()->json([
                     'name' => $pic_name,
                     'url' => '' . $path
@@ -339,7 +351,7 @@ class RockController extends Controller
         }
     }
 
-      /**
+    /**
      * 删除一张图片
      * @param Request $request
      * @param $rock_id
@@ -351,6 +363,8 @@ class RockController extends Controller
         $image = Rock::findOrFail($rock_id)->images()->where('id', '=', $id)->firstOrFail();
 
         if ($image->delete()) {
+            $image->collectible;
+            event(new RockEvent('deleteImage', $request->getClientIp(), $image)); //添加日记事件
             return response()->json([
                 'res' => true,
             ]);
@@ -358,7 +372,6 @@ class RockController extends Controller
             abort(500, '删除失败');
         }
     }
-
 
 
     public function relate(Request $request, $id)

@@ -4,7 +4,13 @@
  * @author: wuzhihui
  * @date: 2017/6/16
  * @description:
- * （1）添加权限控制的中间件
+ * （1）添加权限控制的中间件；
+ *
+ * @version : 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/12/1
+ * @description:
+ * （1）添加了获取所有模块的函数；（2017/12/1）
  */
 namespace App\Http\Controllers\Api;
 
@@ -79,5 +85,15 @@ class AlogController extends Controller
         }else{
             return view(config('app.theme').'.admin.alog.index')->withAlogs($alogs); 
         }
+    }
+
+    /**
+     * 获取所有的模块名称
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function allModule()
+    {
+        //TODO 将之改为缓存的方式，减少数据库访问次数
+        return Alog::select('module as label', 'module as value')->distinct()->get();
     }
 }
