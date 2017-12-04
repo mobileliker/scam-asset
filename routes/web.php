@@ -7,7 +7,8 @@
  * @description:
  *（1）添加批量删除接口到各个模块，并去除原有的通用接口 （2017/7/3）
  *（2）转移功能接口到API.php；（2017/7/4）
- * (3)添加原API的接口：（2017/12/4）
+ * (3)添加原API的接口；(2017/12/4)
+ * (4)将农具模块的resource函数改为直接撰写：（2017/12/4）
  */
 
 /*
@@ -122,8 +123,15 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
 
             Route::post('import', 'FarmController@import'); //导入数据
             Route::post('batch-delete', 'FarmController@batchDelete');
+
+            Route::get('', 'FarmController@index');
+            Route::post('', 'FarmController@store');
+            Route::get('{id}/edit', 'FarmController@edit');
+            Route::put('{id}', 'FarmController@update');
+            Route::get('{id}', 'FarmController@show');
+            Route::delete('{id}', 'FarmController@destroy');
         });
-        Route::resource('farm', 'FarmController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+        //Route::resource('farm', 'FarmController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
         //岩石模块
         Route::group(['prefix' => 'rock'], function () {
