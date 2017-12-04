@@ -4,6 +4,7 @@
 * @date: 2017/10/18
 * @description:
 * （1）基本功能；（2017/10/18）
+* (2)注释掉keeper_id的integer的验证；（2017/12/4）
 */
 
 <template>
@@ -145,9 +146,9 @@
                     memo : [
                         {max : 2000, message : '描述不能超过255个字', trigger : 'blur'}
                     ],
-                    keeper_id : [
-                        {required : true, type: 'integer', message : '请选择保管人', trigger : 'blur'}
-                    ]
+                    //keeper_id : [
+                    //    {required : true, type: 'integer', message : '请选择保管人', trigger : 'blur'}
+                    //]
                 }
             }
         },

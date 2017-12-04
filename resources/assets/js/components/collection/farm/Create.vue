@@ -1,3 +1,13 @@
+/**
+ * 农具管理的新增或者编辑页面
+ * @version 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/12/4
+ * @description :
+ * (1)基本功能；
+ * (2)注释掉keeper_id的integer的验证；（2017/12/4）
+ */
+
 <template>
     <content-component>
         <el-col :lg="24">
@@ -237,9 +247,9 @@
                     size: [
                         {max: 255, message: '尺寸不能超过255个字', trigger: 'blur'}
                     ],
-                    keeper_id : [
-                        {type : 'integer', required : true, message : '请选择保管人', trigger : 'change'}
-                    ],
+                    //keeper_id : [
+                        //{type : 'integer', required : true, message : '请选择保管人', trigger : 'change'}
+                    //],
                     description: [
                         {max: 2000, message: '描述不能超过2000个字', trigger: 'blur'}
                     ],
