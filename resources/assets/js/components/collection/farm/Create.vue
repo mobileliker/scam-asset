@@ -316,7 +316,8 @@
                         //console.log('validate success');
                         this.view.saveLoading = true;
                         if(this.$route.name == 'CollectionFarmEdit'){
-                            axios.put('/api/collection/farm/' + this.$route.params.id, this.farm)
+                            //axios.put('/api/collection/farm/' + this.$route.params.id, this.farm)
+                            axios.post('/api/collection/farm/' + this.$route.params.id + '/update', this.farm)
                                     .then(response => {
                                 //console.log(response.data);
                                 this.$message('保存成功');

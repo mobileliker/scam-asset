@@ -9,6 +9,7 @@
  *（2）转移功能接口到API.php；（2017/7/4）
  * (3)添加原API的接口；(2017/12/4)
  * (4)将农具模块的resource函数改为直接撰写：（2017/12/4）
+ * (5)农具模块的delete和update接口改为get和post的常规请求方式：（2017/12/4）
  */
 
 /*
@@ -127,9 +128,12 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
             Route::get('', 'FarmController@index');
             Route::post('', 'FarmController@store');
             Route::get('{id}/edit', 'FarmController@edit');
-            Route::put('{id}', 'FarmController@update');
+            //Route::put('{id}', 'FarmController@update');
             Route::get('{id}', 'FarmController@show');
-            Route::delete('{id}', 'FarmController@destroy');
+            //Route::delete('{id}', 'FarmController@destroy');
+
+            Route::post('{id}/update', 'FarmController@update');
+            Route::get('{id}/delete', 'FarmController@destroy');
         });
         //Route::resource('farm', 'FarmController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
