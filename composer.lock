@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fde168cdfae84b096bc474779ef93761",
-    "content-hash": "e9a99a05534f74384978f42ddb11d34e",
+    "hash": "6cd3cac4cff19f2b582fee43222a8b78",
+    "content-hash": "96eb6daf814ccdf8e78b2b8f34ce186a",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1213,20 +1213,20 @@
         },
         {
             "name": "laravel/passport",
-            "version": "v4.0.3",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/passport.git",
-                "reference": "0542f1f82edfbf857d0197c34a3d41f549aff30a"
+                "reference": "d19a6b60503cb416fe55507684699de35239681f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/laravel/passport/0542f1f82edfbf857d0197c34a3d41f549aff30a.zip",
-                "reference": "0542f1f82edfbf857d0197c34a3d41f549aff30a",
+                "url": "https://files.phpcomposer.com/files/laravel/passport/d19a6b60503cb416fe55507684699de35239681f.zip",
+                "reference": "d19a6b60503cb416fe55507684699de35239681f",
                 "shasum": ""
             },
             "require": {
-                "firebase/php-jwt": "~3.0|~4.0|~5.0",
+                "firebase/php-jwt": "~3.0|~4.0",
                 "guzzlehttp/guzzle": "~6.0",
                 "illuminate/auth": "~5.4",
                 "illuminate/console": "~5.4",
@@ -1249,7 +1249,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "3.0-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -1278,7 +1278,7 @@
                 "oauth",
                 "passport"
             ],
-            "time": "2017-09-24 14:21:39"
+            "time": "2017-08-04 14:03:52"
         },
         {
             "name": "laravel/tinker",
