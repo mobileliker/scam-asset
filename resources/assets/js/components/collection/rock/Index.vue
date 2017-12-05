@@ -3,8 +3,9 @@
 * @author: wuzhihui
 * @date: 2017/10/18
 * @description:
-* （1）基本功能；（2017/10/18）
+* (1)基本功能；（2017/10/18）
 * (2)列表添加最后编辑时间；（2017/12/5）
+* (3)修改列表一页数量为15条；（2017/12/5）
 */
 
 <template>
@@ -194,7 +195,7 @@
                     from: '',
                     'last_page': '',
                     'next_page_url': '',
-                    'per_page': 10,
+                    'per_page': 15,
                     'prev_page_url': '',
                     'to': '',
                     'total': 0,
