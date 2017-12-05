@@ -318,7 +318,8 @@
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                axios.delete('/api/collection/soil/' + id)
+                //axios.delete('/api/collection/soil/' + id)
+                axios.get('/api/collection/soil/' + id + '/delete')
                     .then(response => {
                         this.$message({
                             type : 'success',

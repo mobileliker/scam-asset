@@ -192,7 +192,8 @@
                         this.view.saveLoading = true;
                         if(this.$route.name == 'CollectionRockEdit'){
                             //console.log('rockEdit');
-                            axios.put('/api/collection/rock/' + this.$route.params.id, this.rock)
+                            //axios.put('/api/collection/rock/' + this.$route.params.id, this.rock)
+                            axios.post('/api/collection/rock/' + this.$route.params.id + '/update', this.rock)
                                 .then(response => {
                                     this.$message('保存成功');
                                     this.$router.push('/collection/rock');

@@ -284,7 +284,8 @@
                     if (valid) {
                         this.view.saveLoading = true;
                         if (this.$route.name == 'CollectionAnimalEdit') {
-                            axios.put('/api/collection/animal/' + this.$route.params.id, this.animal)
+                            //axios.put('/api/collection/animal/' + this.$route.params.id, this.animal)
+                            axios.post('/api/collection/animal/' + this.$route.params.id + '/update', this.animal)
                                 .then(response => {
                                     this.$message('保存成功');
                                     this.$router.push('/collection/animal');

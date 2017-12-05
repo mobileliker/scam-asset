@@ -232,7 +232,8 @@
                     if (valid) {
                         this.view.saveLoading = true;
                         if (this.$route.name == 'CollectionSoilEdit') {
-                            axios.put('/api/collection/soil/' + this.$route.params.id, this.soil)
+                            //axios.put('/api/collection/soil/' + this.$route.params.id, this.soil)
+                            axios.post('/api/collection/soil/' + this.$route.params.id + '/update', this.soil)
                                 .then(response => {
                                     this.$message('保存成功');
                                     this.$router.push('/collection/soil');

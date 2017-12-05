@@ -315,7 +315,8 @@
 							this.view.savaLoading = true;
 
 							if(this.dialog.add.id != '') {
-						 		axios.put('/api/collection/soil/' + this.$route.params.id + '/' + this.dialog.add.prefix +'/' + this.dialog.add.id, this.dialog.add.model)
+						 		//axios.put('/api/collection/soil/' + this.$route.params.id + '/' + this.dialog.add.prefix +'/' + this.dialog.add.id, this.dialog.add.model)
+							 	axios.post('/api/collection/soil/' + this.$route.params.id + '/' + this.dialog.add.prefix +'/' + this.dialog.add.id + '/update', this.dialog.add.model)
 						 			.then((response) => {
 						 				if(this.dialog.add.prefix == 'soil-big') Vue.set(this.list.soilBig.data, this.dialog.add.index, response.data);
 						 				else  Vue.set(this.list.soilSmall.data, this.dialog.add.index, response.data);
@@ -364,7 +365,8 @@
 								cancelButtonText: '取消',
 								type: 'warning'
 						}).then(() => {
-							axios.delete('/api/collection/soil/' + this.$route.params.id + '/' + prefix + '/' + id)
+							//axios.delete('/api/collection/soil/' + this.$route.params.id + '/' + prefix + '/' + id)
+							axios.get('/api/collection/soil/' + this.$route.params.id + '/' + prefix + '/' + id + '/delete')
 								.then((response) => {
 									data.splice(index, 1);
 											this.$message({

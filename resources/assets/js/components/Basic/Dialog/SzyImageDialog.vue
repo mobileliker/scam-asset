@@ -73,7 +73,8 @@
                 //console.log(file, fileList);
                 //this.$emit('handleRemove', file.id);
 
-                axios.delete(this.prefix + '/image/' + file.id)
+                //axios.delete(this.prefix + '/image/' + file.id)
+                axios.get(this.prefix + '/image/' + file.id + '/delete')
                     .then(response => {
                         this.$message('删除成功');
                     }).catch(error => {

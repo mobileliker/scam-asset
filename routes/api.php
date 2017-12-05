@@ -22,6 +22,7 @@
  * （3）新增了获取所有日志模块的接口：（2017/12/1）
  * (4)临时注释掉API接口测试；（2017/12/4）
  * (5)恢复被注释的API接口，并修改为post和get方法代替delete和put方法；（2017/12/5）
+ * (6)修改藏品管理部分的使用post和get方法代替delete和put方法；（2017/12/5）
  */
 
 //use Illuminate\Http\Request;
@@ -106,47 +107,105 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
             Route::get('{id}/image', 'RockController@showImage');
             Route::post('{id}/image', 'RockController@saveImage');
             Route::get('{id}/relate', 'RockController@relate');
-            Route::delete('/{rock_id}/image/{id}', 'RockController@deleteImage');
+            //Route::delete('/{rock_id}/image/{id}', 'RockController@deleteImage');
+            Route::get('/{rock_id}/image/{id}/delete', 'RockController@deleteImage');
 
             Route::post('import', 'RockController@import');
             Route::post('batch-delete', 'RockController@batchDelete');
+
+            Route::get('', 'RockController@index');
+            Route::post('', 'RockController@store');
+            Route::get('{id}/edit', 'RockController@edit');
+            //Route::put('{id}', 'RockController@update');
+            Route::get('{id}', 'RockController@show');
+            //Route::delete('{id}', 'RockController@destroy');
+
+            Route::post('{id}/update', 'RockController@update');
+            Route::get('{id}/delete', 'RockController@destroy');
         });
-        Route::resource('rock', 'RockController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+        //Route::resource('rock', 'RockController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
         //植物模块
         Route::group(['prefix' => 'plant'], function () {
             Route::get('{id}/image', 'PlantController@showImage');
             Route::post('{id}/image', 'PlantController@saveImage');
             Route::get('{id}/relate', 'PlantController@relate');
-            Route::delete('{plant_id}/image/{id}', 'PlantController@deleteImage');
+            //Route::delete('{plant_id}/image/{id}', 'PlantController@deleteImage');
+            Route::get('{plant_id}/image/{id}/delete', 'PlantController@deleteImage');
 
             Route::post('import', 'PlantController@import');
             Route::post('batch-delete', 'PlantController@batchDelete');
+
+            Route::get('', 'PlantController@index');
+            Route::post('', 'PlantController@store');
+            Route::get('{id}/edit', 'PlantController@edit');
+            //Route::put('{id}', 'PlantController@update');
+            Route::get('{id}', 'PlantController@show');
+            //Route::delete('{id}', 'PlantController@destroy');
+
+            Route::post('{id}/update', 'PlantController@update');
+            Route::get('{id}/delete', 'PlantController@destroy');
         });
-        Route::resource('plant', 'PlantController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+        //Route::resource('plant', 'PlantController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
         //土壤模块
         Route::group(['prefix' => 'soil'], function () {
             Route::get('{id}/image', 'SoilController@showImage');
             Route::post('{id}/image', 'SoilController@saveImage');
             Route::get('{id}/relate', 'SoilController@relate');
-            Route::delete('{soil_id}/image/{id}', 'soilController@deleteImage');
+            //Route::delete('{soil_id}/image/{id}', 'soilController@deleteImage');
+            Route::get('{soil_id}/image/{id}/delete', 'soilController@deleteImage');
 
             Route::post('import', 'SoilController@import');
             Route::post('batch-delete', 'SoilController@batchDelete');
 
-        });
-        Route::resource('soil', 'SoilController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+            Route::get('', 'SoilController@index');
+            Route::post('', 'SoilController@store');
+            Route::get('{id}/edit', 'SoilController@edit');
+            //Route::put('{id}', 'SoilController@update');
+            Route::get('{id}', 'SoilController@show');
+            //Route::delete('{id}', 'SoilController@destroy');
 
+            Route::post('{id}/update', 'SoilController@update');
+            Route::get('{id}/delete', 'SoilController@destroy');
+
+        });
+        //Route::resource('soil', 'SoilController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+        //土壤段面标本管理
         Route::get('soil/{soil_id}/soil-big/{id}/image', 'SoilBigController@showImage');
         Route::post('soil/{soil_id}/soil-big/{id}/image', 'SoilBigController@saveImage');
-        Route::delete('soil/{soil_id}/soil-big/{soilBig_id}/image/{id}', 'soilBigController@deleteImage');
-        Route::resource('soil/{soil_id}/soil-big', 'SoilBigController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
+        //Route::delete('soil/{soil_id}/soil-big/{soilBig_id}/image/{id}', 'soilBigController@deleteImage');
+        Route::delete('soil/{soil_id}/soil-big/{soilBig_id}/image/{id}/delete', 'soilBigController@deleteImage');
 
+        //Route::resource('soil/{soil_id}/soil-big', 'SoilBigController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
+        Route::get('soil/{soil_id}/soil-big', 'SoilBigController@index');
+        Route::post('soil/{soil_id}/soil-big', 'SoilBigController@store');
+        Route::get('soil/{soil_id}/soil-big/{id}/edit', 'SoilBigController@edit');
+        //Route::put('soil/{soil_id}/soil-big/{id}', 'SoilBigController@update');
+        Route::get('soil/{soil_id}/soil-big/{id}', 'SoilBigController@show');
+        //Route::delete('soil/{soil_id}/soil-big/{id}', 'SoilBigController@destroy');
+
+        Route::post('soil/{soil_id}/soil-big/{id}/update', 'SoilBigController@update');
+        Route::get('soil/{soil_id}/soil-big/{id}/delete', 'SoilBigController@destroy');
+
+
+        //土壤段面标本管理
         Route::get('soil/{soil_id}/soil-small/{id}/image', 'SoilSmallController@showImage');
         Route::post('soil/{soil_id}/soil-small/{id}/image', 'SoilSmallController@saveImage');
-        Route::delete('soil/{soil_id}/soil-small/{soilSmall_id}/image/{id}', 'soilSmallController@deleteImage');
-        Route::resource('soil/{soil_id}/soil-small', 'SoilSmallController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
+        //Route::delete('soil/{soil_id}/soil-small/{soilSmall_id}/image/{id}', 'soilSmallController@deleteImage');
+        Route::get('soil/{soil_id}/soil-small/{soilSmall_id}/image/{id}/delete', 'soilSmallController@deleteImage');
+
+        //Route::resource('soil/{soil_id}/soil-small', 'SoilSmallController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
+        Route::get('soil/{soil_id}/soil-small', 'SoilSmallController@index');
+        Route::post('soil/{soil_id}/soil-small', 'SoilSmallController@store');
+        Route::get('soil/{soil_id}/soil-small/{id}/edit', 'SoilSmallController@edit');
+        //Route::put('soil/{soil_id}/soil-small/{id}', 'SoilSmallController@update');
+        Route::get('soil/{soil_id}/soil-small/{id}', 'SoilSmallController@show');
+        //Route::delete('soil/{soil_id}/soil-small/{id}', 'SoilSmallController@destroy');
+
+        Route::post('soil/{soil_id}/soil-small/{id}/update', 'SoilSmallController@update');
+        Route::get('soil/{soil_id}/soil-small/{id}/delete', 'SoilSmallController@destroy');
 
 
         //植物模块
@@ -158,8 +217,18 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
 
             Route::post('import', 'AnimalController@import');
             Route::post('batch-delete', 'AnimalController@batchDelete');
+
+            Route::get('', 'AnimalController@index');
+            Route::post('', 'AnimalController@store');
+            Route::get('{id}/edit', 'AnimalController@edit');
+            //Route::put('{id}', 'AnimalController@update');
+            Route::get('{id}', 'AnimalController@show');
+            //Route::delete('{id}', 'AnimalController@destroy');
+
+            Route::post('{id}/update', 'AnimalController@update');
+            Route::get('{id}/delete', 'AnimalController@destroy');
         });
-        Route::resource('animal', 'AnimalController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+        //Route::resource('animal', 'AnimalController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
 
     });
@@ -179,4 +248,3 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         Route::get('', 'AlogController@index');
     });
 });
-

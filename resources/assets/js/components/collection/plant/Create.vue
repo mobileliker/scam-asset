@@ -235,7 +235,8 @@
                     if (valid) {
                         this.view.saveLoading = true;
                         if (this.$route.name == 'CollectionPlantEdit') {
-                            axios.put('/api/collection/plant/' + this.$route.params.id, this.plant)
+                            //axios.put('/api/collection/plant/' + this.$route.params.id, this.plant)
+                            axios.post('/api/collection/plant/' + this.$route.params.id + '/update', this.plant)
                                 .then(response => {
                                     this.$message('保存成功');
                                     this.$router.push('/collection/plant');
