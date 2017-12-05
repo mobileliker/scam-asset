@@ -6,6 +6,7 @@
 * (1)基本功能；
 * (2)新增source字段；（2017/12/5）
 * (3)优化没有图片时显示提示字段；（2017/12/5）
+* (4)相似岩石新增最后编辑时间字段；（2017/12/5）
 */
 
 <template>
@@ -73,7 +74,7 @@
             <el-col :lg="24">
                 <el-card>
                     <div slot="header">
-                        <span>相似岩石</span>
+                        <span>相似岩石（最多显示50条）</span>
                     </div>
 
                     <el-table :data="list.data" border style="width: 100%">
@@ -89,6 +90,7 @@
                         <el-table-column prop="serial" label="编号" sortable></el-table-column>
                         <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
                         <el-table-column prop="user" label="编辑人" sortable></el-table-column>
+												<el-table-column prop="updated_at" label="最后编辑时间" sortable></el-table-column>
                     </el-table>
                 </el-card>
             </el-col>

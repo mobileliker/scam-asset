@@ -17,6 +17,7 @@
  * (2)index函数添加最后编辑时间；（2017/12/5）
  * (3)import函数新增source字段；（2017/12/5）
  * (4)storeOrUpdate函数新增size、storage和source字段；（2017/12/5）
+ * (5)修复relate函数编辑人获取的错误，并添加最后编辑时间字段；（2017/12/5）
  */
 
 namespace App\Http\Controllers\Api;
@@ -390,7 +391,7 @@ class RockController extends Controller
     {
         $lists = Rock::leftJoin('users as keepers', 'rocks.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'rocks.user_id', '=', 'users.id')
-            ->select('rocks.id', 'rocks.input_date', 'rocks.category', 'rocks.name', 'rocks.serial', 'rocks.ename', 'rocks.keeper_id', 'keepers.name as keeper', 'rocks.user_id', 'rocks.name as user')
+            ->select('rocks.id', 'rocks.input_date', 'rocks.category', 'rocks.name', 'rocks.serial', 'rocks.ename', 'rocks.keeper_id', 'keepers.name as keeper', 'rocks.user_id', 'users.name as user', 'rocks.updated_at')
             ->where('rocks.id', '!=', $id);
 
         if ($request->query_text != null && $request->query_text != '') {
