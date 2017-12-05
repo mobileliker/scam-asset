@@ -6,6 +6,7 @@
  * @description :
  * (1)基本功能；
  * (2)注释掉keeper_id的integer的验证；（2017/12/4）
+ * （3）去除对数量的验证；（2017/12/5）
  */
 
 <template>
@@ -260,11 +261,11 @@
                         {required: true, message: '请输入编号', trigger: 'blur'},
                         {max: 255, message: '编号不能超过255个字', trigger: 'blur'}
                     ],
-                    number: [
-                        {type : 'integer', required: true, message: '请输入数量', trigger: 'blur'},
-                        {type: 'integer', message: '请输入正确的整数', trigger: 'blur'},
-                        {type: 'integer', min: 0, message: '数量必须为正数', trigger: 'blur'}
-                    ],
+                    //number: [
+                        //{type : 'integer', required: true, message: '请输入数量', trigger: 'blur'},
+                        //{type: 'integer', message: '请输入正确的整数', trigger: 'blur'},
+                        //{type: 'integer', min: 0, message: '数量必须为正数', trigger: 'blur'}
+                    //],
                     display : [
                         {required : true, message : '请选择展示区域', trigger : 'change'}
                     ],
