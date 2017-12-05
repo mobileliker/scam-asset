@@ -15,6 +15,8 @@
  * @description :
  * (1)添加日志记录；（2017/12/1）
  * (2)index函数添加最后编辑时间；（2017/12/5）
+ * (3)import函数新增source字段；（2017/12/5）
+ * (4)storeOrUpdate函数新增size、storage和source字段；（2017/12/5）
  */
 
 namespace App\Http\Controllers\Api;
@@ -45,6 +47,9 @@ class RockController extends Controller
             'classification' => 'nullable|string|max:255',
             'feature' => 'nullable|string|max:255',
             'origin' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'storage' => 'nullable|string|max:255',
+            'source' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:2000',
             'keeper_id' => 'required|integer|exists:users,id,deleted_at,NULL',
             'asset_id' => 'nullable|exists:assets,serial,deleted_at,NULL',
@@ -57,7 +62,7 @@ class RockController extends Controller
             $rock = Rock::findOrFail($id);
         }
 
-        $rock->setRawAttributes($request->only(['name', 'category_id', 'ename', 'input_date', 'serial', 'classification', 'feature', 'origin', 'description', 'keeper_id', 'asset_id', 'memo']));
+        $rock->setRawAttributes($request->only(['name', 'category_id', 'ename', 'input_date', 'serial', 'classification', 'feature', 'origin', 'description', 'keeper_id', 'asset_id', 'memo', 'size', 'storage', 'source']));
         $rock->user_id = Auth::id();
 
         if ($id != -1) $rock->id = $id;
@@ -152,7 +157,10 @@ class RockController extends Controller
      */
     public function show($id)
     {
-        return Rock::findOrFail($id);
+        //return Rock::findOrFail($id);
+        return Rock::leftJoin('users as keeper', 'keeper.id', '=', 'rocks.keeper_id')
+          ->leftJoin('users', 'users.id', '=', 'rocks.user_id')
+          ->select('rocks.*', 'keeper.name as keeper_name', 'users.name as user_name')->findOrFail($id);
     }
 
     /**
@@ -252,6 +260,7 @@ class RockController extends Controller
                     $origin = $cells[10];
                     $description = $cells[11];
                     $memo = $cells[12];
+                    $source = $cells[13];
 
                     $serials = explode('-', $serial);
                     //Log::info($serials);
@@ -283,6 +292,7 @@ class RockController extends Controller
                         $rock->origin = $origin;
                         $rock->description = $description;
                         $rock->memo = $memo;
+                        $rock->source = $source;
                         $rock->keeper_id = $user->id;
                         $rock->user_id = $user->id;
                         $rock->category = $categories[$i - 1];

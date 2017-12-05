@@ -5,6 +5,7 @@
 * @description:
 * （1）基本功能；（2017/10/18）
 * (2)注释掉keeper_id的integer的验证；（2017/12/4）
+* (3)新增size、storage、source字段；（2017/12/5）
 */
 
 <template>
@@ -40,6 +41,12 @@
                                     <el-option v-for="item in view.keeper_id.options" :label="item.label" :value="item.value"></el-option>
                                 </el-select>
                             </el-form-item>
+                            <el-form-item label="尺寸" prop="size">
+                                <el-input v-model="rock.size" placeholder="尺寸"></el-input>
+                            </el-form-item>
+                            <el-form-item label="来源" prop="source">
+                                <el-input v-model="rock.source" placeholder="来源"></el-input>
+                            </el-form-item>
                             <el-form-item label="描述" prop="description">
                                 <el-input type="textarea" :rows="10" v-model="rock.description" placeholder="描述"></el-input>
                             </el-form-item>
@@ -59,6 +66,9 @@
                             </el-form-item>
                             <el-form-item label="是否固定资产" prop="asset_id">
                                 <el-input v-model="rock.asset_id" placeholder="输入固定资产编号"></el-input>
+                            </el-form-item>
+                            <el-form-item label="存放地点" prop="storage">
+                                <el-input v-model="rock.storage" placeholder="存放地点"></el-input>
                             </el-form-item>
                             <el-form-item label="备注" prop="memo">
                                 <el-input type="textarea" v-model="rock.memo" :rows="10" placeholder="备注"></el-input>
@@ -117,7 +127,10 @@
                     serial : '',
                     classification : '',
                     feature : '',
+                    size : '',
+                    storage : '',
                     description : '',
+                    source : '',
                     keeper_id : '',
                     asset_id : '',
                     memo : ''
@@ -146,6 +159,15 @@
                     memo : [
                         {max : 2000, message : '描述不能超过255个字', trigger : 'blur'}
                     ],
+                    size : [
+                        {max : 255, message : '尺寸不能超过255个字', trigger : 'blur'}
+                    ],
+                    storage : [
+                        {max : 255, message : '存放地点不能超过255个字', trigger : 'blur'}
+                    ],
+                    source : [
+                        {max : 255, message : '来源不能超过255个字', trigger : 'blur'}
+                    ],
                     //keeper_id : [
                     //    {required : true, type: 'integer', message : '请选择保管人', trigger : 'blur'}
                     //]
@@ -171,7 +193,6 @@
                                 }
                             });
                     }
-
                 }).catch(error => {
                     this.$message.error('获取所有用户失败');
                 });
