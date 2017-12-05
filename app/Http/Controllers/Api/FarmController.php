@@ -20,6 +20,7 @@
  * @description:
  * (1)添加日志记录；（2017/12/1）
  * （2）格式化代码；（2017/12/1）
+ * (3)添加拍摄清单函数；（2017/12/5）
  */
 
 namespace App\Http\Controllers\Api;
@@ -410,5 +411,34 @@ class FarmController extends Controller
         $lists = $lists->orderBy('id', 'desc')->take(50)->get();
 
         return $lists;
+    }
+
+    //生成拍摄清单函数
+    public function cameraList()
+    {
+      $post_time = Date('YmdHis');
+      $filePath = resource_path('assets/template/camera-list.xls');
+      $distPath = storage_path('excel/exports/'.$post_time.'.xls');
+      copy($filePath, $distPath);
+
+      Excel::load($distPath, function($reader) {
+          $lists = Farm::leftJoin('collection_images', function($join) {
+            $join->on('farms.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Farm::class);
+          })->whereNull('collection_images.id')->select('farms.category', 'farms.name', 'farms.serial', 'farms.number'/*, 'farms.storage'*/)->get();
+
+          $sheet = $reader->getActiveSheet();
+
+          $post_date = Date('Y-m-d');
+          $sheet->setCellValue('G2', $post_date);
+
+          foreach($lists as $index => $obj) {
+            $sheet->setCellValue('A' . ($index + 4), ($index + 1));
+            $sheet->setCellValue('B' . ($index + 4), $obj->category);
+            $sheet->setCellValue('C' . ($index + 4), $obj->name);
+            $sheet->setCellValue('D' . ($index + 4), $obj->number);
+            $sheet->setCellValue('E' . ($index + 4), $obj->serial);
+            $sheet->setCellValue('F' . ($index + 4), $obj->storage);
+          }
+      })->export('xls');
     }
 }

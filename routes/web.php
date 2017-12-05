@@ -11,6 +11,7 @@
  * (4)将农具模块的resource函数改为直接撰写：（2017/12/4）
  * (5)农具模块的delete和update接口改为get和post的常规请求方式：（2017/12/4）
  * (6)重新去除掉原API方法；(2017/12/5)
+ * (7)添加农具拍摄清单的接口；（2017/12/5）
  */
 
 /*
@@ -74,6 +75,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
     Route::group(['prefix' => 'asset'], function () {
         Route::get('export', 'AssetController@batchExport'); //批量导出所有固定资产
         Route::get('{id}/export', 'AssetController@export'); //导出单据
+    });
+
+    Route::group(['prefix' => 'farm'], function () {
+      Route::get('camera-list', 'FarmController@cameraList'); //拍摄清单
     });
 
 
