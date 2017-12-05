@@ -14,6 +14,7 @@
  * @date : 2017/12/1
  * @description :
  * (1)添加日志记录；（2017/12/1）
+ * (2)index函数添加最后编辑时间；（2017/12/5）
  */
 
 namespace App\Http\Controllers\Api;
@@ -80,7 +81,7 @@ class RockController extends Controller
         $lists = Rock::leftJoin('users as keepers', 'rocks.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'rocks.user_id', '=', 'users.id')
             ->leftJoin('rock_categories', 'rock_categories.id', '=', 'rocks.category_id')
-            ->select('rocks.id', 'rocks.input_date', 'rocks.category_id', 'rocks.category as category', 'rocks.name', 'rocks.ename', 'rocks.serial', 'rocks.keeper_id', 'keepers.name as keeper', 'rocks.user_id', 'users.name as user');
+            ->select('rocks.id', 'rocks.input_date', 'rocks.category_id', 'rocks.category as category', 'rocks.name', 'rocks.ename', 'rocks.serial', 'rocks.keeper_id', 'keepers.name as keeper', 'rocks.user_id', 'users.name as user', 'rocks.updated_at as updated_at');
 
 
         if ($request->keeper_id != null && $request->keeper_id != '') {
@@ -109,6 +110,7 @@ class RockController extends Controller
             'serial' => 'rocks.serial',
             'keeper' => 'keepers.name',
             'user' => 'users.name',
+            'updated_at' => 'rocks.updated_at'
         ];
 
         $text_params = [

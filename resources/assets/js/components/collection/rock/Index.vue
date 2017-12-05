@@ -4,6 +4,7 @@
 * @date: 2017/10/18
 * @description:
 * （1）基本功能；（2017/10/18）
+* (2)列表添加最后编辑时间；（2017/12/5）
 */
 
 <template>
@@ -60,7 +61,8 @@
                 <el-table-column prop="serial" label="编号" sortable></el-table-column>
                 <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
                 <el-table-column prop="user" label="编辑人" sortable></el-table-column>
-                <el-table-column fixed="right" label="操作" width="200">
+                <el-table-column prop="updated_at" label="最后编辑时间" sortable></el-table-column>
+                <el-table-column fixed="right" label="操作" width="220">
                     <template scope="scope">
                         <el-button type="text" size="small" @click="handleImageClick(scope.row.id)">图片管理</el-button>
                         <el-button type="text" size="small">
