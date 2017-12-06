@@ -17,6 +17,7 @@
  * @date : 2017/12/1
  * @description :
  * (1)添加获取保存或者更新的操作字符串的静态方法、并添加新的操作类型；（2017/12/1）
+ * (2)新增使用后台批量导入数据时的日志记录；（2017/12/6）
  */
 
 namespace App;
@@ -66,14 +67,27 @@ class Alog extends Model
     public static function log($module, $operate, $content, $ip = null)
     {
         $user = Auth::user();
-        return Alog::create([
-            'log_time' => date('Y-m-d H:i:s', time()),
-            'user_id' => $user->id,
-            'module' => $module,
-            'operate' => $operate,
-            'content' => '用户 ' . $user->name . ' : ' . $content,
-            'ip' => $ip,
-        ]);
+        if($user != null){
+          return Alog::create([
+              'log_time' => date('Y-m-d H:i:s', time()),
+              'user_id' => $user->id,
+              'module' => $module,
+              'operate' => $operate,
+              'content' => '用户 ' . $user->name . ' : ' . $content,
+              'ip' => $ip,
+          ]);
+        } else { //用户未登录，则是后台直接导入数据
+          $user = User::where('name', '=', 'batch-user')->first();
+          return Alog::create([
+              'log_time' => date('Y-m-d H:i:s', time()),
+              'user_id' => $user->id,
+              'module' => $module,
+              'operate' => $operate,
+              'content' => '用户 ' . $user->name . ' : ' . $content,
+              'ip' => $ip,
+          ]);
+
+        }
     }
 
     /**

@@ -16,6 +16,7 @@
  * @description :
  * (1)添加土壤管理的菜单权限；（2017/11/27）
  * (2)添加动物管理的菜单权限；（2017/11/30）
+ * (3)新增批量导入用户；（2017/12/6）
  */
 
 use Illuminate\Database\Seeder;
@@ -140,5 +141,9 @@ class InitSeeder extends Seeder
         if(!$adminUser->hasRole($alogMethodRole->name)) $adminUser->attachRole($alogMethodRole);
         if(!$adminUser->hasRole($farmRole->name)) $adminUser->attachRole($farmRole);
 
+        //新建批量管理用户
+        $batchUser = User::firstOrNew(['name' => 'batch-user', 'email' => 'batch@scama.com']);
+        $batchUser->password = bcrypt('123456');
+        $batchUser->save();
     }
 }

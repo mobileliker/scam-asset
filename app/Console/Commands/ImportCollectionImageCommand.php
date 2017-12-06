@@ -8,6 +8,7 @@
  * @description:
  * （1）基本功能；
  * （2）修改以适应多类型图片；（2017/11/1）
+ * （3）新增导入图片的日志记录功能；（2017/12/6）
  **/
 
 namespace App\Console\Commands;
@@ -111,7 +112,7 @@ class ImportCollectionImageCommand extends Command
                     $md5_str = md5_file($path . '/' . $file);
 
 
-                    $collectionImage = \App\CollectionImage::where('collectible_type', '=', \App\Rock::class)->where('collectible_id', '=', $collection->id)->where('hash', '=', $md5_str)->first();
+                    $collectionImage = \App\CollectionImage::where('collectible_type', '=', 'App\\' . ucfirst($prefix))->where('collectible_id', '=', $collection->id)->where('hash', '=', $md5_str)->first();
 
                     if ($collectionImage == null) {
                         $entension = strrchr($file, '.');
@@ -126,6 +127,13 @@ class ImportCollectionImageCommand extends Command
                         $collectionImage->collectible_type = 'App\\' . ucfirst($prefix);
                         $collectionImage->collectible_id = $collection->id;
                         if ($collectionImage->save()) {
+
+                          //记录日志
+                          $collectionImage->collectible;
+                          $eventModelName = 'App\\Events\\' . ucfirst($prefix) . 'Event';
+                          $eventClass = new \ReflectionClass($eventModelName);
+                          event($eventClass->newInstance('saveImage', '172.0.0.1', $collectionImage)); //添加日记事件
+
                             $this->comment($file . ' : 导入成功');
                         } else {
                             $this->comment($file . ' : 导入图片已存在');
