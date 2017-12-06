@@ -8,7 +8,6 @@
  * @description:
  * （1）基本功能；
  * （2）修改以适应多类型图片；（2017/11/1）
- * （3）修改文件名编码从GBK到UTF-8以满足服务器显示；（2017/12/6）
  **/
 
 namespace App\Console\Commands;
@@ -62,8 +61,6 @@ class ImportCollectionImageCommand extends Command
         $path = storage_path('import');
         $files = scandir($path);
         foreach ($files as $file) {
-            //$filePath = iconv('GB2312', 'UTF-8', $file);
-            $filePath = $file;
             if (!is_dir($file) && strpos($file, '.') != false && $this->isImage($file)) {
                 $serial = substr($file, 0, strcspn($file, '_'));
                 //$this->comment($serial);
@@ -128,14 +125,13 @@ class ImportCollectionImageCommand extends Command
                         $collectionImage->hash = $md5_str;
                         $collectionImage->collectible_type = 'App\\' . ucfirst($prefix);
                         $collectionImage->collectible_id = $collection->id;
-
                         if ($collectionImage->save()) {
-                            $this->comment($filePath . ' : 导入成功');
+                            $this->comment($file . ' : 导入成功');
                         } else {
-                            $this->comment($filePath . ' : 导入图片已存在');
+                            $this->comment($file . ' : 导入图片已存在');
                         }
                     } else {
-                        $this->comment($filePath . ' : 序列号不存在');
+                        $this->comment($file . ' : 序列号不存在');
                     }
                 }
             }
