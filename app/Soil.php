@@ -7,6 +7,7 @@
  * @date : 2017/11/29
  * @description :
  * （1）基本功能；(2017/11/29)
+ * (2)添加段面标本和纸盒标本的关联函数；（2017/12/6）
  */
 
 namespace App;
@@ -38,5 +39,17 @@ class Soil extends Model
     public function images()
     {
         return $this->morphMany('App\CollectionImage', 'collectible');
+    }
+
+    //关联段面标本
+    public function soilBigs()
+    {
+      return $this->hasMany('App\SoilBig', 'soil_id', 'id');
+    }
+
+    //关联纸盒标本
+    public function soilSmalls()
+    {
+      return $this->hasMany('App\SoilSmall', 'soil_id', 'id');
     }
 }

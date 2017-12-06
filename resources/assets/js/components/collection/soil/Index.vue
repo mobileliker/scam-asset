@@ -1,3 +1,14 @@
+/**
+* @version 2.0
+* @author: wuzhihui
+* @date: 2017/12/6
+* @description:
+* (1)基本功能；
+* (2)列表添加最后编辑时间；（2017/12/6）
+* (3)新增段面标本和纸盒标本数量；（2017/12/6）
+* (4)一页默认为15条；（2017/12/6）
+*/
+
 <template>
   <content-component>
       <el-col :lg="24">
@@ -44,8 +55,11 @@
               </el-table-column>
               <el-table-column prop="ename" label="英文名称" sortable></el-table-column>
               <el-table-column prop="serial" label="编号" sortable></el-table-column>
+              <el-table-column prop="soilBigCount" label="段面数量" width="100"></el-table-column>
+              <el-table-column prop="soilSmallCount" label="纸盒数量" width="100"></el-table-column>
               <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
               <el-table-column prop="user" label="编辑人" sortable></el-table-column>
+              <el-table-column prop="updated_at" label="最后编辑时间" sortable></el-table-column>
               <el-table-column fixed="right" label="操作" width="200">
                   <template scope="scope">
                   <el-button type="text" size="small" @click="handleImageClick(scope.row.id)">图片管理</el-button>
@@ -182,7 +196,7 @@
               from: '',
               'last_page': '',
               'next_page_url': '',
-              'per_page': 10,
+              'per_page': 15,
               'prev_page_url': '',
               'to': '',
               'total': 0,

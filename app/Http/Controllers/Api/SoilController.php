@@ -8,6 +8,8 @@
  * @description :
  * (1)基本功能； （2017/11/27）
  * (2)添加日志记录；（2017/12/1）
+ * (3)新增列表的段面标本和纸盒标本的统计；（2017/12/6）
+ * (4)index添加最后编辑时间字段；（2017/12/6）
  */
 
 namespace App\Http\Controllers\Api;
@@ -202,7 +204,7 @@ class SoilController extends Controller
     {
         $lists = Soil::leftJoin('users as keepers', 'soils.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'soils.user_id', '=', 'users.id')
-            ->select('soils.id', 'soils.input_date', 'soils.name', 'soils.ename', 'soils.serial', 'soils.origin', 'soils.keeper_id', 'keepers.name as keeper', 'soils.user_id', 'users.name as user');
+            ->select('soils.id', 'soils.input_date', 'soils.name', 'soils.ename', 'soils.serial', 'soils.origin', 'soils.keeper_id', 'keepers.name as keeper', 'soils.user_id', 'users.name as user', 'soils.updated_at');
 
         if ($request->input_date_start != null && $request->input_date_start != '') {
             $lists = $lists->where('soils.input_date', '>=', $request->input_date_start)->where('soils.input_date', '<=', $request->input_date_end);
@@ -239,6 +241,23 @@ class SoilController extends Controller
         ];
 
         $lists = IQuery::ofDefault($lists, $request, $order_params, $text_params, 'soils');
+
+        //新增段面标本和纸盒标本统计
+        foreach($lists as $key=>$obj) {
+          $soilBigs = $obj->soilBigs;
+          if($soilBigs != null) {
+            $lists[$key]->soilBigCount = count($soilBigs);
+          }else{
+            $lists[$key]->soilBigCount = 0;
+          }
+
+          $soilSmalls = $obj->soilSmalls;
+          if($soilSmalls != null) {
+            $lists[$key]->soilSmallCount = count($soilSmalls);
+          }else{
+            $lists[$key]->soilSmallCount = 0;
+          }
+        }
 
         return $lists;
     }

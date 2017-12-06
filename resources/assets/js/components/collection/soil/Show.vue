@@ -109,7 +109,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column prop="ename" label="英文名称" sortable></el-table-column>
-                        <el-table-column prop="region" label="地区" sortable></el-table-column>
+                        <el-table-column prop="origin" label="地区" sortable></el-table-column>
                         <el-table-column prop="serial" label="编号" sortable></el-table-column>
                         <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
                         <el-table-column prop="user" label="编辑人" sortable></el-table-column>
