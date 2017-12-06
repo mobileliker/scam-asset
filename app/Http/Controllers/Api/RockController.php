@@ -18,6 +18,7 @@
  * (3)import函数新增source字段；（2017/12/5）
  * (4)storeOrUpdate函数新增size、storage和source字段；（2017/12/5）
  * (5)修复relate函数编辑人获取的错误，并添加最后编辑时间字段；（2017/12/5）
+ * (6)新增导入功能函数；（2017/12/6）
  */
 
 namespace App\Http\Controllers\Api;
@@ -402,6 +403,36 @@ class RockController extends Controller
 
         return $lists;
     }
+
+
+        //生成拍摄清单函数
+        public function cameraList()
+        {
+          $post_time = Date('YmdHis');
+          $filePath = resource_path('assets/template/camera-list.xls');
+          $distPath = storage_path('excel/exports/camera-list/rock/'.$post_time.'.xls');
+          copy($filePath, $distPath);
+
+          Excel::load($distPath, function($reader) {
+              $lists = Rock::leftJoin('collection_images', function($join) {
+                $join->on('rocks.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Rock::class);
+              })->whereNull('collection_images.id')->select('rocks.category', 'rocks.name', 'rocks.serial', /*'rocks.number', */'rocks.storage')->get();
+
+              $sheet = $reader->getActiveSheet();
+
+              $post_date = Date('Y-m-d');
+              $sheet->setCellValue('G2', $post_date);
+
+              foreach($lists as $index => $obj) {
+                $sheet->setCellValue('A' . ($index + 4), ($index + 1));
+                $sheet->setCellValue('B' . ($index + 4), $obj->category);
+                $sheet->setCellValue('C' . ($index + 4), $obj->name);
+                $sheet->setCellValue('D' . ($index + 4), $obj->number);
+                $sheet->setCellValue('E' . ($index + 4), $obj->serial);
+                $sheet->setCellValue('F' . ($index + 4), $obj->storage);
+              }
+          })->export('xls');
+        }
 
 
 }
