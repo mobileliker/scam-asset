@@ -5,8 +5,9 @@
  * @date : 2017/11/30
  * @description :
  * （1）基本功能；
- *  (2) 修改列表的版式；（2017/11/30）
- *
+ * （2）修改列表的版式；（2017/11/30）
+ * （3）新增IP地址项；（2017/12/6）
+ */
 
 <template>
     <content-component id="content">
@@ -37,6 +38,7 @@
                 <el-table-column label="用户名" prop="user_name" sortable width="120"></el-table-column>
                 <el-table-column label="模块" prop="module" sortable width="100"></el-table-column>
                 <el-table-column label="操作" prop="operate" sortable width="100"></el-table-column>
+                <el-table-column label="IP" prop="ip" sortable width="100"></el-table-column>
                 <el-table-column label="内容" prop="content" sortable></el-table-column>
             </el-table>
         </el-col>
@@ -138,15 +140,7 @@
                     'prev_page_url' : '',
                     'to' : '',
                     'total' : 0,
-                    data : [
-                        {
-                            'log_time' : '2017-4-19 17:31',
-                            'user_name' : 'api',
-                            module : 'Asset',
-                            operate : 'ADD',
-                            content : 'aaaaaaaaaaaaaaaa'
-                        }
-                    ]
+                    data : []
                 },
                 view : {
                     table : {
