@@ -1,3 +1,14 @@
+/**
+* @version 2.0.2
+* @author: wuzhihui
+* @date: 2017/12/7
+* @description:
+* (1)基本功能；
+* (2)优化没有图片时显示提示字段；（2017/12/7）
+* (3)相似土壤新增最后编辑时间字段；（2017/12/7）
+* (4)详情添加最后编辑人、最后编辑时间字段；（2017/12/7）
+*/
+
 <template>
 	<content-component>
 		<el-col :lg="24" v-loading.body="view.saveLoading">
@@ -20,6 +31,8 @@
                         <p>采集地点：{{info.origin}}</p>
                         <p>经纬度：{{info.location}}</p>
                         <p>保管人：{{info.keeper_name}}</p>
+												<p>最后编辑人：{{info.user_name}}</p>
+												<p>最后编辑时间：{{info.updated_at}}</p>
             		</el-col>
             		<el-col :lg="12" class="info-item">
                         <p>海拔：{{info.altitude}}</p>
@@ -41,18 +54,23 @@
                     <div slot="header">
                         <span>图片信息</span>
                     </div>
-                    <el-col v-for="(o, index) in 4" :span="6" :key="o" :offset="0">
-                        <el-card body-style="{padding: '0px' }" v-for="(image, key) in images"
-                                 v-if="(key % 4) == index">
-                            <img :src="image.url" class="image">
-                            <div style="padding: 14px;">
-                                <div class="bottom clearfix">
-                                    <time class="time">{{image.time}}</time>
-                                    <el-button type="text" class="button" @click="imageView(image.path)">查看</el-button>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
+										<template v-if="images.length > 0">
+	                    <el-col v-for="(o, index) in 4" :span="6" :key="o" :offset="0">
+	                        <el-card body-style="{padding: '0px' }" v-for="(image, key) in images"
+	                                 v-if="(key % 4) == index">
+	                            <img :src="image.url" class="image">
+	                            <div style="padding: 14px;">
+	                                <div class="bottom clearfix">
+	                                    <time class="time">{{image.time}}</time>
+	                                    <el-button type="text" class="button" @click="imageView(image.path)">查看</el-button>
+	                                </div>
+	                            </div>
+	                        </el-card>
+	                    </el-col>
+										</template>
+										<template v-else>
+										<p class="image-empty">暂无图片</p>
+										</template>
             	</el-card>
             </el-col>
 						<el-col :lg="24">
@@ -113,6 +131,7 @@
                         <el-table-column prop="serial" label="编号" sortable></el-table-column>
                         <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
                         <el-table-column prop="user" label="编辑人" sortable></el-table-column>
+												<el-table-column prop="updated_at" label="最后编辑时间" sortable></el-table-column>
                     </el-table>
                 </el-card>
             </el-col>
@@ -182,6 +201,11 @@
     .clearfix:after {
         clear: both
     }
+
+		.image-empty {
+			text-align :center;
+			font-size : 16px;
+		}
 </style>
 
 <script>

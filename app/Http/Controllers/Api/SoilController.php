@@ -10,6 +10,8 @@
  * (2)添加日志记录；（2017/12/1）
  * (3)新增列表的段面标本和纸盒标本的统计；（2017/12/6）
  * (4)index添加最后编辑时间字段；（2017/12/6）
+ * (5)show函数新增最后编辑人、最后编辑时间字段；（2017/12/7）
+ * (6)relate函数添加最后编辑时间字段；（2017/12/7）
  */
 
 namespace App\Http\Controllers\Api;
@@ -291,7 +293,10 @@ class SoilController extends Controller
      */
     public function show($id)
     {
-        return Soil::findOrFail($id);
+        //return Soil::findOrFail($id);
+        return Soil::leftJoin('users as keeper', 'keeper.id', '=', 'soils.keeper_id')
+          ->leftJoin('users', 'users.id', '=', 'soils.user_id')
+          ->select('soils.*', 'keeper.name as keeper_name', 'users.name as user_name')->findOrFail($id);
     }
 
     /**
@@ -424,7 +429,7 @@ class SoilController extends Controller
     {
         $lists = Soil::leftJoin('users as keepers', 'soils.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'soils.user_id', '=', 'users.id')
-            ->select('soils.id', 'soils.input_date', 'soils.name', 'soils.serial', 'soils.ename', 'soils.origin', 'soils.keeper_id', 'keepers.name as keeper', 'soils.user_id', 'users.name as user')
+            ->select('soils.id', 'soils.input_date', 'soils.name', 'soils.serial', 'soils.ename', 'soils.origin', 'soils.keeper_id', 'keepers.name as keeper', 'soils.user_id', 'users.name as user', 'soils.updated_at')
             ->where('soils.id', '!=', $id);
 
         if ($request->query_text != null && $request->query_text != '') {
