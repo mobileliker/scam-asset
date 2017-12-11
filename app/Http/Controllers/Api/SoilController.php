@@ -12,6 +12,7 @@
  * (4)index添加最后编辑时间字段；（2017/12/6）
  * (5)show函数新增最后编辑人、最后编辑时间字段；（2017/12/7）
  * (6)relate函数添加最后编辑时间字段；（2017/12/7）
+ * (7)index函数添加采集人；（2017/12/11）
  */
 
 namespace App\Http\Controllers\Api;
@@ -206,7 +207,7 @@ class SoilController extends Controller
     {
         $lists = Soil::leftJoin('users as keepers', 'soils.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'soils.user_id', '=', 'users.id')
-            ->select('soils.id', 'soils.input_date', 'soils.name', 'soils.ename', 'soils.serial', 'soils.origin', 'soils.keeper_id', 'keepers.name as keeper', 'soils.user_id', 'users.name as user', 'soils.updated_at');
+            ->select('soils.id', 'soils.input_date', 'soils.name', 'soils.ename', 'soils.serial', 'soils.origin', 'soils.keeper_id', 'keepers.name as keeper', 'soils.user_id', 'users.name as user', 'soils.updated_at', 'soils.collecter');
 
         if ($request->input_date_start != null && $request->input_date_start != '') {
             $lists = $lists->where('soils.input_date', '>=', $request->input_date_start)->where('soils.input_date', '<=', $request->input_date_end);
@@ -234,6 +235,7 @@ class SoilController extends Controller
             'origin' => 'soils.origin',
             'keeper' => 'keepers.name',
             'user' => 'users.name',
+            'collecter' => 'soils.collecter',
         ];
 
         $text_params = [

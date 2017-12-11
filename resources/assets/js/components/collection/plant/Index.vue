@@ -58,8 +58,9 @@
                 </el-table-column>
                 <el-table-column prop="serial" label="编号" sortable></el-table-column>
                 <el-table-column prop="source" label="来源" sortable></el-table-column>
-                <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
-                <el-table-column prop="user" label="编辑人" sortable></el-table-column>
+                <el-table-column prop="keeper" label="保管人" sortable width="100"></el-table-column>
+                <el-table-column prop="user" label="编辑人" sortable width="100"></el-table-column>
+                <el-table-column prop="updated_at" label="最后编辑时间" sortable></el-table-column>
                 <el-table-column fixed="right" label="操作" width="200">
                     <template scope="scope">
                         <el-button type="text" size="small" @click="handleImageClick(scope.row.id)">图片管理</el-button>
@@ -285,7 +286,7 @@
                     from: '',
                     'last_page': '',
                     'next_page_url': '',
-                    'per_page': 10,
+                    'per_page': 15,
                     'prev_page_url': '',
                     'to': '',
                     'total': 0,

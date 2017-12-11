@@ -14,6 +14,7 @@
  * @date : 2017/12/1
  * @description :
  * (1)添加日志记录；（2017/12/1）
+ * (2)index函数添加最后编辑时间;(2017/12/11)
  */
 
 namespace App\Http\Controllers\Api;
@@ -189,7 +190,7 @@ class PlantController extends Controller
     {
         $lists = Plant::leftJoin('users as keepers', 'plants.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'plants.user_id', '=', 'users.id')
-            ->select('plants.id', 'plants.input_date', 'plants.category', 'plants.name', 'plants.latin', 'plants.serial', 'plants.source', 'plants.keeper_id', 'keepers.name as keeper', 'plants.user_id', 'users.name as user');
+            ->select('plants.id', 'plants.input_date', 'plants.category', 'plants.name', 'plants.latin', 'plants.serial', 'plants.source', 'plants.keeper_id', 'keepers.name as keeper', 'plants.user_id', 'users.name as user', 'plants.updated_at');
 
         if ($request->input_date_start != null && $request->input_date_start != '') {
             $lists = $lists->where('plants.input_date', '>=', $request->input_date_start)->where('plants.input_date', '<=', $request->input_date_end);
@@ -223,6 +224,7 @@ class PlantController extends Controller
             'source' => 'plants.source',
             'keeper' => 'keepers.name',
             'user' => 'users.name',
+            'updated_at' => 'plants.updated_at',
         ];
 
         $text_params = [

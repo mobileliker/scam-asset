@@ -53,13 +53,15 @@
                       <router-link :to="'/collection/soil/' + scope.row.id">{{scope.row.name}}</router-link>
                   </template>
               </el-table-column>
-              <el-table-column prop="ename" label="英文名称" sortable></el-table-column>
+              <!--<el-table-column prop="ename" label="英文名称" sortable></el-table-column>-->
+              <el-table-column prop="origin" label="地区" sortable></el-table-column>
               <el-table-column prop="serial" label="编号" sortable></el-table-column>
               <el-table-column prop="soilBigCount" label="段面数量" width="100"></el-table-column>
               <el-table-column prop="soilSmallCount" label="纸盒数量" width="100"></el-table-column>
-              <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
-              <el-table-column prop="user" label="编辑人" sortable></el-table-column>
-              <el-table-column prop="updated_at" label="最后编辑时间" sortable></el-table-column>
+              <!--<el-table-column prop="keeper" label="保管人" sortable></el-table-column>-->
+              <el-table-column prop="collecter" label="采集人" sortable></el-table-column>
+              <el-table-column prop="user" label="编辑人" sortable width="100"></el-table-column>
+              <el-table-column prop="updated_at" label="最后编辑时间" sortable width="160"></el-table-column>
               <el-table-column fixed="right" label="操作" width="200">
                   <template scope="scope">
                   <el-button type="text" size="small" @click="handleImageClick(scope.row.id)">图片管理</el-button>

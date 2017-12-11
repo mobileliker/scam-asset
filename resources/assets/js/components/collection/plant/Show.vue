@@ -14,15 +14,19 @@
                     <el-col :lg="12" class="info-item">
                         <p>入库日期：{{info.input_date}}</p>
                         <p>名称：{{info.name}}</p>
-                        <p>来源：{{info.source}}</p>
+                        <p>科：{{info.family}}</p>
                         <p>尺寸：{{info.size}}</p>
+                        <p>来源：{{info.source}}</p>
+                        <p>存放地点：{{info.storage}}</p>
                         <p>保管人：{{info.keeper_name}}</p>
                         <p>描述：{{info.description}}</p>
                     </el-col>
                     <el-col :lg="12" class="info-item">
                         <p>分类：{{info.category}}</p>
+                        <p>拉丁名：{{info.latin}}</p>
+                        <p>属：{{info.genus}}</p>
                         <p>编号：{{info.serial}}</p>
-                        <p>数量：{{info.number}}</p>
+                        <!--<p>数量：{{info.number}}</p>-->
                         <p>产地：{{info.origin}}</p>
                         <p>固定资产编号：{{info.asset_id}}</p>
                         <p>备注：{{info.memo}}</p>
