@@ -23,6 +23,7 @@
  * (4)临时注释掉API接口测试；（2017/12/4）
  * (5)恢复被注释的API接口，并修改为post和get方法代替delete和put方法；（2017/12/5）
  * (6)修改藏品管理部分的使用post和get方法代替delete和put方法；（2017/12/5）
+ * (7)新增土壤标本的新的显示图片的功能；（2017/12/12）
  */
 
 //use Illuminate\Http\Request;
@@ -151,6 +152,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         //土壤模块
         Route::group(['prefix' => 'soil'], function () {
             Route::get('{id}/image', 'SoilController@showImage');
+            Route::get('{id}/image2', 'SoilController@showImage2'); //同时显示纸盒和段面标本的图片
             Route::post('{id}/image', 'SoilController@saveImage');
             Route::get('{id}/relate', 'SoilController@relate');
             //Route::delete('{soil_id}/image/{id}', 'soilController@deleteImage');

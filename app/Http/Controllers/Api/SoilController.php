@@ -14,6 +14,7 @@
  * (6)relate函数添加最后编辑时间字段；（2017/12/7）
  * (7)index函数添加采集人；（2017/12/11）
  * (8)新增拍摄清单函数；（2017/12/12）
+ * (9)新增详情页的显示图片函数；（2017/12/12）
  */
 
 namespace App\Http\Controllers\Api;
@@ -248,20 +249,20 @@ class SoilController extends Controller
         $lists = IQuery::ofDefault($lists, $request, $order_params, $text_params, 'soils');
 
         //新增段面标本和纸盒标本统计
-        foreach($lists as $key=>$obj) {
-          $soilBigs = $obj->soilBigs;
-          if($soilBigs != null) {
-            $lists[$key]->soilBigCount = count($soilBigs);
-          }else{
-            $lists[$key]->soilBigCount = 0;
-          }
+        foreach ($lists as $key => $obj) {
+            $soilBigs = $obj->soilBigs;
+            if ($soilBigs != null) {
+                $lists[$key]->soilBigCount = count($soilBigs);
+            } else {
+                $lists[$key]->soilBigCount = 0;
+            }
 
-          $soilSmalls = $obj->soilSmalls;
-          if($soilSmalls != null) {
-            $lists[$key]->soilSmallCount = count($soilSmalls);
-          }else{
-            $lists[$key]->soilSmallCount = 0;
-          }
+            $soilSmalls = $obj->soilSmalls;
+            if ($soilSmalls != null) {
+                $lists[$key]->soilSmallCount = count($soilSmalls);
+            } else {
+                $lists[$key]->soilSmallCount = 0;
+            }
         }
 
         return $lists;
@@ -298,8 +299,8 @@ class SoilController extends Controller
     {
         //return Soil::findOrFail($id);
         return Soil::leftJoin('users as keeper', 'keeper.id', '=', 'soils.keeper_id')
-          ->leftJoin('users', 'users.id', '=', 'soils.user_id')
-          ->select('soils.*', 'keeper.name as keeper_name', 'users.name as user_name')->findOrFail($id);
+            ->leftJoin('users', 'users.id', '=', 'soils.user_id')
+            ->select('soils.*', 'keeper.name as keeper_name', 'users.name as user_name')->findOrFail($id);
     }
 
     /**
@@ -357,6 +358,26 @@ class SoilController extends Controller
     public function showImage(Request $request, $id)
     {
         return Soil::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
+    }
+
+    public function showImage2(Request $request, $id)
+    {
+        //return Soil::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
+        $list = Soil::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time');
+        $soilSmallImages = SoilSmall::join('soils', 'soils.id', '=', 'soil_smalls.soil_id')
+            ->where('soils.id', '=', $id)
+            ->join('collection_images', function ($join) {
+                $join->on('collection_images.collectible_id', '=', 'soil_smalls.id')->whereNull('collection_images.deleted_at')->where('collection_images.collectible_type', '=', SoilSmall::class);
+            })->select('collection_images.id', 'collection_images.thumb as url', 'collection_images.path', 'collection_images.cover', 'collection_images.updated_at as time');
+        $soilBigImages = SoilBig::join('soils', 'soils.id', '=', 'soil_bigs.soil_id')
+            ->where('soils.id', '=', $id)
+            ->join('collection_images', function ($join) {
+                $join->on('collection_images.collectible_id', '=', 'soil_bigs.id')->whereNull('collection_images.deleted_at')->where('collection_images.collectible_type', '=', SoilBig::class);
+            })
+            ->select('collection_images.id', 'collection_images.thumb as url', 'collection_images.path', 'collection_images.cover', 'collection_images.updated_at as time');
+
+        $list = $list->union($soilSmallImages)->union($soilBigImages)->get();
+        return $list;
     }
 
 
@@ -445,39 +466,39 @@ class SoilController extends Controller
     }
 
 
-            //生成拍摄清单函数
-            public function cameraList()
-            {
-              $post_time = Date('YmdHis');
-              $filePath = resource_path('assets/template/camera-list.xls');
-              $distPath = storage_path('excel/exports/camera-list/soil/'.$post_time.'.xls');
-              copy($filePath, $distPath);
+    //生成拍摄清单函数
+    public function cameraList()
+    {
+        $post_time = Date('YmdHis');
+        $filePath = resource_path('assets/template/camera-list.xls');
+        $distPath = storage_path('excel/exports/camera-list/soil/' . $post_time . '.xls');
+        copy($filePath, $distPath);
 
-              Excel::load($distPath, function($reader) {
-                  // $lists = Rock::leftJoin('collection_images', function($join) {
-                  //   $join->on('rocks.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Rock::class);
-                  // })->whereNull('collection_images.id')->select('rocks.category', 'rocks.name', 'rocks.serial', /*'rocks.number', */'rocks.storage')->get();
+        Excel::load($distPath, function ($reader) {
+            // $lists = Rock::leftJoin('collection_images', function($join) {
+            //   $join->on('rocks.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Rock::class);
+            // })->whereNull('collection_images.id')->select('rocks.category', 'rocks.name', 'rocks.serial', /*'rocks.number', */'rocks.storage')->get();
 
-                  $lists = SoilSmall::leftJoin('collection_images', function($join) {
-                    $join->on('soil_smalls.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', SoilSmall::class);
-                  })->leftJoin('soils', function($join) {
-                    $join->on('soils.id', '=', 'soil_smalls.soil_id')->whereNull('soils.deleted_at');
-                  })
-                  ->whereNull('collection_images.id')->select('soils.name', 'soil_smalls.serial', 'soil_smalls.storage')->get();
+            $lists = SoilSmall::leftJoin('collection_images', function ($join) {
+                $join->on('soil_smalls.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', SoilSmall::class);
+            })->leftJoin('soils', function ($join) {
+                $join->on('soils.id', '=', 'soil_smalls.soil_id')->whereNull('soils.deleted_at');
+            })
+                ->whereNull('collection_images.id')->select('soils.name', 'soil_smalls.serial', 'soil_smalls.storage')->get();
 
-                  $sheet = $reader->getActiveSheet();
+            $sheet = $reader->getActiveSheet();
 
-                  $post_date = Date('Y-m-d');
-                  $sheet->setCellValue('G2', $post_date);
+            $post_date = Date('Y-m-d');
+            $sheet->setCellValue('G2', $post_date);
 
-                  foreach($lists as $index => $obj) {
-                    $sheet->setCellValue('A' . ($index + 4), ($index + 1));
-                    $sheet->setCellValue('B' . ($index + 4), '纸盒标本');
-                    $sheet->setCellValue('C' . ($index + 4), $obj->name);
-                    $sheet->setCellValue('D' . ($index + 4), '1');
-                    $sheet->setCellValue('E' . ($index + 4), $obj->serial);
-                    $sheet->setCellValue('F' . ($index + 4), $obj->storage);
-                  }
-              })->export('xls');
+            foreach ($lists as $index => $obj) {
+                $sheet->setCellValue('A' . ($index + 4), ($index + 1));
+                $sheet->setCellValue('B' . ($index + 4), '纸盒标本');
+                $sheet->setCellValue('C' . ($index + 4), $obj->name);
+                $sheet->setCellValue('D' . ($index + 4), '1');
+                $sheet->setCellValue('E' . ($index + 4), $obj->serial);
+                $sheet->setCellValue('F' . ($index + 4), $obj->storage);
             }
+        })->export('xls');
+    }
 }

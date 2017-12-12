@@ -7,6 +7,7 @@
 * (2)优化没有图片时显示提示字段；（2017/12/7）
 * (3)相似土壤新增最后编辑时间字段；（2017/12/7）
 * (4)详情添加最后编辑人、最后编辑时间字段；（2017/12/7）
+* (5)使用新的显示图片接口；（2017/12/12）
 */
 
 <template>
@@ -52,7 +53,7 @@
             	</el-card>
             	<el-card class="item">
                     <div slot="header">
-                        <span>图片信息</span>
+                        <span>图片信息(土壤断面和纸盒标本图片同时显示)</span>
                     </div>
 										<template v-if="images.length > 0">
 	                    <el-col v-for="(o, index) in 4" :span="6" :key="o" :offset="0">
@@ -309,7 +310,7 @@
     				});
 
 
-                axios.get('api/collection/soil/' + this.$route.params.id + '/image')
+                axios.get('api/collection/soil/' + this.$route.params.id + '/image2')
                     .then(response => {
                         //console.log(response.data);
                         this.images = response.data;
