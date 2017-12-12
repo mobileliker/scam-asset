@@ -87,5 +87,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
       Route::get('camera-list', 'RockController@cameraList'); //拍摄清单
     });
 
+    //土壤管理
+    Route::group(['prefix' => 'soil'], function () {
+      Route::get('camera-list', 'SoilController@cameraList'); //拍摄清单
+    });
+
 
 });

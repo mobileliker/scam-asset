@@ -7,6 +7,7 @@
 * （2）添加农具的相关统计数据；（2017/9/30）
 * （3）添加岩石相关的统计数据；（2017/11/1）
 * （4）修改首页的显示样式为藏品分类统计与其他统计分开；（2017/11/29）
+* （5）修复文字描述的问题；（2017/12/12）
 */
 
 <template>
@@ -45,7 +46,7 @@
                     </div>
                     <p>总数量：{{total.collection.number}}</p>
                     <p>图片总数量：{{total.collection.image_number}}</p>
-                    <p>本月新增新增数量：{{total.collection.month_add}}</p>
+                    <p>本月新增数量：{{total.collection.month_add}}</p>
                     <p>本年新增数量：{{total.collection.year_add}}</p>
                     <p>本月图片新增数量：{{total.collection.image_month_add}}</p>
                     <p>本年图片新增数量：{{total.collection.image_year_add}}</p>
@@ -65,7 +66,7 @@
                   </div>
                   <p>总数量：{{total.farm.number}}</p>
                   <p>图片总数量：{{total.farm.image_number}}</p>
-                  <p>本月新增新增数量：{{total.farm.month_add}}</p>
+                  <p>本月新增数量：{{total.farm.month_add}}</p>
                   <p>本年新增数量：{{total.farm.year_add}}</p>
                   <p>本月图片新增数量：{{total.farm.image_month_add}}</p>
                   <p>本年图片新增数量：{{total.farm.image_year_add}}</p>
@@ -78,7 +79,7 @@
                   </div>
                   <p>总数量：{{total.rock.number}}</p>
                   <p>图片总数量：{{total.rock.image_number}}</p>
-                  <p>本月新增新增数量：{{total.rock.month_add}}</p>
+                  <p>本月新增数量：{{total.rock.month_add}}</p>
                   <p>本年新增数量：{{total.rock.year_add}}</p>
                   <p>本月图片新增数量：{{total.rock.image_month_add}}</p>
                   <p>本年图片新增数量：{{total.rock.image_year_add}}</p>
@@ -91,7 +92,7 @@
                   </div>
                   <p>总数量：{{total.plant.number}}</p>
                   <p>图片总数量：{{total.plant.image_number}}</p>
-                  <p>本月新增新增数量：{{total.plant.month_add}}</p>
+                  <p>本月新增数量：{{total.plant.month_add}}</p>
                   <p>本年新增数量：{{total.plant.year_add}}</p>
                   <p>本月图片新增数量：{{total.plant.image_month_add}}</p>
                   <p>本年图片新增数量：{{total.plant.image_year_add}}</p>
@@ -104,7 +105,7 @@
                   </div>
                   <p>总数量：{{total.animal.number}}</p>
                   <p>图片总数量：{{total.animal.image_number}}</p>
-                  <p>本月新增新增数量：{{total.animal.month_add}}</p>
+                  <p>本月新增数量：{{total.animal.month_add}}</p>
                   <p>本年新增数量：{{total.animal.year_add}}</p>
                   <p>本月图片新增数量：{{total.animal.image_month_add}}</p>
                   <p>本年图片新增数量：{{total.animal.image_year_add}}</p>
@@ -117,7 +118,7 @@
                   </div>
                   <p>总数量：{{total.soilBig.number}}</p>
                   <p>图片总数量：{{total.soilBig.image_number}}</p>
-                  <p>本月新增新增数量：{{total.soilBig.month_add}}</p>
+                  <p>本月新增数量：{{total.soilBig.month_add}}</p>
                   <p>本年新增数量：{{total.soilBig.year_add}}</p>
                   <p>本月图片新增数量：{{total.soilBig.image_month_add}}</p>
                   <p>本年图片新增数量：{{total.soilBig.image_year_add}}</p>
@@ -130,7 +131,7 @@
                   </div>
                   <p>总数量：{{total.soilSmall.number}}</p>
                   <p>图片总数量：{{total.soilSmall.image_number}}</p>
-                  <p>本月新增新增数量：{{total.soilSmall.month_add}}</p>
+                  <p>本月新增数量：{{total.soilSmall.month_add}}</p>
                   <p>本年新增数量：{{total.soilSmall.year_add}}</p>
                   <p>本月图片新增数量：{{total.soilSmall.image_month_add}}</p>
                   <p>本年图片新增数量：{{total.soilSmall.image_year_add}}</p>

@@ -13,6 +13,7 @@
  * (5)show函数新增最后编辑人、最后编辑时间字段；（2017/12/7）
  * (6)relate函数添加最后编辑时间字段；（2017/12/7）
  * (7)index函数添加采集人；（2017/12/11）
+ * (8)新增拍摄清单函数；（2017/12/12）
  */
 
 namespace App\Http\Controllers\Api;
@@ -442,4 +443,41 @@ class SoilController extends Controller
 
         return $lists;
     }
+
+
+            //生成拍摄清单函数
+            public function cameraList()
+            {
+              $post_time = Date('YmdHis');
+              $filePath = resource_path('assets/template/camera-list.xls');
+              $distPath = storage_path('excel/exports/camera-list/soil/'.$post_time.'.xls');
+              copy($filePath, $distPath);
+
+              Excel::load($distPath, function($reader) {
+                  // $lists = Rock::leftJoin('collection_images', function($join) {
+                  //   $join->on('rocks.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Rock::class);
+                  // })->whereNull('collection_images.id')->select('rocks.category', 'rocks.name', 'rocks.serial', /*'rocks.number', */'rocks.storage')->get();
+
+                  $lists = SoilSmall::leftJoin('collection_images', function($join) {
+                    $join->on('soil_smalls.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', SoilSmall::class);
+                  })->leftJoin('soils', function($join) {
+                    $join->on('soils.id', '=', 'soil_smalls.soil_id')->whereNull('soils.deleted_at');
+                  })
+                  ->whereNull('collection_images.id')->select('soils.name', 'soil_smalls.serial', 'soil_smalls.storage')->get();
+
+                  $sheet = $reader->getActiveSheet();
+
+                  $post_date = Date('Y-m-d');
+                  $sheet->setCellValue('G2', $post_date);
+
+                  foreach($lists as $index => $obj) {
+                    $sheet->setCellValue('A' . ($index + 4), ($index + 1));
+                    $sheet->setCellValue('B' . ($index + 4), '纸盒标本');
+                    $sheet->setCellValue('C' . ($index + 4), $obj->name);
+                    $sheet->setCellValue('D' . ($index + 4), '1');
+                    $sheet->setCellValue('E' . ($index + 4), $obj->serial);
+                    $sheet->setCellValue('F' . ($index + 4), $obj->storage);
+                  }
+              })->export('xls');
+            }
 }

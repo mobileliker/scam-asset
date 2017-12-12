@@ -36,11 +36,12 @@
           <el-input placeholder="请输入名称、英文名称进行搜索" icon="search" v-model="search.query_text"
                     :on-icon-click="handleSearchIconClick"></el-input>
       </el-col>
-      <el-col :lg="2" class="pull-right">
+      <el-col :lg="4" class="pull-right">
           <router-link to="/collection/soil/create">
               <el-button type="success">添加</el-button>
           </router-link>
           <el-button type="success" @click="handleImport">导入</el-button>
+          <el-button type="success" @click="handleCaremaList">拍摄单</el-button>
       </el-col>
       <el-col :lg="24" class="list">
           <el-table :data="list.data" border style="width: 100%" v-loading="loading" element-loading-text="拼命加载数据中"
@@ -422,6 +423,11 @@
 
             this.dialog.image.visible = true;
         },
+
+        //拍摄清单
+        handleCaremaList() {
+          window.open('/api/soil/camera-list', '_blank');
+        }
     }
   }
 </script>
