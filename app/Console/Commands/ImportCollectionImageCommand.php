@@ -12,6 +12,7 @@
  * （4）引入土壤管理的图片导入支持；（2017/12/12）
  * （5）修复图片导入的提示语的错误；（2017/12/12）
  * （6）新增图片导入不成功的分类功能；（2017/12/12）
+ *（7）新增对大写后缀和jpg格式的图片的支持；（2017/12/12）
  **/
 
 namespace App\Console\Commands;
@@ -48,8 +49,8 @@ class ImportCollectionImageCommand extends Command
 
     private function isImage($filename)
     {
-        $types = '.gif|.jpeg|.png|.bmp';
-        $ext = strrchr($filename, '.');
+        $types = '.gif|.jpeg|.png|.bmp|.jpg';
+        $ext = strrchr(strtolower($filename), '.');
         return stripos($types, $ext);
     }
 
