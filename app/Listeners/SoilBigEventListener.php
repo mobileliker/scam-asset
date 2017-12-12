@@ -7,6 +7,7 @@
  * @date : 2017/12/1
  * @description :
  * (1)基本功能；（2017/12/1）
+ * (2)修改日志详情的显示内容；（2017/12/12）
  */
 
 namespace App\Listeners;
@@ -18,8 +19,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class SoilBigEventListener extends ModelEventListener
 {
     protected $module = '土壤段面';
-    protected $name = '名称';
-    protected $value = 'name';
+    protected $name = '编号';
+    protected $value = 'serial';
 
     /**
      * Create the event listener.

@@ -9,6 +9,9 @@
  * （1）基本功能；
  * （2）修改以适应多类型图片；（2017/11/1）
  * （3）新增导入图片的日志记录功能；（2017/12/6）
+ * （4）引入土壤管理的图片导入支持；（2017/12/12）
+ * （5）修复图片导入的提示语的错误；（2017/12/12）
+ * （6）新增图片导入不成功的分类功能；（2017/12/12）
  **/
 
 namespace App\Console\Commands;
@@ -100,11 +103,17 @@ class ImportCollectionImageCommand extends Command
                 if(substr($serial, 0, 1) == 'A') {
                     $prefix = 'farm';
                 }
-                else if(substr($serial, 0, 1) == 'C') {
-                    $prefix = 'rock';
-                }
-                else {
-                    continue;
+                else if(substr($serial, 0, 3) == 'C06'){
+                  $prefix = 'soil_small';
+                }else if(substr($serial, 0, 3) == 'C05'){
+                  $prefix = 'soil_big';
+                }else if(substr($serial, 0, 3) == 'C01'){
+                  $prefix = 'soil';
+                }else if(substr($serial, 0, 1) == 'C') {
+                  $prefix = 'rock';
+                }else {
+                  rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
+                  continue;
                 }
 
                 $collection = DB::table(str_plural($prefix))->where('serial', '=', $serial)->first();
@@ -112,7 +121,7 @@ class ImportCollectionImageCommand extends Command
                     $md5_str = md5_file($path . '/' . $file);
 
 
-                    $collectionImage = \App\CollectionImage::where('collectible_type', '=', 'App\\' . ucfirst($prefix))->where('collectible_id', '=', $collection->id)->where('hash', '=', $md5_str)->first();
+                    $collectionImage = \App\CollectionImage::where('collectible_type', '=', 'App\\' . studly_case($prefix))->where('collectible_id', '=', $collection->id)->where('hash', '=', $md5_str)->first();
 
                     if ($collectionImage == null) {
                         $entension = strrchr($file, '.');
@@ -124,23 +133,28 @@ class ImportCollectionImageCommand extends Command
                         $collectionImage->path = $path2;
                         $collectionImage->thumb = $path2;
                         $collectionImage->hash = $md5_str;
-                        $collectionImage->collectible_type = 'App\\' . ucfirst($prefix);
+                        $collectionImage->collectible_type = 'App\\' . studly_case($prefix);
                         $collectionImage->collectible_id = $collection->id;
                         if ($collectionImage->save()) {
 
                           //记录日志
                           $collectionImage->collectible;
-                          $eventModelName = 'App\\Events\\' . ucfirst($prefix) . 'Event';
+                          $eventModelName = 'App\\Events\\' . studly_case($prefix) . 'Event';
                           $eventClass = new \ReflectionClass($eventModelName);
                           event($eventClass->newInstance('saveImage', '172.0.0.1', $collectionImage)); //添加日记事件
 
-                            $this->comment($file . ' : 导入成功');
+                          $this->comment($file . ' : 导入成功');
                         } else {
-                            $this->comment($file . ' : 导入图片已存在');
+                            rename($path . '/' . $file, $path . '/.save_error/' . $file);
+                            $this->comment($file . ' : 保存图片失败');
                         }
                     } else {
-                        $this->comment($file . ' : 序列号不存在');
+                        rename($path . '/' . $file, $path . '/.image_exist/' . $file);
+                        $this->comment($file . ' : 图片已存在');
                     }
+                } else {
+                    rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
+                    $this->comment($file . ' : 序列号不存在');
                 }
             }
         }

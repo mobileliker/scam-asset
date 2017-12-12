@@ -261,6 +261,7 @@ class FarmController extends Controller
 //                foreach($cells as $col => $cell){
 //                    Log::info($cell);
 //                }
+                //$index = $cells[0];
                 $category = $cells[1];
                 $name = $cells[2];
                 $number = $cells[3];
@@ -269,6 +270,8 @@ class FarmController extends Controller
                 $description = $cells[6];
                 $size = $cells[7];
                 $serial = $cells[8];
+                //$image1 = $cells[9];
+                //$image2 = $cells[10];
                 $memo = $cells[11];
                 $display = $cells[12];
                 if ($number > 1) $serial = trim(explode('-', $serial)[0]);
