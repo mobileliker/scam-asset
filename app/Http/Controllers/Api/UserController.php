@@ -22,7 +22,7 @@ use Illuminate\Http\JsonResponse;
 use App\PermissionCategory, App\Permission, App\User, App\Role;
 use Auth;
 use IQuery;
-use Hash;
+use Hash, Cache;
 
 class UserController extends Controller
 {
@@ -291,7 +291,10 @@ class UserController extends Controller
 
     public function all()
     {
-        $users = User::select('id', 'name', 'id as value', 'name as label')->get();
+        $users = Cache::rememberForever('user_all', function() {
+            \Log::info('record cache');
+            return User::select('id', 'name', 'id as value', 'name as label')->get();
+        });
         return $users;
     }
 
