@@ -7,10 +7,17 @@
  * @description:
  * （1）注释提供的命令行范例；
  * （2）添加二维码生成的命令行工具；
+ *
+ * @version ：2.0.2
+ * @author ：wuzhihui
+ * @date : 2017/12/13
+ * @description :
+ * (1) 添加生成word文档的命令；(2017/12/13)
  */
 
 namespace App\Console;
 
+use App\Traits\CommonTraits;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,6 +31,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\GenerateQrcode', //二维码生成的命令行工具
         Commands\ImportCollectionImageCommand::class, //导入图片
+        Commands\GenerateWordDocument::class, //生成word文档
     ];
 
     /**
