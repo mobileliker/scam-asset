@@ -12,6 +12,7 @@ namespace App\Observers;
 
 use App\User, App\Alog;
 use DB;
+use Cache;
 
 class UserObserver
 {
