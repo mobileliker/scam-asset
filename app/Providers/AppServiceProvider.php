@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
 
         //注册观察者
 //        Asset::observe(AssetObserver::class);
-//        User::observe(UserObserver::class);
+          User::observe(UserObserver::class);
 //        Farm::observe(FarmObserver::class);
     }
 

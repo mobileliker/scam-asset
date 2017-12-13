@@ -15,19 +15,31 @@ use DB;
 
 class UserObserver
 {
+    public function cacheUser()
+    {
+        if (Cache::has('key')) {
+            Cache::forget('user_all');
+        }
+        $users = User::all();
+        Cache::forever('user_all', $users);
+    }
+
     public function created(User $user)
     {
-        Alog::log('User', Alog::OPERATE_CREATE, $user->toJson()); //记录日志
+        //Alog::log('User', Alog::OPERATE_CREATE, $user->toJson()); //记录日志
+        $this->cacheUser();
     }
 
     public function deleted(User $user)
     {
-        Alog::log('User', Alog::OPERATE_DELETE, $user->toJson()); //记录日志
+        //Alog::log('User', Alog::OPERATE_DELETE, $user->toJson()); //记录日志
+        $this->cacheUser();
     }
 
     public function updated(User $user)
     {
-        Alog::log('User', Alog::OPERATE_UPDATE, $user->toJson()); //记录日志
+        //Alog::log('User', Alog::OPERATE_UPDATE, $user->toJson()); //记录日志
+        $this->cacheUser();
     }
     
     public function deleting(User $user)
