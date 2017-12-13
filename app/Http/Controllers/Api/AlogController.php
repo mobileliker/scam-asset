@@ -11,6 +11,7 @@
  * @date : 2017/12/1
  * @description:
  * （1）添加了获取所有模块的函数；（2017/12/1）
+ * （2）index函数新增user_id的查询；（2017/12/13）
  */
 namespace App\Http\Controllers\Api;
 
@@ -64,6 +65,10 @@ class AlogController extends Controller
         $operate = $request->input('operate');
         if($operate != null && $operate != ''){
         	$alogs = $alogs->where('operate', $operate);
+        }
+
+        if($request->user_id != null && $request->user_id != ''){
+            $alogs = $alogs->where('user_id', '=', $request->user_id);
         }
 
         $alogs = IQuery::ofOrder($alogs, $request);
