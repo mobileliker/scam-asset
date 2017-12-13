@@ -21,7 +21,7 @@ class UserObserver
         if (Cache::has('key')) {
             Cache::forget('user_all');
         }
-        $users = User::all();
+        $users = User::select('id', 'name', 'id as value', 'name as label')->get();
         Cache::forever('user_all', $users);
     }
 
