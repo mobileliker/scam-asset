@@ -278,6 +278,9 @@
                     .then(response => {
                         //console.log(response.data);
                         this.dialog.content.role = response.data;
+                        for (var i = 0; k < this.dialog.content.role.length; k++) {
+                            this.dialog.content.role[i].value = parseInt(this.dialog.content.role[i].value);
+                        }
                     });
             },
             typeChange() {
