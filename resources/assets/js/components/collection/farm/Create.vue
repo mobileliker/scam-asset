@@ -325,7 +325,7 @@
                                 this.$router.push('/collection/farm');
                             }).catch(error => {
                                 if(error.response.status == 422) {
-                                    this.errors = error.rsponse.data;
+                                    this.errors = error.response.data;
                                 }else if(error.response.status == 404){
                                     this.$message.error('欲保存的农具不存在');
                                 }else{
