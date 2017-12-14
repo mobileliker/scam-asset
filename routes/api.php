@@ -24,7 +24,7 @@
  * (5)恢复被注释的API接口，并修改为post和get方法代替delete和put方法；（2017/12/5）
  * (6)修改藏品管理部分的使用post和get方法代替delete和put方法；（2017/12/5）
  * (7)新增土壤标本的新的显示图片的功能；（2017/12/12）
- * (8)修改用户管理部分的使用post和get方法代替delete和put方法；（2017/12/14）
+ * (8)修改用户管理部分、用户设置的使用post和get方法代替delete和put方法；（2017/12/14）
  */
 
 //use Illuminate\Http\Request;
@@ -52,7 +52,8 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     //Route::post('util/check/{model}', 'UtilController@check'); //验证
     Route::post('image/update', 'AdminController@image'); //异步上传图片
     Route::post('file/update', 'AdminController@file'); //异步上传附件
-    Route::put('user/settings', 'UserController@settings'); //用户设置
+    //Route::put('user/settings', 'UserController@settings'); //用户设置
+    Route::post('user/settings', 'UserController@settings'); //用户设置
     Route::get('/', 'IndexController@index'); //首页统计
 
     //基础信息接口

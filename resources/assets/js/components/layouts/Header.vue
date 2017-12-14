@@ -5,6 +5,13 @@
 @description:
 * 添加了用户设置窗口
 -->
+/**
+ * @version: 2.0.2
+ * @author : wuzhihui
+ * @date : 2017/12/14
+ * @description:
+ * （1）更改用户设置的接口；（2017/12/14）
+ */
 <template>
     <div>
         <el-menu mode="horizontal"  @select="handleSelect">
@@ -124,7 +131,7 @@
                 //console.log('settingSave');
                 this.$refs['setting-dialog'].validate((valid) => {
                     if(valid) {
-                        axios.put('/api/user/settings', this.dialog.model)
+                        axios.post('/api/user/settings', this.dialog.model)
                             .then( response => {
                                 //console.log('setting');
                                 //console.log(response.data);
