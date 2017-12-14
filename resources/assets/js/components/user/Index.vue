@@ -5,6 +5,12 @@
  * description:
  * （1）去除原有的type；（2017/7/5）
  * （2）去除用户列表的范例数据；（2017/7/14）
+ *
+ * @version: 2.0.2
+ * @author: wuzhihui
+ * @date: 2017/12/14
+ * @description:
+ * （1）修改用户删除和更新的接口；（2017/12/14）
  */
 <template>
     <content-component id="content">
@@ -307,7 +313,7 @@
                   cancelButtonText: '取消',
                   type: 'warning'
                 }).then(() => {
-                    axios.delete('/api/user/' + id)
+                    axios.get('/api/user/' + id + '/delete')
                         .then(response => {
                           this.$message({
                             type: 'success',
@@ -316,7 +322,7 @@
                           data.splice(index, 1);
                         }).catch(error => {
                             if(error.response.status == 404){
-                                this.$message.error('欲删除的资产不存在');
+                                this.$message.error('欲删除的用户不存在');
                             }else if(error.response.status == 500){
                                 this.$message.error('删除失败');
                             }
@@ -419,7 +425,7 @@
                                 }
                             });
                     } else {
-                        axios.put('/api/user/' + this.dialog.model.id, this.dialog.model)
+                        axios.post('/api/user/' + this.dialog.model.id + '/update', this.dialog.model)
                             .then(response => {
                                 //console.log(response);
                                 console.log(this.list.data[this.view.dialog.index]);

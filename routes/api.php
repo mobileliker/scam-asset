@@ -19,11 +19,12 @@
  * @description :
  * (1)添加土壤相关的接口；（2017/11/27）
  * (2)添加动物相关的接口；（2017/11/30）
- * （3）新增了获取所有日志模块的接口：（2017/12/1）
+ * (3)新增了获取所有日志模块的接口：（2017/12/1）
  * (4)临时注释掉API接口测试；（2017/12/4）
  * (5)恢复被注释的API接口，并修改为post和get方法代替delete和put方法；（2017/12/5）
  * (6)修改藏品管理部分的使用post和get方法代替delete和put方法；（2017/12/5）
  * (7)新增土壤标本的新的显示图片的功能；（2017/12/12）
+ * (8)修改用户管理部分的使用post和get方法代替delete和put方法；（2017/12/14）
  */
 
 //use Illuminate\Http\Request;
@@ -210,7 +211,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
         Route::get('soil/{soil_id}/soil-small/{id}/delete', 'SoilSmallController@destroy');
 
 
-        //植物模块
+        //动物模块
         Route::group(['prefix' => 'animal'], function () {
             Route::get('{id}/image', 'AnimalController@showImage');
             Route::post('{id}/image', 'AnimalController@saveImage');
@@ -240,6 +241,16 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::post('batch-delete', 'UserController@batchDelete'); //批量删除
         Route::post('check', 'UserController@check'); //验证
+
+        Route::get('', 'UserController@index');
+        Route::post('', 'UserController@store');
+        Route::get('{id}', 'UserController@show');
+        Route::get('{id}/edit', 'UserController@edit');
+        //Route::put('{id}', 'UserController@update');
+        //Route::delete('{id}', 'UserController@destroy');
+
+        Route::post('{id}/update', 'UserController@update');
+        Route::get('{id}/delete', 'UserController@destroy');
     });
     Route::resource('user', 'UserController', ['only' => ['index', 'store', 'show', 'edit', 'update', 'destroy']]);
 
