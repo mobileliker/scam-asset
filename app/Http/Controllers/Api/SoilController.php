@@ -15,6 +15,7 @@
  * (7)index函数添加采集人；（2017/12/11）
  * (8)新增拍摄清单函数；（2017/12/12）
  * (9)新增详情页的显示图片函数；（2017/12/12）
+ * （10）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -36,6 +37,30 @@ class SoilController extends Controller
 {
     protected $model = Soil::class;
 
+    public function __construct()
+    {
+        $this->middleware('ability:Soil|Method-Collection-Soil-Import,true')->only('import');
+        $this->middleware('ability:Soil|Method-Collection-Soil-Index,true')->only('index');
+        $this->middleware('ability:Soil|Method-Collection-Soil-Store,true')->only('store');
+        $this->middleware('ability:Soil|Method-Collection-Soil-Show,true')->only('show');
+        $this->middleware('ability:Soil|Method-Collection-Soil-Edit,true')->only('edit');
+        $this->middleware('ability:Soil|Method-Collection-Soil-Update,true')->only('update');
+        $this->middleware('ability:Soil|Method-Collection-Soil-Destroy,true')->only('destroy');
+        $this->middleware('ability:Soil|Method-Collection-Soil-BatchDelete,true')->only('batchDelete');
+        $this->middleware('ability:Soil|Method-Collection-Soil-ShowImage,true')->only('showImage');
+        $this->middleware('ability:Soil|Method-Collection-Soil-SaveImage,true')->only('saveImage');
+        $this->middleware('ability:Soil|Method-Collection-Soil-SaveImage2,true')->only('saveImage2');
+        $this->middleware('ability:Soil|Method-Collection-Soil-DeleteImage,true')->only('deleteImage');
+        $this->middleware('ability:Soil|Method-Collection-Soil-Relate,true')->only('relate');
+        $this->middleware('ability:Soil|Method-Collection-Soil-CameraList,true')->only('cameraList');
+    }
+
+    /**
+     * 新增保存和编辑保存
+     * @param Request $request
+     * @param int $id
+     * @return Soil|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function storeOrUpdate(Request $request, $id = -1)
     {
         $this->validate($request, [
@@ -77,6 +102,10 @@ class SoilController extends Controller
         }
     }
 
+    /**
+     * 导入
+     * @param Request $request
+     */
     public function import(Request $request)
     {
         $this->validate($request, [
@@ -343,14 +372,18 @@ class SoilController extends Controller
         }
     }
 
+    /**
+     * 批量删除
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function batchDelete(Request $request)
     {
         return parent::batchDelete($request);
     }
 
-
     /**
-     * 显示一张图片
+     * 显示图片
      * @param Request $request
      * @param $id
      * @return mixed
@@ -360,6 +393,12 @@ class SoilController extends Controller
         return Soil::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
     }
 
+    /**
+     * 显示图片（并显示纸盒标本和段面标本的图片）
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
     public function showImage2(Request $request, $id)
     {
         //return Soil::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
@@ -379,7 +418,6 @@ class SoilController extends Controller
         $list = $list->union($soilSmallImages)->union($soilBigImages)->get();
         return $list;
     }
-
 
     /**
      * 保存一张图片
@@ -426,7 +464,6 @@ class SoilController extends Controller
         }
     }
 
-
     /**
      * 删除一张图片
      * @param Request $request
@@ -448,7 +485,12 @@ class SoilController extends Controller
         }
     }
 
-
+    /**
+     * 相关
+     * @param Request $request
+     * @param $id
+     * @return $this|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|static[]
+     */
     public function relate(Request $request, $id)
     {
         $lists = Soil::leftJoin('users as keepers', 'soils.keeper_id', '=', 'keepers.id')
@@ -465,8 +507,9 @@ class SoilController extends Controller
         return $lists;
     }
 
-
-    //生成拍摄清单函数
+    /**
+     * 生成拍摄清单函数
+     */
     public function cameraList()
     {
         $post_time = Date('YmdHis');

@@ -19,6 +19,8 @@
  * (4)storeOrUpdate函数新增size、storage和source字段；（2017/12/5）
  * (5)修复relate函数编辑人获取的错误，并添加最后编辑时间字段；（2017/12/5）
  * (6)新增导入功能函数；（2017/12/6）
+ * (7)新增权限控制；（2017/12/14）
+ * （8）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -38,6 +40,29 @@ class RockController extends Controller
 {
     protected $model = Rock::class;
 
+    public function __construct()
+    {
+        $this->middleware('ability:Rock|Method-Collection-Rock-Import,true')->only('import');
+        $this->middleware('ability:Rock|Method-Collection-Rock-Index,true')->only('index');
+        $this->middleware('ability:Rock|Method-Collection-Rock-Store,true')->only('store');
+        $this->middleware('ability:Rock|Method-Collection-Rock-Show,true')->only('show');
+        $this->middleware('ability:Rock|Method-Collection-Rock-Edit,true')->only('edit');
+        $this->middleware('ability:Rock|Method-Collection-Rock-Update,true')->only('update');
+        $this->middleware('ability:Rock|Method-Collection-Rock-Destroy,true')->only('destroy');
+        $this->middleware('ability:Rock|Method-Collection-Rock-BatchDelete,true')->only('batchDelete');
+        $this->middleware('ability:Rock|Method-Collection-Rock-ShowImage,true')->only('showImage');
+        $this->middleware('ability:Rock|Method-Collection-Rock-SaveImage,true')->only('saveImage');
+        $this->middleware('ability:Rock|Method-Collection-Rock-DeleteImage,true')->only('deleteImage');
+        $this->middleware('ability:Rock|Method-Collection-Rock-Relate,true')->only('relate');
+        $this->middleware('ability:Rock|Method-Collection-Rock-CameraList,true')->only('cameraList');
+    }
+
+    /**
+     * 新增保存和更新保存
+     * @param Request $request
+     * @param int $id
+     * @return Rock|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function storeOrUpdate(Request $request, $id = -1)
     {
         $this->validate($request, [
@@ -76,7 +101,6 @@ class RockController extends Controller
             abort(500, '保存失败');
         }
     }
-
 
     /**
      * Display a listing of the resource.
@@ -161,8 +185,8 @@ class RockController extends Controller
     {
         //return Rock::findOrFail($id);
         return Rock::leftJoin('users as keeper', 'keeper.id', '=', 'rocks.keeper_id')
-          ->leftJoin('users', 'users.id', '=', 'rocks.user_id')
-          ->select('rocks.*', 'keeper.name as keeper_name', 'users.name as user_name')->findOrFail($id);
+            ->leftJoin('users', 'users.id', '=', 'rocks.user_id')
+            ->select('rocks.*', 'keeper.name as keeper_name', 'users.name as user_name')->findOrFail($id);
     }
 
     /**
@@ -205,6 +229,11 @@ class RockController extends Controller
         }
     }
 
+    /**
+     * 批量删除
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function batchDelete(Request $request)
     {
         return parent::batchDelete($request);
@@ -320,7 +349,6 @@ class RockController extends Controller
         return Rock::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
     }
 
-
     /**
      * 保存一张图片
      * @param Request $request
@@ -387,7 +415,12 @@ class RockController extends Controller
         }
     }
 
-
+    /**
+     * 相关
+     * @param Request $request
+     * @param $id
+     * @return $this|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|static[]
+     */
     public function relate(Request $request, $id)
     {
         $lists = Rock::leftJoin('users as keepers', 'rocks.keeper_id', '=', 'keepers.id')
@@ -404,35 +437,35 @@ class RockController extends Controller
         return $lists;
     }
 
+    /**
+     * 生成拍摄清单函数
+     */
+    public function cameraList()
+    {
+        $post_time = Date('YmdHis');
+        $filePath = resource_path('assets/template/camera-list.xls');
+        $distPath = storage_path('excel/exports/camera-list/rock/' . $post_time . '.xls');
+        copy($filePath, $distPath);
 
-        //生成拍摄清单函数
-        public function cameraList()
-        {
-          $post_time = Date('YmdHis');
-          $filePath = resource_path('assets/template/camera-list.xls');
-          $distPath = storage_path('excel/exports/camera-list/rock/'.$post_time.'.xls');
-          copy($filePath, $distPath);
-
-          Excel::load($distPath, function($reader) {
-              $lists = Rock::leftJoin('collection_images', function($join) {
+        Excel::load($distPath, function ($reader) {
+            $lists = Rock::leftJoin('collection_images', function ($join) {
                 $join->on('rocks.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Rock::class);
-              })->whereNull('collection_images.id')->select('rocks.category', 'rocks.name', 'rocks.serial', /*'rocks.number', */'rocks.storage')->get();
+            })->whereNull('collection_images.id')->select('rocks.category', 'rocks.name', 'rocks.serial', /*'rocks.number', */
+                'rocks.storage')->get();
 
-              $sheet = $reader->getActiveSheet();
+            $sheet = $reader->getActiveSheet();
 
-              $post_date = Date('Y-m-d');
-              $sheet->setCellValue('G2', $post_date);
+            $post_date = Date('Y-m-d');
+            $sheet->setCellValue('G2', $post_date);
 
-              foreach($lists as $index => $obj) {
+            foreach ($lists as $index => $obj) {
                 $sheet->setCellValue('A' . ($index + 4), ($index + 1));
                 $sheet->setCellValue('B' . ($index + 4), $obj->category);
                 $sheet->setCellValue('C' . ($index + 4), $obj->name);
                 $sheet->setCellValue('D' . ($index + 4), $obj->number);
                 $sheet->setCellValue('E' . ($index + 4), $obj->serial);
                 $sheet->setCellValue('F' . ($index + 4), $obj->storage);
-              }
-          })->export('xls');
-        }
-
-
+            }
+        })->export('xls');
+    }
 }

@@ -12,6 +12,7 @@
  * （5）添加批量删除功能，验证功能（2017/7/3）
  * （6）修改了setting方法，优化了错误的提示；（2017/7/6）
  * （7）添加获取所有用户的方法，添加label和value；（2017/7/10）
+ * （8）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -30,18 +31,24 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:UserMethod|Method-User-Index,true')->only('index');
-        $this->middleware('ability:UserMethod|Method-User-Store,true')->only('store');
-        $this->middleware('ability:UserMethod|Method-User-Edit,true')->only('edit');
-        $this->middleware('ability:UserMethod|Method-User-Update,true')->only('update');
-        $this->middleware('ability:UserMethod|Method-user-Destroy,true')->only('destroy');
-        $this->middleware('ability:Common|Method-Common-Settings,true')->only('settings');
-        $this->middleware('ability:Common|Method-Common-Menu,true')->only('menu');
-        $this->middleware('ability:Asset|Method-Asset-UserAll,true')->only('all');
-        $this->middleware('ability:UserMethod|Method-User-BatchDelete,true')->only('batchDelete');
-        $this->middleware('ability:UserMethod|Method-User-Check,true')->only('check');
+        $this->middleware('ability:User|Method-User-Index,true')->only('index');
+        $this->middleware('ability:User|Method-User-Store,true')->only('store');
+        $this->middleware('ability:User|Method-User-Edit,true')->only('edit');
+        $this->middleware('ability:User|Method-User-Update,true')->only('update');
+        $this->middleware('ability:User|Method-user-Destroy,true')->only('destroy');
+//        $this->middleware('ability:Common|Method-Common-Settings,true')->only('settings');
+//        $this->middleware('ability:Common|Method-Common-Menu,true')->only('menu');
+//        $this->middleware('ability:Asset|Method-Asset-UserAll,true')->only('all');
+        $this->middleware('ability:User|Method-User-BatchDelete,true')->only('batchDelete');
+        $this->middleware('ability:User|Method-User-Check,true')->only('check');
     }
 
+    /**
+     * 新增保存和编辑保存
+     * @param Request $request
+     * @param int $id
+     * @return User|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function storeOrUpdate(Request $request, $id = -1)
     {
         $this->validate($request, [
@@ -150,7 +157,6 @@ class UserController extends Controller
 //        return view(config('app.theme') . '.admin.user.create');
 //    }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -229,6 +235,7 @@ class UserController extends Controller
     }
 
     /**
+     * 用户设置
      * @param Request $request
      * @param $id
      * @return string
@@ -266,7 +273,10 @@ class UserController extends Controller
         }
     }
 
-
+    /**
+     * 菜单
+     * @return array
+     */
     public function menu()
     {
         $user = Auth::user();

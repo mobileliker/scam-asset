@@ -8,6 +8,12 @@
  * （1）批量删除方法迁移到把batchDelete；（2017/7/3）
  * （2）整理控制器的接口的顺序；（2017/7/5）
  * （3）优化查询功能，将已被删除的用户也显示出来；（2017/7/6）
+ *
+ * @version: 2.0.2
+ * @author: wuzhihui
+ * @date: 2017/12/14
+ * @description:
+ * （1）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -32,7 +38,7 @@ class AssetController extends Controller
         $this->middleware('ability:Asset|Method-Asset-Store,true')->only('store');
         $this->middleware('ability:Asset|Method-Asset-Edit,true')->only('edit');
         $this->middleware('ability:Asset|Method-Asset-Update,true')->only('update');
-        $this->middleware('ability:Asset|Method-AssetDestroy,true')->only('destroy');
+        $this->middleware('ability:Asset|Method-Asset-Destroy,true')->only('destroy');
         $this->middleware('ability:Asset|Method-Asset-Export,true')->only('export');
         $this->middleware('ability:Asset|Method-Asset-BatchExport,true')->only('batchExport');
         $this->middleware('ability:Asset|Method-Asset-BatchDelete,true')->only('batchDelete');

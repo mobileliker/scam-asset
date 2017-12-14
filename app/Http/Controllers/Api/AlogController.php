@@ -12,6 +12,7 @@
  * @description:
  * （1）添加了获取所有模块的函数；（2017/12/1）
  * （2）index函数新增user_id的查询；（2017/12/13）
+ * （3）更改权限控制；（2017/12/14）
  */
 namespace App\Http\Controllers\Api;
 
@@ -27,7 +28,7 @@ class AlogController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ability:AlogMethod|Index,true')->only('index');
+        $this->middleware('ability:Alog|Index,true')->only('index');
     }
     
     public function index(Request $request)

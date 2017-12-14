@@ -17,13 +17,115 @@
  * (1)添加土壤管理的菜单权限；（2017/11/27）
  * (2)添加动物管理的菜单权限；（2017/11/30）
  * (3)新增批量导入用户；（2017/12/6）
+ * (4)精简代码，并完成权限控制的导入；（2017/12/14）
  */
 
 use Illuminate\Database\Seeder;
 use App\User, App\Role, App\Permission, App\PermissionCategory;
+use Illuminate\Support\Facades\Log;
 
 class InitSeeder extends Seeder
 {
+
+    private function generateCategories($categories, $pcategory)
+    {
+        $ccategories = array();
+        foreach ($categories as $name => $display_name) {
+            $pc = PermissionCategory::firstOrCreate([
+                'name' => $pcategory->name . '-' . $name,
+                'display_name' => $display_name,
+                'pid' => $pcategory->id
+            ]);
+            $ccategories[$name] = $pc;
+        }
+        return $ccategories;
+    }
+
+//    private function generatePermissions($permission_infos, $categories)
+//    {
+//
+//    }
+//
+    private function generateCollection($roleName, $menuP, $category, $prefix, $params = [])
+    {
+        $permission_infos = Array(
+            'Index' => [
+                'display_name' => '列表',
+                'resource' => '/',
+            ],
+            'Store' => [
+                'display_name' => '新增保存',
+                'resource' => '/',
+            ],
+            'Show' => [
+                'display_name' => '详情',
+                'resource' => '/%',
+            ],
+            'Edit' => [
+                'display_name' => '编辑',
+                'resource' => '/%/edit',
+            ],
+            'Update' => [
+                'display_name' => '更新保存',
+                'resource' => '/%',
+            ],
+            'Destroy' => [
+                'display_name' => '删除',
+                'resource' => '/%',
+            ],
+            'BatchDelete' => [
+                'display_name' => '批量删除',
+                'resource' => '/batch-delete',
+            ],
+            'Import' => [
+                'display_name' => '导入',
+                'resource' => '/import',
+            ],
+            'ShowImage' => [
+                'display_name' => '显示图片',
+                'resource' => '/%/image',
+            ],
+            'DeleteImage' => [
+                'display_name' => '删除图片',
+                'resource' => '/%/image/%',
+            ],
+            'SaveImage' => [
+                'display_name' => '保存图片',
+                'resource' => '/%/image',
+            ],
+            'Relate' => [
+                'display_name' => '相似藏品',
+                'resource' => '/:id/relate',
+            ],
+            'CameraList' => [
+                'display_name' => '拍摄清单',
+                'resource' => '/camera-list',
+            ],
+        );
+
+        if (isset($params['only'])) {
+            $permission_infos = array_only($permission_infos, $params['only']);
+        }
+        if (isset($params['extra'])) {
+            $permission_infos = array_merge($permission_infos, $params['extra']);
+        }
+
+        $pids = array($menuP->id);
+        foreach ($permission_infos as $name => $info) {
+            $permission = Permission::firstOrCreate([
+                'name' => $category->name . '-' . $name,
+                'display_name' => $info['display_name'],
+                'resource' => $prefix . $info['resource'],
+                'permission_category_id' => $category->id,
+            ]);
+            $pids[] = $permission->id;
+        }
+        //Log::info($pids);
+
+        $role = Role::firstOrCreate(['name' => $roleName, 'display_name' => $category->display_name . '角色']);
+        $role->perms()->sync($pids);
+    }
+
     /**
      * Run the database seeds.
      *
@@ -31,119 +133,176 @@ class InitSeeder extends Seeder
      */
     public function run()
     {
-        //菜单权限分类以及权限
-        $menuPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Menu', 'display_name' => '菜单项']);
-        $assetPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Menu-Asset', 'display_name' => '固定资产管理', 'pid' => $menuPermissionCategory->id]);
-        $collectionPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Menu-Collection', 'display_name' => '藏品管理', 'pid' => $menuPermissionCategory->id]);
-        $systemPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Menu-System', 'display_name' => '系统管理', 'pid' => $menuPermissionCategory->id]);
+        $menuPC = PermissionCategory::firstOrCreate(['name' => 'Menu', 'display_name' => '菜单']);
+        $methodPC = PermissionCategory::firstOrCreate(['name' => 'Method', 'display_name' => '功能']);
 
-        $assetPermission = Permission::firstOrCreate(['name' => 'Menu-Asset-Asset', 'display_name' => '资产管理','resource' => '/asset', 'permission_category_id' => $assetPermissionCategory->id]);
-        $farmPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Farm', 'display_name' => '农具管理', 'resource' => '/collection/farm', 'permission_category_id' => $collectionPermissionCategory->id]);
-        $rockPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Rock', 'display_name' => '岩石管理', 'resource' => '/collection/rock', 'permission_category_id' => $collectionPermissionCategory->id]);
-        $plantPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Plant', 'display_name' => '植物管理', 'resource' => '/collection/plant', 'permission_category_id' => $collectionPermissionCategory->id]);
-        $soilPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Soil', 'display_name' => '土壤管理', 'resource' => '/collection/soil', 'permission_category_id' => $collectionPermissionCategory->id]);
-        $animalPermission = Permission::firstOrCreate(['name' => 'Menu-Collection-Animal', 'display_name' => '动物管理', 'resource' => '/collection/animal', 'permission_category_id' => $collectionPermissionCategory->id]);
-        $userPermission = Permission::firstOrCreate(['name' => 'Menu-System-User', 'display_name' => '用户管理','resource' => '/user', 'permission_category_id' => $systemPermissionCategory->id]);
-        $alogPermission = Permission::firstOrCreate(['name' => 'Menu-System-Alog', 'display_name' => '操作日志', 'resource' => '/alog','permission_category_id' => $systemPermissionCategory->id]);
+        //一级菜单
+        $menu1s = array(
+            'Asset' => '固定资产',
+            'Collection' => '藏品管理',
+            'System' => '系统管理'
+        );
+        $menu1pcs = $this->generateCategories($menu1s, $menuPC);
 
-        //功能权限分类以及权限
-        $methodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method', 'display_name' => '功能']);
-        $commonMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-Common', 'display_name' => '通用功能模块', 'pid' => $methodPermissionCategory->id]);
-        $assetMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-Asset', 'display_name' => '固定资产模块', 'pid' => $methodPermissionCategory->id]);
-        $collectionMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-Collection', 'display_name' => '藏品管理模块', 'pid' => $methodPermissionCategory->id]); //藏品管理
-        $collectionFarmMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-Collection-Farm', 'display_name' => '农具管理模块', 'pid' => $collectionMethodPermissionCategory->id]); //农具管理
+        //二级菜单
+        $menu2s = array(
+            'Asset' => array(
+                'Asset' => [
+                    'display_name' => '资产管理',
+                    'resource' => '/asset',
+                ]
+            ),
+            'Collection' => array(
+                'Farm' => [
+                    'display_name' => '农具管理',
+                    'resource' => '/collection/farm',
+                ],
+                'Rock' => [
+                    'display_name' => '岩石管理',
+                    'resource' => '/collection/rock',
+                ],
+                'Plant' => [
+                    'display_name' => '植物管理',
+                    'resource' => '/collection/plant'
+                ],
+                'Animal' => [
+                    'display_name' => '动物管理',
+                    'resource' => '/collection/animal',
+                ],
+                'Soil' => [
+                    'display_name' => '土壤管理',
+                    'resource' => '/collection/soil',
+                ]
+            ),
+            'System' => array(
+                'Alog' => [
+                    'display_name' => '日志管理',
+                    'resource' => '/alog'
+                ],
+                'User' => [
+                    'display_name' => '用户管理',
+                    'resource' => '/user'
+                ]
+            )
+        );
 
-        $userMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-User', 'display_name' => '用户管理模块', 'pid' => $methodPermissionCategory->id]);
-        $alogMethodPermissionCategory = PermissionCategory::firstOrCreate(['name' => 'Method-Alog', 'display_name' => '日志模块', 'pid' => $methodPermissionCategory->id]);
+        $menu2ps = array();
+        foreach ($menu2s as $key => $permission_infos) {
+            foreach ($permission_infos as $name => $info) {
+                $menu2ps[$name] = Permission::firstOrCreate([
+                    'name' => $menu1pcs[$key]->name . '-' . $name,
+                    'display_name' => $info['display_name'],
+                    'resource' => $info['resource'],
+                    'permission_category_id' => $menu1pcs[$key]->id,
+                ]);
+            }
+        }
 
-        $commonSettingsMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Settings', 'display_name' => '通用功能-Settings', 'resource' => '/api/user/{id}/settings' , 'permission_category_id' => $commonMethodPermissionCategory->id]);
-        $commonMenuMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Menu', 'display_name' => '通用功能-Menu','resource' => '/api/user/menu', 'permission_category_id' => $commonMethodPermissionCategory->id]);
-        $commonImageMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Image', 'display_name' => '通用功能-Image','resource' => '/api/image/update', 'permission_category_id' => $commonMethodPermissionCategory->id]);
-        $commonFileMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-File', 'display_name' => '通用功能-File', 'resource' => '/api/file/update', 'permission_category_id' => $commonMethodPermissionCategory->id]);
-        $commonIndexMethodPermission = Permission::firstOrCreate(['name' => 'Method-Common-Index', 'display_name' => '通用功能-Index','resource' => '/api', 'permission_category_id' => $commonMethodPermissionCategory->id]);
+        //日志功能
+        $alogPC = PermissionCategory::firstOrCreate(['name' => 'Method-Alog', 'display_name' => '日志管理']);
+        $params = [
+            'only' => [
+                'Index',
+            ],
+        ];
+        $this->generateCollection('Alog', $menu2ps['Alog'], $alogPC, '/api/alog', $params);
 
-        $assetIndexMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-Index', 'display_name' => '资产管理-Index','resource' => '/api/asset' ,'permission_category_id' => $assetMethodPermissionCategory->id]);
-        $assetStoreMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-Store', 'display_name' => '资产管理-Store', 'resource' => '/api/asset', 'permission_category_id' => $assetMethodPermissionCategory->id]);
-        $assetEditMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-Edit', 'display_name' => '资产管理-Edit','resource' => '/api/asset/{id}/edit' ,'permission_category_id' => $assetMethodPermissionCategory->id]);
-        $assetUpdateMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-Update', 'display_name' => '资产管理-Update', 'resource' => '/api/asset/{id}', 'permission_category_id' => $assetMethodPermissionCategory->id]);
-        $assetDestroyMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-Destroy', 'display_name' => '资产管理-Destroy', 'resource' => '/api/asset/{id}', 'permission_category_id' => $assetMethodPermissionCategory->id]);
-        $assetExportMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-Export', 'display_name' => '资产管理-Export','resource' => '/api/asset/{id}/export' ,'permission_category_id' => $assetMethodPermissionCategory->id]);
-        $assetBatchExportMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-BatchExport', 'display_name' => '资产管理-BatchExport', 'resource' => '/api/asset/export', 'permission_category_id' => $assetMethodPermissionCategory->id]);
-        $assetBatchDeleteMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-BatchDelete', 'display_name' => '资产管理-BatchDelete', 'resource' => '/api/asset/batch-delete', 'permission_category_id' => $assetMethodPermissionCategory->id]);
-        $assetUserAllMethodPermission = Permission::firstOrCreate(['name' => 'Method-Asset-UserAll', 'display_name' => '资产管理-UserAll', 'resource' => '/api/user/all', 'permission_category_id' => $assetMethodPermissionCategory->id]);
+        //用户功能
+        $userPC = PermissionCategory::firstOrCreate(['name' => 'Method-User', 'display_name' => '用户管理']);
+        $params = [
+            'only' => [
+                'Index',
+                'Store',
+                'Edit',
+                'Update',
+                'Destroy',
+                'BatchDelete',
+            ],
+            'extra' => [
+                'Check' => [
+                    'display_name' => '验证',
+                    'resource' => '/Check',
+                ],
+            ]
+        ];
+        $this->generateCollection('User', $menu2ps['User'], $userPC, '/api/user', $params);
 
-        //藏品管理
+        //固定资产
+        $assetPC = PermissionCategory::firstOrCreate(['name' => 'Method-Asset', 'display_name' => '固定资产管理']);
+        $params = [
+            'only' => [
+                'Index',
+                'Store',
+                'Edit',
+                'Update',
+                'Destroy',
+                'BatchDelete',
+            ],
+            'extra' => [
+                'Export' => [
+                    'display_name' => '导出',
+                    'resource' => '/%/export',
+                ],
+                'BatchExport' => [
+                    'display_name' => '批量导出',
+                    'resource' => '/export',
+                ],
+            ]
+        ];
+        $this->generateCollection('Asset', $menu2ps['Asset'], $assetPC, '/api/asset', $params);
+
+        //藏品功能
+        $collectionPC = PermissionCategory::firstOrCreate(['name' => 'Method-Collection', 'display_name' => '藏品管理']);
+        $method1s = array(
+            'Farm' => '农具管理',
+            'Rock' => '岩石管理',
+            'Plant' => '植物管理',
+            'Animal' => '动物管理',
+            'Soil' => '土壤管理',
+            'SoilBig' => '土壤段面管理',
+            'SoilSmall' => '土壤纸盒管理',
+        );
+        $method1pcs = $this->generateCategories($method1s, $collectionPC);
+
         //农具管理
-        $farmIndexMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Index', 'display_name' => '农具管理-Index', 'resource' => '/api/collection/farm', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
-        $farmStoreMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Store', 'display_name' => '农具管理-Store', 'resource' => '/api/collection/farm', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
-        $farmEditMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Edit', 'display_name' => '农具管理-Edit', 'resource' => '/api/collection/farm/{id}/edit', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
-        $farmUpdateMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Update', 'display_name' => '农具管理-Update', 'resource' => '/api/collection/farm/{id}', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
-        $farmDestroyMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Destroy', 'display_name' => '农具管理-Destroy', 'resource' => '/api/collection/farm/{id}', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
-        $farmBatchDeleteMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-BatchDelete', 'display_name' => '农具管理-BatchDelete', 'resource' => '/api/collection/farm/batch-delete', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
-        $farmImportMethodPermission = Permission::firstOrCreate(['name' => 'Method-Collection-Farm-Import', 'display_name' => '农具管理-Import', 'resource' => '/api/collection/farm/import', 'permission_category_id' => $collectionFarmMethodPermissionCategory->id]);
+        $this->generateCollection('Farm', $menu2ps['Farm'], $method1pcs['Farm'], '/api/collection/farm');
 
-        $userIndexMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Index', 'display_name' => '用户管理-Index', 'resource' => '/api/user', 'permission_category_id' => $userMethodPermissionCategory->id ]);
-        $userStoreMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Store', 'display_name' => '用户管理-Store', 'resource' => '/api/user', 'permission_category_id' => $userMethodPermissionCategory->id]);
-        $userEditMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Edit', 'display_name' => '用户管理-Edit', 'resource' => '/api/user/{id}/edit', 'permission_category_id' => $userMethodPermissionCategory->id]);
-        $userUpdateMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Update', 'display_name' => '用户管理-Update', 'resource' => '/api/user/{id}', 'permission_category_id' => $userMethodPermissionCategory->id]);
-        $userDestroyMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Destroy', 'display_name' => '用户管理-Destroy', 'resource' => '/api/user/{id}', 'permission_category_id' => $userMethodPermissionCategory->id]);
-        $userBatchDeleteMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-BatchDelete', 'display_name' => '用户管理-BatchDelete', 'resource' => '/api/user/batch-delete', 'permission_category_id' => $userMethodPermissionCategory->id]);
-        $userCheckMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Check', 'display_name' => '用户管理-Check', 'resource' => '/api/user/check', 'permission_category_id' => $userMethodPermissionCategory->id]);
-        $userRoleMethodPermission = Permission::firstOrCreate(['name' => 'Method-User-Role', 'display_name' => '用户管理-Role', 'resource' => '/api/role/all', 'permission_category_id' => $userMethodPermissionCategory->id]);
+        //岩石管理
+        $this->generateCollection('Rock', $menu2ps['Rock'], $method1pcs['Rock'], '/api/collection/rock');
 
-        $alogIndexMethodPermission = Permission::firstOrCreate(['name' => 'Method-Alog-Index', 'display_name' => '日志操作-Index', 'resource' => '/api/alog', 'permission_category_id' => $alogMethodPermissionCategory->id]);
+        //植物管理
+        $this->generateCollection('Plant', $menu2ps['Plant'], $method1pcs['Plant'], '/api/collection/plant');
 
-        //普通用户角色
-        $userRole = Role::firstOrCreate(['name' => 'User', 'display_name' => '单位用户']);
-      $userRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $soilPermission->id, $animalPermission->id));
+        //动物管理
+        $this->generateCollection('Animal', $menu2ps['Animal'], $method1pcs['Animal'], '/api/collection/animal');
 
-        //管理员用户角色
-        $adminRole = Role::firstOrCreate(['name' => 'Admin', 'display_name' => '管理员']);
-        $adminRole->perms()->sync(array($assetPermission->id, $farmPermission->id, $rockPermission->id, $plantPermission->id, $soilPermission->id, $animalPermission->id, $userPermission->id, $alogPermission->id));
+        //土壤管理
+        $params = [
+            'extra' => [
+                'ShowImage2' => [
+                    'display_name' => '显示图片2',
+                    'resource' => '/%/image',
+                ],
+            ]
+        ];
+        $this->generateCollection('Soil', $menu2ps['Soil'], $method1pcs['Soil'], '/api/collection/soil', $params);
 
-        //通用功能角色
-        $commonRole = Role::firstOrCreate(['name' => 'Common', 'display_name' => '通用功能角色']);
-        $commonRole->perms()->sync(array($commonSettingsMethodPermission->id, $commonMenuMethodPermission->id, $commonImageMethodPermission->id, $commonIndexMethodPermission->id, $commonFileMethodPermission->id));
+        //土壤段面管理
+        $this->generateCollection('SoilBig', $menu2ps['Soil'], $method1pcs['SoilBig'], '/api/collection/soil/%/soil-big');
 
-        //固定资产管理角色
-        $assetRole = Role::firstOrCreate(['name' => 'Asset', 'display_name' => '固定资产管理角色']);
-        $assetRole->perms()->sync(array($assetIndexMethodPermission->id, $assetStoreMethodPermission->id, $assetEditMethodPermission->id, $assetUpdateMethodPermission->id, $assetDestroyMethodPermission->id, $assetExportMethodPermission->id, $assetBatchExportMethodPermission->id, $assetBatchDeleteMethodPermission->id, $assetUserAllMethodPermission->id));
+        //土壤纸盒管理
+        $this->generateCollection('SoilSmall', $menu2ps['Soil'], $method1pcs['SoilSmall'], '/api/collection/soil/%/soil-big');
 
-        //农具管理角色
-        $farmRole = Role::firstOrCreate(['name' => 'Farm', 'display_name' => '农具管理角色']);
-        $farmRole->perms()->sync(array($farmIndexMethodPermission->id, $farmStoreMethodPermission->id, $farmEditMethodPermission->id, $farmUpdateMethodPermission->id, $farmDestroyMethodPermission->id, $farmBatchDeleteMethodPermission->id, $farmImportMethodPermission->id));
 
-        //用户管理角色
-        $userMethodRole = Role::firstOrCreate(['name' => 'UserMethod', 'display_name' => '用户管理角色']);
-        $userMethodRole->perms()->sync(array($userIndexMethodPermission->id, $userStoreMethodPermission->id, $userEditMethodPermission->id, $userUpdateMethodPermission->id, $userDestroyMethodPermission->id, $userBatchDeleteMethodPermission->id, $userCheckMethodPermission->id, $userRoleMethodPermission->id));
-
-        //日志操作角色
-        $alogMethodRole = Role::firstOrCreate(['name' => 'AlogMethod', 'display_name' => '日志操作角色']);
-        $alogMethodRole->perms()->sync(array($alogIndexMethodPermission->id));
-
-        //新建普通用户
-        $user = User::firstOrNew(['name' => 'user', 'email' => 'user@scama.com']);
-        $user->password = bcrypt('123456');
-        $user->save();
-        if(!$user->hasRole($userRole->name)) $user->attachRole($userRole);
-        if(!$user->hasRole($commonRole->name)) $user->attachRole($commonRole);
-        if(!$user->hasRole($assetRole->name)) $user->attachRole($assetRole);
-        if(!$user->hasRole($farmRole->name)) $user->attachRole($farmRole);
-
-        //新建管理员用户
         $adminUser = User::firstOrNew(['name' => 'admin', 'email' => 'admin@scama.com']);
-        $adminUser->password = bcrypt('123456');
+        $adminUser->password = bcrypt('nbb123456NBB');
         $adminUser->save();
-        if(!$adminUser->hasRole($adminRole->name)) $adminUser->attachRole($adminRole);
-        if(!$adminUser->hasRole($commonRole->name)) $adminUser->attachRole($commonRole);
-        if(!$adminUser->hasRole($assetRole->name)) $adminUser->attachRole($assetRole);
-        if(!$adminUser->hasRole($userMethodRole->name)) $adminUser->attachRole($userMethodRole);
-        if(!$adminUser->hasRole($alogMethodRole->name)) $adminUser->attachRole($alogMethodRole);
-        if(!$adminUser->hasRole($farmRole->name)) $adminUser->attachRole($farmRole);
+        $roles = \App\Role::all();
+        $adminUser->roles()->sync($roles);
 
         //新建批量管理用户
         $batchUser = User::firstOrNew(['name' => 'batch-user', 'email' => 'batch@scama.com']);
-        $batchUser->password = bcrypt('123456');
+        $batchUser->password = bcrypt('nbb123456NBB');
         $batchUser->save();
     }
 }

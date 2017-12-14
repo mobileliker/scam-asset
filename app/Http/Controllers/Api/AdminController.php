@@ -14,6 +14,7 @@
  * （2）添加权限控制；（2017/7/5）
  * （3）附件上传功能；（2107/7/14）
  * （4）修改图片上传错误返回为500错误；（2017/7/14）
+ * （5）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -29,8 +30,8 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ability:Common|Method-Common-Image,true')->only('image');
-        $this->middleware('ability:Common|Method-Common-File,true')->only('file');
+//        $this->middleware('ability:Common|Method-Common-Image,true')->only('image');
+//        $this->middleware('ability:Common|Method-Common-File,true')->only('file');
     }
 
     /**

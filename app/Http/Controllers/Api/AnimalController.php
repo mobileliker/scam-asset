@@ -9,6 +9,8 @@
  * (1)基本功能；（2017/11/30）
  * (2)添加日志记录；（2017/12/1）
  * (3)格式化代码：（2017/12/1）
+ * (4)新增权限管理的内容；（2017/12/14）
+ * （5）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -26,10 +28,30 @@ use App\Alog;
 
 class AnimalController extends Controller
 {
-
     protected $model = Animal::class;
 
+    public function __construct()
+    {
+        $this->middleware('ability:Animal|Method-Collection-Animal-Import,true')->only('import');
+        $this->middleware('ability:Animal|Method-Collection-Animal-Index,true')->only('index');
+        $this->middleware('ability:Animal|Method-Collection-Animal-Store,true')->only('store');
+        $this->middleware('ability:Animal|Method-Collection-Animal-Show,true')->only('show');
+        $this->middleware('ability:Animal|Method-Collection-Animal-Edit,true')->only('edit');
+        $this->middleware('ability:Animal|Method-Collection-Animal-Update,true')->only('update');
+        $this->middleware('ability:Animal|Method-Collection-Animal-Destroy,true')->only('destroy');
+        $this->middleware('ability:Animal|Method-Collection-Animal-BatchDelete,true')->only('batchDelete');
+        $this->middleware('ability:Animal|Method-Collection-Animal-ShowImage,true')->only('showImage');
+        $this->middleware('ability:Animal|Method-Collection-Animal-SaveImage,true')->only('saveImage');
+        $this->middleware('ability:Animal|Method-Collection-Animal-DeleteImage,true')->only('deleteImage');
+        $this->middleware('ability:Animal|Method-Collection-Animal-Relate,true')->only('relate');
+    }
 
+    /**
+     * 新增和编辑保存的处理函数
+     * @param Request $request
+     * @param int $id
+     * @return Animal|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function storeOrUpdate(Request $request, $id = -1)
     {
         $this->validate($request, [
@@ -78,6 +100,10 @@ class AnimalController extends Controller
         }
     }
 
+    /**
+     * 导入Excel文件功能
+     * @param Request $request
+     */
     public function import(Request $request)
     {
         $this->validate($request, [
@@ -283,6 +309,11 @@ class AnimalController extends Controller
         }
     }
 
+    /**
+     * 批量删除
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function batchDelete(Request $request)
     {
         return parent::batchDelete($request);
@@ -298,7 +329,6 @@ class AnimalController extends Controller
     {
         return Animal::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
     }
-
 
     /**
      * 保存一张图片
@@ -346,7 +376,6 @@ class AnimalController extends Controller
         }
     }
 
-
     /**
      * 删除一张图片
      * @param Request $request
@@ -369,7 +398,12 @@ class AnimalController extends Controller
         }
     }
 
-
+    /**
+     * 相关动物
+     * @param Request $request
+     * @param $id
+     * @return $this|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|static[]
+     */
     public function relate(Request $request, $id)
     {
         $lists = Animal::leftJoin('users as keepers', 'animals.keeper_id', '=', 'keepers.id')
@@ -385,5 +419,4 @@ class AnimalController extends Controller
 
         return $lists;
     }
-
 }

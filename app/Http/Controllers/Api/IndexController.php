@@ -15,6 +15,7 @@
  * @description :
  * (1)添加段面土壤标本和纸盒标本统计；（2017/11/29）
  * (2)添加动物标本的统计；（2017/11/30）
+ * （3）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -33,7 +34,7 @@ class IndexController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ability:Common|Method-Common-Index,true')->only('index');
+//        $this->middleware('ability:Common|Method-Common-Index,true')->only('index');
     }
 
     public function index()

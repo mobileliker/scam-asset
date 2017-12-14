@@ -8,6 +8,8 @@
  * @description :
  * (1)基本功能；（2017/11/29）
  * (2)添加日志记录；（2017/12/1）
+ * (3)添加权限控制；（2017/12/14）
+ * （4）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -24,6 +26,33 @@ use App\Alog;
 
 class SoilBigController extends Controller
 {
+    protected $model = SoilBig::class;
+
+    public function __construct()
+    {
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-Import,true')->only('import');
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-Index,true')->only('index');
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-Store,true')->only('store');
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-Edit,true')->only('edit');
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-Update,true')->only('update');
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-Destroy,true')->only('destroy');
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-ShowImage,true')->only('showImage');
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-SaveImage,true')->only('saveImage');
+        $this->middleware('ability:SoilBig|Method-Collection-SoilBig-DeleteImage,true')->only('deleteImage');
+
+        //$this->middleware('ability:SoilBig|Method-Collection-SoilBig-Show,true')->only('show');
+        //$this->middleware('ability:SoilBig|Method-Collection-SoilBig-BatchDelete,true')->only('batchDelete');
+        //$this->middleware('ability:SoilBig|Method-Collection-SoilBig-Relate,true')->only('relate');
+        //$this->middleware('ability:SoilBig|Method-Collection-SoilBig-CameraList,true')->only('cameraList');
+    }
+
+    /**
+     * 新增保存和编辑保存
+     * @param Request $request
+     * @param $soil_id
+     * @param int $id
+     * @return SoilBig|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function storeOrUpdate(Request $request, $soil_id, $id = -1)
     {
         $this->validate($request, [
@@ -75,11 +104,11 @@ class SoilBigController extends Controller
         return $lists;
     }
 
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     // public function create()
     // {
     //     //
@@ -96,12 +125,12 @@ class SoilBigController extends Controller
         return $this->storeOrUpdate($request, $soil_id);
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     // public function show($id)
     // {
     //     //
@@ -147,7 +176,6 @@ class SoilBigController extends Controller
             abort(500, '删除失败');
         }
     }
-
 
     /**
      * 显示一张图片
@@ -204,7 +232,6 @@ class SoilBigController extends Controller
             abort(500, '上传失败');
         }
     }
-
 
     /**
      * 删除一张图片

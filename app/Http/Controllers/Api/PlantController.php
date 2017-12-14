@@ -15,6 +15,8 @@
  * @description :
  * (1)添加日志记录；（2017/12/1）
  * (2)index函数添加最后编辑时间;(2017/12/11)
+ * (3)新增权限控制；（2017/12/14）
+ * （4）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -34,7 +36,28 @@ class PlantController extends Controller
 {
     protected $model = Plant::class;
 
+    public function __construct()
+    {
+        $this->middleware('ability:Plant|Method-Collection-Plant-Import,true')->only('import');
+        $this->middleware('ability:Plant|Method-Collection-Plant-Index,true')->only('index');
+        $this->middleware('ability:Plant|Method-Collection-Plant-Store,true')->only('store');
+        $this->middleware('ability:Plant|Method-Collection-Plant-Show,true')->only('show');
+        $this->middleware('ability:Plant|Method-Collection-Plant-Edit,true')->only('edit');
+        $this->middleware('ability:Plant|Method-Collection-Plant-Update,true')->only('update');
+        $this->middleware('ability:Plant|Method-Collection-Plant-Destroy,true')->only('destroy');
+        $this->middleware('ability:Plant|Method-Collection-Plant-BatchDelete,true')->only('batchDelete');
+        $this->middleware('ability:Plant|Method-Collection-Plant-ShowImage,true')->only('showImage');
+        $this->middleware('ability:Plant|Method-Collection-Plant-SaveImage,true')->only('saveImage');
+        $this->middleware('ability:Plant|Method-Collection-Plant-DeleteImage,true')->only('deleteImage');
+        $this->middleware('ability:Plant|Method-Collection-Plant-Relate,true')->only('relate');
+    }
 
+    /**
+     * 新增保存和更新保存
+     * @param Request $request
+     * @param int $id
+     * @return Plant|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function storeOrUpdate(Request $request, $id = -1)
     {
         $this->validate($request, [
@@ -74,6 +97,10 @@ class PlantController extends Controller
         }
     }
 
+    /**
+     * 导入Excel
+     * @param Request $request
+     */
     public function import(Request $request)
     {
         $this->validate($request, [
@@ -310,6 +337,11 @@ class PlantController extends Controller
         }
     }
 
+    /**
+     * 批量删除
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function batchDelete(Request $request)
     {
         return parent::batchDelete($request);
@@ -325,7 +357,6 @@ class PlantController extends Controller
     {
         return Plant::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
     }
-
 
     /**
      * 保存一张图片
@@ -395,7 +426,12 @@ class PlantController extends Controller
         }
     }
 
-
+    /**
+     * 相关
+     * @param Request $request
+     * @param $id
+     * @return $this|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|static[]
+     */
     public function relate(Request $request, $id)
     {
         $lists = Plant::leftJoin('users as keepers', 'plants.keeper_id', '=', 'keepers.id')
@@ -411,5 +447,4 @@ class PlantController extends Controller
 
         return $lists;
     }
-
 }

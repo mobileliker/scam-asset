@@ -21,6 +21,8 @@
  * (1)添加日志记录；（2017/12/1）
  * （2）格式化代码；（2017/12/1）
  * (3)添加拍摄清单函数；（2017/12/5）
+ * (4)补充权限控制；（2017/12/14）
+ * （5）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -40,23 +42,32 @@ use App\Alog;
 
 class FarmController extends Controller
 {
-//    use AttachmentTraits;
-//    private $attachementPath = 'collection/farm';
-
     protected $model = Farm::class;
 
     public function __construct()
     {
         $this->middleware('ability:Farm|Method-Collection-Farm-Index,true')->only('index');
         $this->middleware('ability:Farm|Method-Collection-Farm-Store,true')->only('store');
+        $this->middleware('ability:Farm|Method-Collection-Farm-Show,true')->only('show');
         $this->middleware('ability:Farm|Method-Collection-Farm-Edit,true')->only('edit');
         $this->middleware('ability:Farm|Method-Collection-Farm-Update,true')->only('update');
         $this->middleware('ability:Farm|Method-Collection-Farm-destroy,true')->only('destroy');
         $this->middleware('ability:Farm|Method-Collection-Farm-BatchDelete,true')->only('batchDelete');
         $this->middleware('ability:Farm|Method-Collection-Farm-Import,true')->only('import');
+        $this->middleware('ability:Farm|Method-Collection-Farm-ShowImage,true')->only('showImage');
+        $this->middleware('ability:Farm|Method-Collection-Farm-SaveImage,true')->only('saveImage');
+        $this->middleware('ability:Farm|Method-Collection-Farm-DeleteImage,true')->only('deleteImage');
+        $this->middleware('ability:Farm|Method-Collection-Farm-Relate,true')->only('relate');
+        $this->middleware('ability:Farm|Method-Collection-Farm-CameraList,true')->only('cameraList');
     }
 
 
+    /**
+     * 新增保存和更新保存
+     * @param Request $request
+     * @param int $id
+     * @return Farm|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function storeOrUpdate(Request $request, $id = -1)
     {
         $this->validate($request, [
@@ -224,7 +235,7 @@ class FarmController extends Controller
     }
 
     /**
-     *
+     * 批量删除
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */

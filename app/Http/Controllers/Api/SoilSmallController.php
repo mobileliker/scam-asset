@@ -8,6 +8,8 @@
  * @description :
  * (1)基本功能；（2017/11/29）
  * (2)添加日志记录；（2017/12/1）
+ * (3)新增权限控制；(2017/12/14)
+ * （4）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -24,6 +26,33 @@ use App\Events\SoilSmallEvent;
 
 class SoilSmallController extends Controller
 {
+    protected $model = SoilSmall::class;
+
+    public function __construct()
+    {
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-Import,true')->only('import');
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-Index,true')->only('index');
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-Store,true')->only('store');
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-Edit,true')->only('edit');
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-Update,true')->only('update');
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-Destroy,true')->only('destroy');
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-ShowImage,true')->only('showImage');
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-SaveImage,true')->only('saveImage');
+        $this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-DeleteImage,true')->only('deleteImage');
+
+        //$this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-Show,true')->only('show');
+        //$this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-BatchDelete,true')->only('batchDelete');
+        //$this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-Relate,true')->only('relate');
+        //$this->middleware('ability:SoilSmall|Method-Collection-SoilSmall-CameraList,true')->only('cameraList');
+    }
+
+    /**
+     * 新增保存和编辑保存
+     * @param Request $request
+     * @param $soil_id
+     * @param int $id
+     * @return SoilSmall|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function storeOrUpdate(Request $request, $soil_id, $id = -1)
     {
         $this->validate($request, [
@@ -148,9 +177,8 @@ class SoilSmallController extends Controller
         }
     }
 
-
     /**
-     * 显示一张图片
+     * 显示图片
      * @param Request $request
      * @param $id
      * @return mixed
@@ -204,7 +232,6 @@ class SoilSmallController extends Controller
             abort(500, '上传失败');
         }
     }
-
 
     /**
      * 删除一张图片

@@ -7,6 +7,12 @@
  * @description:
  * （1）添加获取所有角色；
  * （2）添加权限控制；（2017/7/5）
+ *
+ * @version: 2.0.2
+ * @author: wuzhihui
+ * @date: 2017/12/14
+ * @description:
+ * （1）更改权限控制；（2017/12/14）
  */
 
 namespace App\Http\Controllers\Api;
@@ -19,7 +25,7 @@ class RoleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ability:UserMethod|Method-user-Role,true')->only('all');
+//        $this->middleware('ability:UserMethod|Method-user-Role,true')->only('all');
     }
 
     /**
