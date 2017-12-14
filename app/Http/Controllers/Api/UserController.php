@@ -189,10 +189,10 @@ class UserController extends Controller
 //        $user->roles = $roles;
 
         $roles = $user->roles->pluck('id');
+        $user->role_ids = $roles;
         foreach($user->role_ids as $key=>$role_id){
             $user->role_ids[$key] = '' . $role_id;
         }
-        $user->role_ids = $roles;
 
         return $user;
     }
