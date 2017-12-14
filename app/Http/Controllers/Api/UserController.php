@@ -71,7 +71,9 @@ class UserController extends Controller
         //$user->type = $type;
 
         if ($user->save()) {
-
+            foreach($role_ids as $key=>$role_id){
+                $role_ids[$key] = intval($role_id);
+            }
             $user->roles()->sync($role_ids);
 
             //$user->type = User::TYPE[$user->type];
@@ -187,6 +189,9 @@ class UserController extends Controller
 //        $user->roles = $roles;
 
         $roles = $user->roles->pluck('id');
+        foreach($user->role_ids as $key=>$role_id){
+            $user->role_ids[$key] = '' . $role_id;
+        }
         $user->role_ids = $roles;
 
         return $user;
