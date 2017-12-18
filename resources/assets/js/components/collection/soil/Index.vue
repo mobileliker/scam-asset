@@ -7,6 +7,12 @@
 * (2)列表添加最后编辑时间；（2017/12/6）
 * (3)新增段面标本和纸盒标本数量；（2017/12/6）
 * (4)一页默认为15条；（2017/12/6）
+*
+* @version: 2.0.3
+* @author : wuzhihui
+* @date : 2017/12/18
+* @description:
+* (1)修复地区的错误；（2017/12/18）
 */
 
 <template>
@@ -55,7 +61,7 @@
                   </template>
               </el-table-column>
               <!--<el-table-column prop="ename" label="英文名称" sortable></el-table-column>-->
-              <el-table-column prop="origin" label="地区" sortable></el-table-column>
+              <el-table-column prop="region" label="地区" sortable></el-table-column>
               <el-table-column prop="serial" label="编号" sortable></el-table-column>
               <el-table-column prop="soilBigCount" label="段面数量" width="100"></el-table-column>
               <el-table-column prop="soilSmallCount" label="纸盒数量" width="100"></el-table-column>

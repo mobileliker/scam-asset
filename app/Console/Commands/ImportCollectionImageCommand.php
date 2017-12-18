@@ -13,6 +13,12 @@
  * （5）修复图片导入的提示语的错误；（2017/12/12）
  * （6）新增图片导入不成功的分类功能；（2017/12/12）
  *（7）新增对大写后缀和jpg格式的图片的支持；（2017/12/12）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2017/12/18
+ * @description:
+ * （1）添加图片标签的导入；（2017/12/18）
  **/
 
 namespace App\Console\Commands;
@@ -136,6 +142,12 @@ class ImportCollectionImageCommand extends Command
                         $collectionImage->hash = $md5_str;
                         $collectionImage->collectible_type = 'App\\' . studly_case($prefix);
                         $collectionImage->collectible_id = $collection->id;
+
+                        $prefixs = explode('_', $file);
+                        if($prefixs != null && count($prefixs) == 4) {
+                            $collectionImage->target = iconv("GB2312", "UTF-8", $prefixs[2]) ;
+                        }
+
                         if ($collectionImage->save()) {
 
                           //记录日志

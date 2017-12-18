@@ -17,6 +17,12 @@
  * (9)新增详情页的显示图片函数；（2017/12/12）
  * （10）更改权限控制；（2017/12/14）
  * (11)添加段面标本的导出清单；（2017/12/15）
+ *
+ * @version：2017/12/18
+ * @author : wuzhihui
+ * @date : 2017/12/18
+ * @description:
+ * （1）导入功能暂时忽略memo；（2017/12/18）
  */
 
 namespace App\Http\Controllers\Api;
@@ -125,7 +131,7 @@ class SoilController extends Controller
                 if ($row == 0) continue; //忽略标题行和表头
                 if ($cells[5] == '') continue; //编号不存在则忽略
 
-                $index = $cells[0];
+                //$index = $cells[0];
                 $input_date = $cells[1];
                 $name = $cells[2];
                 $ename = $cells[3];
@@ -137,7 +143,7 @@ class SoilController extends Controller
                 $small_count = $cells[9];
                 $small_serial = $cells[10];
                 $small_storage = $cells[11];
-                $origin_serial = $cells[12];
+                //$origin_serial = $cells[12];
                 $origin = $cells[13];
                 $location = $cells[14];
                 $altitude = $cells[15];
@@ -162,7 +168,7 @@ class SoilController extends Controller
                 $obj->ename = $ename;
                 $obj->region = $region;
                 $obj->serial = $serial;
-                $obj->origin = $region;
+                $obj->origin = $origin;
                 $obj->location = $location;
                 $obj->altitude = $altitude;
                 $obj->terrain = $terrain;
@@ -173,7 +179,8 @@ class SoilController extends Controller
                 $obj->depth = $depth;
                 $obj->collecter = $collecter;
                 $obj->description = $description;
-                $obj->memo = $memo;
+                //TODO 修复备注无法导入的问题
+                //$obj->memo = $memo;
 
                 $obj->keeper_id = $user->id;
                 $obj->user_id = $user->id;
@@ -239,7 +246,7 @@ class SoilController extends Controller
     {
         $lists = Soil::leftJoin('users as keepers', 'soils.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'soils.user_id', '=', 'users.id')
-            ->select('soils.id', 'soils.input_date', 'soils.name', 'soils.ename', 'soils.serial', 'soils.origin', 'soils.keeper_id', 'keepers.name as keeper', 'soils.user_id', 'users.name as user', 'soils.updated_at', 'soils.collecter');
+            ->select('soils.id', 'soils.input_date', 'soils.name', 'soils.ename', 'soils.serial', 'soils.region', 'soils.keeper_id', 'keepers.name as keeper', 'soils.user_id', 'users.name as user', 'soils.updated_at', 'soils.collecter');
 
         if ($request->input_date_start != null && $request->input_date_start != '') {
             $lists = $lists->where('soils.input_date', '>=', $request->input_date_start)->where('soils.input_date', '<=', $request->input_date_end);
@@ -264,7 +271,7 @@ class SoilController extends Controller
             'name' => 'soils.name',
             'ename' => 'soils.ename',
             'serial' => 'soils.serial',
-            'origin' => 'soils.origin',
+            'region' => 'soils.region',
             'keeper' => 'keepers.name',
             'user' => 'users.name',
             'collecter' => 'soils.collecter',
@@ -369,7 +376,7 @@ class SoilController extends Controller
             event(new SoilEvent('destroy', $request->getClientIp(), $obj));
             return $obj;
         } else {
-            abort(500, ‘删除失败’);
+            abort(500, '删除失败');
         }
     }
 
@@ -537,10 +544,10 @@ class SoilController extends Controller
             })->whereNull('collection_images.id')->select('soils.name', 'soil_bigs.serial', 'soil_bigs.storage')
                 ->get();
 
-            foreach($lists as $key=>$obj) {
+            foreach ($lists as $key => $obj) {
                 $lists[$key]->category = '纸盒标本';
             }
-            foreach($soilSmalls as $key=>$obj) {
+            foreach ($soilSmalls as $key => $obj) {
                 $obj->category = '段面标本';
                 $lists[] = $obj;
             }
