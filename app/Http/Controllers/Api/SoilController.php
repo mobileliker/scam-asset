@@ -18,11 +18,12 @@
  * （10）更改权限控制；（2017/12/14）
  * (11)添加段面标本的导出清单；（2017/12/15）
  *
- * @version：2017/12/18
+ * @version：2.0.3
  * @author : wuzhihui
  * @date : 2017/12/18
  * @description:
  * （1）导入功能暂时忽略memo；（2017/12/18）
+ * （2）拍摄清单加入土壤采集记录；（2017/12/18
  */
 
 namespace App\Http\Controllers\Api;
@@ -530,6 +531,8 @@ class SoilController extends Controller
             //   $join->on('rocks.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Rock::class);
             // })->whereNull('collection_images.id')->select('rocks.category', 'rocks.name', 'rocks.serial', /*'rocks.number', */'rocks.storage')->get();
 
+
+
             $soilSmalls = SoilSmall::leftJoin('collection_images', function ($join) {
                 $join->on('soil_smalls.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', SoilSmall::class);
             })->leftJoin('soils', function ($join) {
@@ -537,17 +540,25 @@ class SoilController extends Controller
             })->whereNull('collection_images.id')->select('soils.name', 'soil_smalls.serial', 'soil_smalls.storage')->get();
 
 
-            $lists = SoilBig::leftJoin('collection_images', function ($join) {
+            $soilBigs = SoilBig::leftJoin('collection_images', function ($join) {
                 $join->on('soil_bigs.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', SoilBig::class);
             })->leftJoin('soils', function ($join) {
                 $join->on('soils.id', '=', 'soil_bigs.soil_id')->whereNull('soils.deleted_at');
             })->whereNull('collection_images.id')->select('soils.name', 'soil_bigs.serial', 'soil_bigs.storage')
                 ->get();
 
+            $lists = Soil::leftJoin('collection_images', function($join) {
+                $join->on('soils.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Soil::class);
+            })->whereNull('collection_images.id')->select('soils.name', 'soils.serial', 'soils.region as storage')->get();
+
             foreach ($lists as $key => $obj) {
-                $lists[$key]->category = '纸盒标本';
+                $lists[$key]->category = '采集记录';
             }
             foreach ($soilSmalls as $key => $obj) {
+                $obj->category = '纸盒标本';
+                $lists[] = $obj;
+            }
+            foreach ($soilBigs as $key => $obj) {
                 $obj->category = '段面标本';
                 $lists[] = $obj;
             }
