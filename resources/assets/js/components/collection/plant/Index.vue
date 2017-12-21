@@ -1,3 +1,12 @@
+/**
+ * 植物管理首页
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2017/12/21
+ * @description:
+ * （1）基本功能；
+ * （2）添加拍摄清单功能；（2017/12/21）
+ **/
 <template>
     <content-component>
         <el-col :lg="24">
@@ -37,11 +46,12 @@
             <el-input placeholder="请输入名称、编号、来源或描述进行搜索" icon="search" v-model="search.query_text"
                       :on-icon-click="handleSearchIconClick"></el-input>
         </el-col>
-        <el-col :lg="2" class="pull-right">
+        <el-col :lg="4" class="pull-right">
             <router-link to="/collection/plant/create">
                 <el-button type="success">添加</el-button>
             </router-link>
             <el-button type="success" @click="handleImport">导入</el-button>
+            <el-button type="success" @click="handleCaremaList">拍摄单</el-button>
         </el-col>
         <el-col :lg="24" class="list">
             <el-table :data="list.data" border style="width: 100%" v-loading="loading" element-loading-text="拼命加载数据中"
@@ -480,6 +490,11 @@
 
                 this.dialog.image.visible = true;
             },
+
+            //拍摄清单
+            handleCaremaList() {
+                window.open('/api/plant/camera-list', '_blank');
+            }
         }
     }
 </script>

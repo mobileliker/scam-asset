@@ -12,6 +12,12 @@
  * (5)农具模块的delete和update接口改为get和post的常规请求方式：（2017/12/4）
  * (6)重新去除掉原API方法；(2017/12/5)
  * (7)添加农具、岩石拍摄清单的接口；（2017/12/5）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2017/12/21
+ * @description:
+ * (1)添加植物管理拍摄清单接口；（2017/12/21）
  */
 
 /*
@@ -89,8 +95,11 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
 
     //土壤管理
     Route::group(['prefix' => 'soil'], function () {
-      Route::get('camera-list', 'SoilController@cameraList'); //拍摄清单
+        Route::get('camera-list', 'SoilController@cameraList'); //拍摄清单
     });
 
-
+    //植物管理
+    Route::group(['prefix' => 'plant'], function () {
+        Route::get('camera-list', 'PlantController@cameraList'); //拍摄清单
+    });
 });

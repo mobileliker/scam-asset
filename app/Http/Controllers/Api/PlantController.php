@@ -17,6 +17,12 @@
  * (2)index函数添加最后编辑时间;(2017/12/11)
  * (3)新增权限控制；（2017/12/14）
  * （4）更改权限控制；（2017/12/14）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2017/12/21
+ * @description:
+ * (1)添加拍摄清单函数；（2017/12/21）
  */
 
 namespace App\Http\Controllers\Api;
@@ -50,6 +56,7 @@ class PlantController extends Controller
         $this->middleware('ability:Plant|Method-Collection-Plant-SaveImage,true')->only('saveImage');
         $this->middleware('ability:Plant|Method-Collection-Plant-DeleteImage,true')->only('deleteImage');
         $this->middleware('ability:Plant|Method-Collection-Plant-Relate,true')->only('relate');
+        $this->middleware('ability:Plant|Method-Collection-Plant-CameraList,true')->only('cameraList');
     }
 
     /**
@@ -446,5 +453,38 @@ class PlantController extends Controller
         $lists = $lists->orderBy('id', 'desc')->take(50)->get();
 
         return $lists;
+    }
+
+    /**
+     * 拍摄清单
+     * @param Request $request
+     */
+    public function cameraList(Request $request)
+    {
+        $post_time = Date('YmdHis');
+        $filePath = resource_path('assets/template/camera-list.xls');
+        $distPath = storage_path('excel/exports/camera-list/plant/' . $post_time . '.xls');
+        copy($filePath, $distPath);
+
+        Excel::load($distPath, function ($reader) {
+            $lists = Plant::leftJoin('collection_images', function ($join) {
+                $join->on('plants.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Plant::class);
+            })->whereNull('collection_images.id')->select('plants.name', 'plants.serial', 'plants.storage', 'plants.category')->get();
+
+            $sheet = $reader->getActiveSheet();
+
+            $post_date = Date('Y-m-d');
+            $sheet->setCellValue('G2', $post_date);
+
+            foreach ($lists as $index => $obj) {
+                $sheet->setCellValue('A' . ($index + 4), ($index + 1));
+                $sheet->setCellValue('B' . ($index + 4), $obj->category);
+                $sheet->setCellValue('C' . ($index + 4), $obj->name);
+                $sheet->setCellValue('D' . ($index + 4), '1');
+                $sheet->setCellValue('E' . ($index + 4), $obj->serial);
+                $sheet->setCellValue('F' . ($index + 4), $obj->storage);
+            }
+
+        })->export('xls');
     }
 }
