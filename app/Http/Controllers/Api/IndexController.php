@@ -157,6 +157,7 @@ class IndexController extends Controller
 
                 if(isset($sumCount[$prefix])) $sumCount[$prefix] = $sumCount[$prefix] + $count;
                 else $sumCount[$prefix] = $count;
+                $sumCount['sum'] = $sumCount['sum'] + $count;
             }
             $yearCounts[] = $yearCount;
         }

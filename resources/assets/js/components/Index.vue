@@ -65,6 +65,7 @@
             </div>
             <el-table :data="total.yearCounts" style="width: 100%">
                 <el-table-column prop="year" label="年份"></el-table-column>
+                <el-table-column prop="farm" label="农具"></el-table-column>
                 <el-table-column prop="rock" label="岩石"></el-table-column>
                 <el-table-column prop="plant" label="植物"></el-table-column>
                 <el-table-column prop="animal" label="动物"></el-table-column>
