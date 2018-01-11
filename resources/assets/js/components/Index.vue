@@ -8,6 +8,12 @@
 * （3）添加岩石相关的统计数据；（2017/11/1）
 * （4）修改首页的显示样式为藏品分类统计与其他统计分开；（2017/11/29）
 * （5）修复文字描述的问题；（2017/12/12）
+*
+* @version : 2.0.3
+* @author : wuzhihui
+* @date : 2018/1/11
+* @description :
+* (1)新增藏品入库统计功能；（2018/1/11）
 */
 
 <template>
@@ -54,11 +60,23 @@
             </el-col>
         </el-col>
         <el-col :lg="24">
+            <div class="page-header">
+                <h3>藏品进库统计</h3>
+            </div>
+            <el-table :data="total.yearCounts" style="width: 100%">
+                <el-table-column prop="year" label="年份"></el-table-column>
+                <el-table-column prop="rock" label="岩石"></el-table-column>
+                <el-table-column prop="plant" label="植物"></el-table-column>
+                <el-table-column prop="animal" label="动物"></el-table-column>
+                <el-table-column prop="soilBig" label="土壤段面"></el-table-column>
+                <el-table-column prop="soilSmall" label="土壤纸盒"></el-table-column>
+                <el-table-column prop="sum" label="合计"></el-table-column>
+            </el-table>
+        </el-col>
+        <el-col :lg="24">
           <div class="page-header">
           <h3>藏品分类统计</h3>
           </div>
-
-
           <el-col :lg="4" class="box-card">
               <el-card>
                   <div slot="header" class="clearfix">

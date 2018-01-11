@@ -16,6 +16,12 @@
  * (1)添加段面土壤标本和纸盒标本统计；（2017/11/29）
  * (2)添加动物标本的统计；（2017/11/30）
  * （3）更改权限控制；（2017/12/14）
+ *
+ * @version ： 2.0.3
+ * @author ： wuzhihui
+ * @date : 2018/1/11
+ * @description :
+ * (4)新增首页的藏品入库统计功能；（2018/1/11）
  */
 
 namespace App\Http\Controllers\Api;
@@ -72,6 +78,13 @@ class IndexController extends Controller
         $prefixs[] = 'soilBig';
         $prefixs[] = 'soilSmall';
 
+        $years = array();
+        $years[] = 2015;
+        $years[] = 2016;
+        $years[] = 2017;
+        $years[] = 2018;
+        $countYears =
+
         $numberSum = 0;
         $imageNumberSum = 0;
         $monthAddSum = 0;
@@ -115,6 +128,40 @@ class IndexController extends Controller
             'image_month_add' => $imageMonthAddSum,
             'image_year_add' => $imageYearAddSum,
         ];
+
+        $yearCounts = array();
+
+        $sumCount = array();
+        $sumCount['year'] = '合计';
+        $sumCount['sum'] = 0;
+
+        foreach($years as $key => $year){
+            $yearCount = array();
+            $yearCount['year'] = $year;
+            $yearCount['sum'] = 0;
+
+
+            foreach ($prefixs as $key => $prefix) {
+                $model_name = 'App\\' . ucfirst($prefix);
+                $class = new ReflectionClass($model_name);
+                $model = $class->newInstanceArgs();
+
+                if($prefix == 'soilBig' || $prefix == 'soilSmall'){
+                    $count = $model->join('soils', 'soils.id', '=', 'soil_id')->whereYear('soils.input_date', '=', $year)->count();
+                }
+                else {
+                    $count = $model->whereYear('input_date', '=', $year)->count();
+                }
+                $yearCount['sum'] = $yearCount['sum'] + $count;
+                $yearCount[$prefix] = $count;
+
+                if(isset($sumCount[$prefix])) $sumCount[$prefix] = $sumCount[$prefix] + $count;
+                else $sumCount[$prefix] = $count;
+            }
+            $yearCounts[] = $yearCount;
+        }
+        $yearCounts[] = $sumCount;
+        $total['yearCounts'] = $yearCounts;
 
         return response()->json($total);
     }
