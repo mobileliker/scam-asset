@@ -23,6 +23,13 @@
  * (3)添加拍摄清单函数；（2017/12/5）
  * (4)补充权限控制；（2017/12/14）
  * （5）更改权限控制；（2017/12/14）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/1/12
+ * @description :
+ * （1)采用新的导入格式；（2018/1/12）
+ * （2）新增storage、origin字段，去除display、category字段；（2018/1/12）
  */
 
 namespace App\Http\Controllers\Api;
@@ -72,15 +79,17 @@ class FarmController extends Controller
     {
         $this->validate($request, [
             'input_date' => 'required|date',
-            'category' => 'required|string|max:255',
+//            'category' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'number' => 'required|integer|min:0',
             'source' => 'nullable|string|max:255',
+            'origin' => 'nullable|string|max:255',
+            'storage' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:2000',
             'size' => 'nullable|string|max:255',
             'serial' => 'required|string|max:255',
             'memo' => 'nullable|string|max:2000',
-            'display' => 'required|string|max:255',
+//            'display' => 'required|string|max:255',
             'keeper_id' => 'required|integer|exists:users,id,deleted_at,NULL',
             'asset_id' => 'nullable|exists:assets,serial,deleted_at,NULL'
         ]);
@@ -93,7 +102,7 @@ class FarmController extends Controller
             $farm = Farm::findOrFail($id);
         }
 
-        $farm->setRawAttributes($request->only(['category', 'name', 'number', 'input_date', 'source', 'description', 'size', 'serial', 'memo', 'display', 'keeper_id', 'asset_id']));
+        $farm->setRawAttributes($request->only(['name', 'number', 'input_date', 'source', 'description', 'size', 'serial', 'memo', 'keeper_id', 'asset_id', 'storage', 'origin']));
         $farm->user_id = Auth::id();
         if ($id != -1) $farm->id = $id;
 
@@ -117,7 +126,7 @@ class FarmController extends Controller
 
         $lists = Farm::leftJoin('users as keepers', 'farms.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'farms.user_id', '=', 'users.id')
-            ->select('farms.id', 'farms.input_date', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user');
+            ->select('farms.id', 'farms.input_date', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user', 'farms.storage', 'farms.origin');
 
         if ($request->category != null && $request->category != '') {
             $lists = $lists->where('farms.category', '=', $request->category);
@@ -143,9 +152,10 @@ class FarmController extends Controller
         $order_params = [
             'id' => 'farms.id',
             'input_date' => 'farms.input_date',
-            'category' => 'farms.category',
+            //'category' => 'farms.category',
             'name' => 'farms.name',
             'serial' => 'farms.serial',
+            'origin' => 'farms.origin',
             'source' => 'farms.source',
             'keeper' => 'keepers.name',
             'user' => 'users.name',
@@ -155,6 +165,7 @@ class FarmController extends Controller
             'name' => 'farms.name',
             'serial' => 'farms.serial',
             'source' => 'farms.source',
+            'origin' => 'farms.origin',
         ];
 
         $lists = IQuery::ofDefault($lists, $request, $order_params, $text_params, 'farms');
@@ -258,34 +269,40 @@ class FarmController extends Controller
             'type' => 'required|in:ignore,cover',
         ]);
 
+
         $user = Auth::user();
 
         $path = $request->file;
         //Log::info($path);
 
         Excel::load($path, function ($reader) use ($user, $request) {
-            $sheet = $reader->getSheet(0);
-            $sheet_array = $sheet->toArray();
-            foreach ($sheet_array as $row => $cells) {
-                if ($row == 0) continue; //忽略标题行
-                if ($cells[8] == '') continue; //编号不存在则忽略
+
+
+            if ($request->version == null || $request->version == '') {
+
+                $sheet = $reader->getSheet(0);
+                $sheet_array = $sheet->toArray();
+
+                foreach ($sheet_array as $row => $cells) {
+                    if ($row == 0) continue; //忽略标题行
+                    if ($cells[8] == '') continue; //编号不存在则忽略
 //                foreach($cells as $col => $cell){
 //                    Log::info($cell);
 //                }
-                //$index = $cells[0];
-                $category = $cells[1];
-                $name = $cells[2];
-                $number = $cells[3];
-                $input_date = str_replace('.', '-', $cells[4]);
-                $source = $cells[5];
-                $description = $cells[6];
-                $size = $cells[7];
-                $serial = $cells[8];
-                //$image1 = $cells[9];
-                //$image2 = $cells[10];
-                $memo = $cells[11];
-                $display = $cells[12];
-                if ($number > 1) $serial = trim(explode('-', $serial)[0]);
+                    //$index = $cells[0];
+                    $category = $cells[1];
+                    $name = $cells[2];
+                    $number = $cells[3];
+                    $input_date = str_replace('.', '-', $cells[4]);
+                    $source = $cells[5];
+                    $description = $cells[6];
+                    $size = $cells[7];
+                    $serial = $cells[8];
+                    //$image1 = $cells[9];
+                    //$image2 = $cells[10];
+                    $memo = $cells[11];
+                    $display = $cells[12];
+                    if ($number > 1) $serial = trim(explode('-', $serial)[0]);
 //                Log::info(
 //                    'row : ' . $row . ','
 //                    . 'category : ' . $category . ','
@@ -300,35 +317,99 @@ class FarmController extends Controller
 //                    . 'display : ' . $display
 //                );
 
-                while ($number--) {
-                    $farm = Farm::where('serial', '=', $serial)->first();
-                    if ($farm == null) $farm = new Farm;
-                    else if ($request->type == 'ignore') continue;
-                    $farm->serial = $serial;
-                    $farm->category = $category;
-                    $farm->name = $name;
-                    $farm->input_date = $input_date;
-                    $farm->source = $source;
-                    $farm->description = $description;
-                    $farm->size = $size;
-                    $farm->memo = $memo;
-                    $farm->display = $display;
-                    $farm->keeper_id = $user->id;
-                    $farm->user_id = $user->id;
-                    $farm->save();
-                    //Log::info($farm);
+                    while ($number--) {
+                        $farm = Farm::where('serial', '=', $serial)->first();
+                        if ($farm == null) $farm = new Farm;
+                        else if ($request->type == 'ignore') continue;
+                        $farm->serial = $serial;
+                        $farm->category = $category;
+                        $farm->name = $name;
+                        $farm->input_date = $input_date;
+                        $farm->source = $source;
+                        $farm->description = $description;
+                        $farm->size = $size;
+                        $farm->memo = $memo;
+                        $farm->display = $display;
+                        $farm->keeper_id = $user->id;
+                        $farm->user_id = $user->id;
+                        $farm->save();
+                        //Log::info($farm);
 
-                    event(new FarmEvent('import', $request->getClientIp(), $farm)); //添加导入日记记录
+                        event(new FarmEvent('import', $request->getClientIp(), $farm)); //添加导入日记记录
 
-                    $serial = 'A0' . (intval(substr($serial, 1)) + 1);
+                        $serial = 'A0' . (intval(substr($serial, 1)) + 1);
+                    }
+
+                }
+            } else {
+                //Log::info('farm import v2');
+
+                for ($i = 1; $i <= 4; $i++) {
+
+                    $sheet = $reader->getSheet($i);
+                    $sheet_array = $sheet->toArray();
+
+                    foreach ($sheet_array as $row => $cells) {
+                        if ($row == 0) continue; //忽略标题行
+                        if ($cells[5] == null || $cells[5] == '') continue; //忽略无编号农具
+
+                        $index = $cells[0];
+                        $batchNumber = $cells[1];
+                        $input_date = str_replace('.', '-', $cells[2]);
+                        $name = $cells[3];
+                        $oldSerial = $cells[4];
+                        $serial = $cells[5];
+                        $number = $cells[6];
+                        $size = $cells[7];
+                        if ($cells[8] != null && $cells[8] != '') $origin = $cells[8];
+                        $source = $cells[9];
+                        $price = $cells[10];
+                        $storage = $cells[11];
+
+                        $serialArr = explode('、', trim($serial));
+                        if (count($serial) > 1) {
+                            $serial_start = intval(substr($serialArr[0], 1, 7));
+                            $serial_end = intval(substr($serialArr[0], 1, 7));
+                        } else {
+                            $serialArr2 = explode('-', $serialArr[0]);
+                            $serial_start = intval(substr(trim($serialArr2[0]), 1, 7));
+                            $serial_end = intval(substr(trim($serialArr2[count($serialArr2) - 1]), 1, 7));
+                        }
+
+                        while ($serial_start <= $serial_end) {
+
+                            $farm = Farm::where('serial', '=', substr($serial, 0, 1) . $serial_start)->first();
+                            if ($farm == null) $farm = new Farm;
+                            else if ($request->type == 'ignore') continue;
+                            $farm->serial = substr($serial, 0, 1) . str_pad($serial_start, 7, '0', STR_PAD_LEFT);
+                            //$farm->category = $category;
+                            $farm->name = $name;
+                            $farm->input_date = $input_date;
+                            $farm->source = $source;
+                            $farm->origin = $origin;
+                            $farm->number = $number;
+                            //$farm->description = $description;
+                            $farm->size = $size;
+                            $farm->storage = $storage;
+                            //$farm->memo = $memo;
+                            //$farm->display = $display;
+                            $farm->keeper_id = $user->id;
+                            $farm->user_id = $user->id;
+                            $farm->save();
+                            //Log::info($farm);
+
+                            event(new FarmEvent('import', $request->getClientIp(), $farm)); //添加导入日记记录
+
+                            $serial_start = $serial_start + 1;
+                        }
+                    }
                 }
 
             }
+
         });
 
-        return response()->json([
-            'res' => 'success'
-        ]);
+        return response()->json(['res' => 'success']);
 
         //TODO 添加数据校验功能
 
@@ -340,7 +421,8 @@ class FarmController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function saveImage(Request $request, $id)
+    public
+    function saveImage(Request $request, $id)
     {
         $farm = Farm::findOrFail($id);
 
@@ -384,7 +466,8 @@ class FarmController extends Controller
      * @param $id
      * @return mixed
      */
-    public function showImage(Request $request, $id)
+    public
+    function showImage(Request $request, $id)
     {
         return Farm::findOrFail($id)->images()->select('id', 'thumb as url', 'path', 'cover', 'updated_at as time')->get();
     }
@@ -396,7 +479,8 @@ class FarmController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteImage(Request $request, $farm_id, $id)
+    public
+    function deleteImage(Request $request, $farm_id, $id)
     {
         $image = Farm::findOrFail($farm_id)->images()->where('id', '=', $id)->firstOrFail();
 
@@ -411,11 +495,12 @@ class FarmController extends Controller
         }
     }
 
-    public function relate(Request $request, $id)
+    public
+    function relate(Request $request, $id)
     {
         $lists = Farm::leftJoin('users as keepers', 'farms.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'farms.user_id', '=', 'users.id')
-            ->select('farms.id', 'farms.input_date', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user')
+            ->select('farms.id', 'farms.input_date', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user', 'farms.storage', 'farms.origin', 'farms.number')
             ->where('farms.id', '!=', $id);
 
         if ($request->query_text != null && $request->query_text != '') {
@@ -427,32 +512,33 @@ class FarmController extends Controller
         return $lists;
     }
 
-    //生成拍摄清单函数
-    public function cameraList()
+//生成拍摄清单函数
+    public
+    function cameraList()
     {
-      $post_time = Date('YmdHis');
-      $filePath = resource_path('assets/template/camera-list.xls');
-      $distPath = storage_path('excel/exports/'.$post_time.'.xls');
-      copy($filePath, $distPath);
+        $post_time = Date('YmdHis');
+        $filePath = resource_path('assets/template/camera-list.xls');
+        $distPath = storage_path('excel/exports/' . $post_time . '.xls');
+        copy($filePath, $distPath);
 
-      Excel::load($distPath, function($reader) {
-          $lists = Farm::leftJoin('collection_images', function($join) {
-            $join->on('farms.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Farm::class);
-          })->whereNull('collection_images.id')->select('farms.category', 'farms.name', 'farms.serial', 'farms.number'/*, 'farms.storage'*/)->get();
+        Excel::load($distPath, function ($reader) {
+            $lists = Farm::leftJoin('collection_images', function ($join) {
+                $join->on('farms.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Farm::class);
+            })->whereNull('collection_images.id')->select('farms.category', 'farms.name', 'farms.serial', 'farms.number'/*, 'farms.storage'*/)->get();
 
-          $sheet = $reader->getActiveSheet();
+            $sheet = $reader->getActiveSheet();
 
-          $post_date = Date('Y-m-d');
-          $sheet->setCellValue('G2', $post_date);
+            $post_date = Date('Y-m-d');
+            $sheet->setCellValue('G2', $post_date);
 
-          foreach($lists as $index => $obj) {
-            $sheet->setCellValue('A' . ($index + 4), ($index + 1));
-            $sheet->setCellValue('B' . ($index + 4), $obj->category);
-            $sheet->setCellValue('C' . ($index + 4), $obj->name);
-            $sheet->setCellValue('D' . ($index + 4), $obj->number);
-            $sheet->setCellValue('E' . ($index + 4), $obj->serial);
-            $sheet->setCellValue('F' . ($index + 4), $obj->storage);
-          }
-      })->export('xls');
+            foreach ($lists as $index => $obj) {
+                $sheet->setCellValue('A' . ($index + 4), ($index + 1));
+                $sheet->setCellValue('B' . ($index + 4), $obj->category);
+                $sheet->setCellValue('C' . ($index + 4), $obj->name);
+                $sheet->setCellValue('D' . ($index + 4), $obj->number);
+                $sheet->setCellValue('E' . ($index + 4), $obj->serial);
+                $sheet->setCellValue('F' . ($index + 4), $obj->storage);
+            }
+        })->export('xls');
     }
 }

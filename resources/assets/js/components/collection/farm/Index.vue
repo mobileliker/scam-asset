@@ -6,6 +6,13 @@
 * （1）初步完成了农具管理的首页功能；（2017/7/10）
 * （2）完成了农具数据的导入功能；（2017/7/14）
 * （3）添加拍摄清单功能；（2017/12/5）
+*
+* @version : 2.0.3
+* @author : wuzhihui
+* @date :2018/1/12
+* @description :
+* (1) 更改EXCEL的导入格式；（2018/1/12）
+* (2) 新增storage、origin字段，去除display、category字段；（2018/1/12）
 */
 
 <template>
@@ -17,11 +24,11 @@
                 <el-breadcrumb-item>农具管理</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>
-        <el-col :lg="3">
-            <el-select v-model="search.category.value" placeholder="分类" clearable>
-                <el-option v-for="item in search.category.options" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-        </el-col>
+        <!--<el-col :lg="3">-->
+            <!--<el-select v-model="search.category.value" placeholder="分类" clearable>-->
+                <!--<el-option v-for="item in search.category.options" :label="item.label" :value="item.value"></el-option>-->
+            <!--</el-select>-->
+        <!--</el-col>-->
         <el-col :lg="3">
             <el-select v-model="search.keeper_id.value" placeholder="保管人" clearable>
                 <el-option v-for="item in search.keeper_id.options" :label="item.label" :value="item.value"></el-option>
@@ -59,13 +66,14 @@
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column type="index" label="序号" width="70"></el-table-column>
                 <el-table-column prop="input_date" label="入库时间" sortable></el-table-column>
-                <el-table-column prop="category" label="分类" sortable></el-table-column>
+                <!--<el-table-column prop="category" label="分类" sortable></el-table-column>-->
                 <el-table-column prop="name" label="名称" sortable>
                     <template scope="scope">
                         <router-link :to="'/collection/farm/' + scope.row.id">{{scope.row.name}}</router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="serial" label="编号" sortable></el-table-column>
+                <el-table-column prop="origin" label="产地" sortable></el-table-column>
                 <el-table-column prop="source" label="来源" sortable></el-table-column>
                 <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
                 <el-table-column prop="user" label="编辑人" sortable></el-table-column>
@@ -112,8 +120,11 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialog.import.visible=false">取消</el-button>
-                <el-button type="primary" @click="handleImportSave" element-loading-text="导入中..."
-                           v-loading.fullscreen.lock="fullscreenLoading">导入
+                <!--<el-button type="primary" @click="handleImportSave('')" element-loading-text="导入中..."-->
+                           <!--v-loading.fullscreen.lock="fullscreenLoading">导入-->
+                <!--</el-button>-->
+                <el-button type="primary" @click="handleImportSave('V2')" element-loading-text="导入中..."
+                           v-loading.fullscreen.lock="fullscreenLoading">导入(新）
                 </el-button>
             </div>
         </el-dialog>
@@ -155,87 +166,87 @@
                 loading: true,
                 fullscreenLoading: false,
                 search: {
-                    category: {
-                        value: '',
-                        options: [ //大田农作生产农具分类：1 耕地整地工具、2 播种工具、3 中耕工具、4 施肥植保工具、5 排灌工具、6 收割工具、 7 运输工具、8 脱晒工具、9 加工工具、10 计量工具、11劳保工具、12 农用器具；专门类：制酒用具，茶叶种植、采集加工用具，蚕桑丝织用器，棉纺织用器，甘蔗种植、收获、加工用具，渔业生产用具，岭南热带水果种植、收获、加工用具。
-                            {
-                                label: '耕地整地工具',
-                                value: '耕地整地工具'
-                            },
-                            {
-                                label: '播种工具',
-                                value: '播种工具'
-                            },
-                            {
-                                label: '中耕工具',
-                                value: '中耕工具'
-                            },
-                            {
-                                label: '施肥植保工具',
-                                value: '施肥植保工具'
-                            },
-                            {
-                                label: '排灌工具',
-                                value: '排灌工具'
-                            },
-                            {
-                                label: '收割工具',
-                                value: '收割工具'
-                            },
-                            {
-                                label: '运输工具',
-                                value: '运输工具'
-                            },
-                            {
-                                label: '脱晒工具',
-                                value: '脱晒工具'
-                            },
-                            {
-                                label: '加工工具',
-                                value: '加工工具'
-                            },
-                            {
-                                label: '计量工具',
-                                value: '计量工具'
-                            },
-                            {
-                                label: '劳保工具',
-                                value: '劳保工具'
-                            },
-                            {
-                                label: '农用器具',
-                                value: '农用器具'
-                            },
-                            {
-                                label: '制酒用具',
-                                value: '制酒用具'
-                            },
-                            {
-                                label: '茶叶种植、采集加工用具',
-                                value: '茶叶种植、采集加工用具'
-                            },
-                            {
-                                label: '蚕桑丝织用器',
-                                value: '蚕桑丝织用器'
-                            },
-                            {
-                                label: '棉纺织用器',
-                                value: '棉纺织用器'
-                            },
-                            {
-                                label: '甘蔗种植、收获、加工用具',
-                                value: '甘蔗种植、收获、加工用具'
-                            },
-                            {
-                                label: '渔业生产用具',
-                                value: '渔业生产用具'
-                            },
-                            {
-                                label: '岭南热带水果种植、收获、加工用具',
-                                value: '岭南热带水果种植、收获、加工用具'
-                            }
-                        ]
-                    },
+//                    category: {
+//                        value: '',
+//                        options: [ //大田农作生产农具分类：1 耕地整地工具、2 播种工具、3 中耕工具、4 施肥植保工具、5 排灌工具、6 收割工具、 7 运输工具、8 脱晒工具、9 加工工具、10 计量工具、11劳保工具、12 农用器具；专门类：制酒用具，茶叶种植、采集加工用具，蚕桑丝织用器，棉纺织用器，甘蔗种植、收获、加工用具，渔业生产用具，岭南热带水果种植、收获、加工用具。
+//                            {
+//                                label: '耕地整地工具',
+//                                value: '耕地整地工具'
+//                            },
+//                            {
+//                                label: '播种工具',
+//                                value: '播种工具'
+//                            },
+//                            {
+//                                label: '中耕工具',
+//                                value: '中耕工具'
+//                            },
+//                            {
+//                                label: '施肥植保工具',
+//                                value: '施肥植保工具'
+//                            },
+//                            {
+//                                label: '排灌工具',
+//                                value: '排灌工具'
+//                            },
+//                            {
+//                                label: '收割工具',
+//                                value: '收割工具'
+//                            },
+//                            {
+//                                label: '运输工具',
+//                                value: '运输工具'
+//                            },
+//                            {
+//                                label: '脱晒工具',
+//                                value: '脱晒工具'
+//                            },
+//                            {
+//                                label: '加工工具',
+//                                value: '加工工具'
+//                            },
+//                            {
+//                                label: '计量工具',
+//                                value: '计量工具'
+//                            },
+//                            {
+//                                label: '劳保工具',
+//                                value: '劳保工具'
+//                            },
+//                            {
+//                                label: '农用器具',
+//                                value: '农用器具'
+//                            },
+//                            {
+//                                label: '制酒用具',
+//                                value: '制酒用具'
+//                            },
+//                            {
+//                                label: '茶叶种植、采集加工用具',
+//                                value: '茶叶种植、采集加工用具'
+//                            },
+//                            {
+//                                label: '蚕桑丝织用器',
+//                                value: '蚕桑丝织用器'
+//                            },
+//                            {
+//                                label: '棉纺织用器',
+//                                value: '棉纺织用器'
+//                            },
+//                            {
+//                                label: '甘蔗种植、收获、加工用具',
+//                                value: '甘蔗种植、收获、加工用具'
+//                            },
+//                            {
+//                                label: '渔业生产用具',
+//                                value: '渔业生产用具'
+//                            },
+//                            {
+//                                label: '岭南热带水果种植、收获、加工用具',
+//                                value: '岭南热带水果种植、收获、加工用具'
+//                            }
+//                        ]
+//                    },
                     keeper_id: {
                         value: '',
                         options: []
@@ -328,6 +339,7 @@
                         model: {
                             file: [],
                             type: 'cover',
+                            version : '',
                         }
                     },
                     image: {
@@ -349,7 +361,7 @@
                     params: {
                         paginate: this.list.per_page,
                         page: this.list.current_page,
-                        category: this.search.category.value,
+                        //category: this.search.category.value,
                         keeper_id: this.search.keeper_id.value,
                         user_id: this.search.user_id.value,
                         is_asset: this.search.is_asset.value,
@@ -363,13 +375,13 @@
             }
         },
         watch: {
-            'search.category.value': {
-                handler: function (val, oldVal) {
-                    this.list.current_page = 1;
-                    this.load();
-                },
-                deep: true
-            },
+//            'search.category.value': {
+//                handler: function (val, oldVal) {
+//                    this.list.current_page = 1;
+//                    this.load();
+//                },
+//                deep: true
+//            },
             'search.keeper_id.value': {
                 handler: function (val, oldVal) {
                     this.list.current_page = 1;
@@ -519,9 +531,10 @@
             },
 
             //导入数据按钮
-            handleImportSave() {
+            handleImportSave(version) {
                 //console.log('handleImportSave');
                 this.fullscreenLoading = true;
+                this.dialog.import.model.version = version;
                 axios.post('/api/collection/farm/import', this.dialog.import.model)
                     .then(response => {
                         //console.log(response.data);

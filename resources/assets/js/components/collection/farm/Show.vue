@@ -1,3 +1,10 @@
+/**
+* @version : 2.0.3
+* @author : wuzhihui
+* @date :2018/1/12
+* @description :
+* (1) 新增storage、origin字段，去除display、category字段；（2018/1/12）
+*/
 <template>
     <content-component>
         <el-col :lg="24">
@@ -20,10 +27,12 @@
                         <p>描述：{{info.description}}</p>
                     </el-col>
                     <el-col :lg="12" class="info-item">
-                        <p>分类：{{info.category}}</p>
+                        <!--<p>分类：{{info.category}}</p>-->
+                        <p>产地：{{info.origin}}</p>
                         <p>编号：{{info.serial}}</p>
                         <p>数量：{{info.number}}</p>
-                        <p>展示区域：{{info.display}}</p>
+                        <p>保存地点：{{info.storage}}</p>
+                        <!--<p>展示区域：{{info.display}}</p>-->
                         <p>固定资产编号：{{info.asset_id}}</p>
                         <p>备注：{{info.memo}}</p>
                     </el-col>
@@ -53,17 +62,17 @@
                     <div slot="header">
                         <span>相似农具</span>
                     </div>
-
                     <el-table :data="list.data" border style="width: 100%">
                         <el-table-column type="index" label="序号" width="70"></el-table-column>
                         <el-table-column prop="input_date" label="入库时间" sortable></el-table-column>
-                        <el-table-column prop="category" label="分类" sortable></el-table-column>
+                        <!--<el-table-column prop="category" label="分类" sortable></el-table-column>-->
                         <el-table-column prop="name" label="名称" sortable>
                             <template scope="scope">
                                 <router-link :to="'/collection/farm/' + scope.row.id">{{scope.row.name}}</router-link>
                             </template>
                         </el-table-column>
                         <el-table-column prop="serial" label="编号" sortable></el-table-column>
+                        <el-table-column prop="origin" label="产地" sortable></el-table-column>
                         <el-table-column prop="source" label="来源" sortable></el-table-column>
                         <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
                         <el-table-column prop="user" label="编辑人" sortable></el-table-column>
@@ -129,17 +138,17 @@
             return {
                 info: [],
                 images: [],
-                dialog : {
-                    view : {
-                        visible : false,
-                        path : '',
+                dialog: {
+                    view: {
+                        visible: false,
+                        path: '',
                     }
                 },
-                list : {
-                    data : [],
-                    options : {
-                        params : {
-                            query_text : '',
+                list: {
+                    data: [],
+                    options: {
+                        params: {
+                            query_text: '',
                         }
                     }
                 }
@@ -148,12 +157,12 @@
         mounted() {
             this.load();
         },
-        watch : {
-            '$route.params.id' : {
-                handler : function(val, oldVal) {
+        watch: {
+            '$route.params.id': {
+                handler: function (val, oldVal) {
                     this.load();
                 },
-                deep : true
+                deep: true
             }
         },
         methods: {
