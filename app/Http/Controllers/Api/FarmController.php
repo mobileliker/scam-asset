@@ -32,6 +32,7 @@
  * （2）新增storage、origin字段，去除display、category字段；（2018/1/12）
  * （3）新增p_category和category字段；（2018/1/22）
  * （4）修复农具导入是编号为XXXX-1、XXX-2无法导入的错误；（2018/1/22）
+ * （5）修复首页按父分类排序的错误；（2018/1/22）
  */
 
 namespace App\Http\Controllers\Api;
@@ -155,7 +156,7 @@ class FarmController extends Controller
         $order_params = [
             'id' => 'farms.id',
             'input_date' => 'farms.input_date',
-            'p_category' => 'famrs.p_category',
+            'p_category' => 'farms.p_category',
             'category' => 'farms.category',
             'name' => 'farms.name',
             'serial' => 'farms.serial',
