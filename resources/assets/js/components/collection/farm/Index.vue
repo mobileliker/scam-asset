@@ -11,8 +11,9 @@
 * @author : wuzhihui
 * @date :2018/1/12
 * @description :
-* (1) 更改EXCEL的导入格式；（2018/1/12）
-* (2) 新增storage、origin字段，去除display、category字段；（2018/1/12）
+* （1）更改EXCEL的导入格式；（2018/1/12）
+* （2）新增storage、origin字段，去除display、category字段；（2018/1/12）
+* （3）新增cateogory和p_category字段；（2018/1/22）
 */
 
 <template>
@@ -65,18 +66,19 @@
                       @selection-change="handleSelectionChange" @sort-change="handleSortChange">
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column type="index" label="序号" width="70"></el-table-column>
-                <el-table-column prop="input_date" label="入库时间" sortable></el-table-column>
-                <!--<el-table-column prop="category" label="分类" sortable></el-table-column>-->
+                <el-table-column prop="input_date" label="入库时间" width="130" sortable></el-table-column>
+                <el-table-column prop="p_category" label="父分类" width="110" sortable></el-table-column>
+                <el-table-column prop="category" label="分类" sortable></el-table-column>
                 <el-table-column prop="name" label="名称" sortable>
                     <template scope="scope">
                         <router-link :to="'/collection/farm/' + scope.row.id">{{scope.row.name}}</router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="serial" label="编号" sortable></el-table-column>
+                <el-table-column prop="serial" label="编号" width="130" sortable></el-table-column>
                 <el-table-column prop="origin" label="产地" sortable></el-table-column>
-                <el-table-column prop="source" label="来源" sortable></el-table-column>
-                <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
-                <el-table-column prop="user" label="编辑人" sortable></el-table-column>
+                <el-table-column prop="source" label="来源" width="90" sortable></el-table-column>
+                <!--<el-table-column prop="keeper" label="保管人" sortable></el-table-column>-->
+                <el-table-column prop="user" label="编辑人" width="110" sortable></el-table-column>
                 <el-table-column fixed="right" label="操作" width="200">
                     <template scope="scope">
                         <el-button type="text" size="small" @click="handleImageClick(scope.row.id)">图片管理</el-button>

@@ -13,6 +13,7 @@
 * @date : 2018/1/12
 * @description :
 * （1）新增storage、origin字段，去除display、category字段；（2018/1/12）
+* （2）新增cateogory和p_category字段；（2018/1/22）
 */
 
 <template>
@@ -37,6 +38,9 @@
                             </el-form-item>
                             <el-form-item label="名称" prop="name">
                                 <el-input v-model="farm.name" placeholder="名称"></el-input>
+                            </el-form-item>
+                            <el-form-item label="父分类" prop="p_category">
+                                <el-input v-model="farm.p_category" placeholder="父分类"></el-input>
                             </el-form-item>
                             <el-form-item label="来源" prop="source">
                                 <el-input v-model="farm.source" placeholder="来源"></el-input>
@@ -68,6 +72,9 @@
                             </el-form-item>
                             <el-form-item label="产地" prop="origin">
                                 <el-input v-model="farm.origin" placeholder="产地"></el-input>
+                            </el-form-item>
+                            <el-form-item label="分类" prop="category">
+                                <el-input v-model="farm.category" placeholder="分类"></el-input>
                             </el-form-item>
                             <el-form-item label="数量" prop="number">
                                 <el-input v-model="farm.number" placeholder="数量"></el-input>
@@ -263,6 +270,12 @@
                     ],
                     size: [
                         {max: 255, message: '尺寸不能超过255个字', trigger: 'blur'}
+                    ],
+                    p_category: [
+                        {max: 255, message: '父分类不能超过255个字', trigger: 'blur'}
+                    ],
+                    category: [
+                        {max: 255, message: '分类不能超过255个字', trigger: 'blur'}
                     ],
                     //keeper_id : [
                     //{type : 'integer', required : true, message : '请选择保管人', trigger : 'change'}

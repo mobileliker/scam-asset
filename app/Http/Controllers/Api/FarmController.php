@@ -30,6 +30,8 @@
  * @description :
  * （1)采用新的导入格式；（2018/1/12）
  * （2）新增storage、origin字段，去除display、category字段；（2018/1/12）
+ * （3）新增p_category和category字段；（2018/1/22）
+ * （4）修复农具导入是编号为XXXX-1、XXX-2无法导入的错误；（2018/1/22）
  */
 
 namespace App\Http\Controllers\Api;
@@ -79,7 +81,8 @@ class FarmController extends Controller
     {
         $this->validate($request, [
             'input_date' => 'required|date',
-//            'category' => 'required|string|max:255',
+            'p_category' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'number' => 'required|integer|min:0',
             'source' => 'nullable|string|max:255',
@@ -102,7 +105,7 @@ class FarmController extends Controller
             $farm = Farm::findOrFail($id);
         }
 
-        $farm->setRawAttributes($request->only(['name', 'number', 'input_date', 'source', 'description', 'size', 'serial', 'memo', 'keeper_id', 'asset_id', 'storage', 'origin']));
+        $farm->setRawAttributes($request->only(['p_category','category', 'name', 'number', 'input_date', 'source', 'description', 'size', 'serial', 'memo', 'keeper_id', 'asset_id', 'storage', 'origin']));
         $farm->user_id = Auth::id();
         if ($id != -1) $farm->id = $id;
 
@@ -126,7 +129,7 @@ class FarmController extends Controller
 
         $lists = Farm::leftJoin('users as keepers', 'farms.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'farms.user_id', '=', 'users.id')
-            ->select('farms.id', 'farms.input_date', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user', 'farms.storage', 'farms.origin');
+            ->select('farms.id', 'farms.input_date', 'farms.p_category', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user', 'farms.storage', 'farms.origin');
 
         if ($request->category != null && $request->category != '') {
             $lists = $lists->where('farms.category', '=', $request->category);
@@ -152,7 +155,8 @@ class FarmController extends Controller
         $order_params = [
             'id' => 'farms.id',
             'input_date' => 'farms.input_date',
-            //'category' => 'farms.category',
+            'p_category' => 'famrs.p_category',
+            'category' => 'farms.category',
             'name' => 'farms.name',
             'serial' => 'farms.serial',
             'origin' => 'farms.origin',
@@ -351,23 +355,26 @@ class FarmController extends Controller
 
                     foreach ($sheet_array as $row => $cells) {
                         if ($row == 0) continue; //忽略标题行
-                        if ($cells[5] == null || $cells[5] == '') continue; //忽略无编号农具
 
                         $index = $cells[0];
                         $batchNumber = $cells[1];
                         $input_date = str_replace('.', '-', $cells[2]);
-                        $name = $cells[3];
-                        $oldSerial = $cells[4];
-                        $serial = $cells[5];
-                        $number = $cells[6];
-                        $size = $cells[7];
-                        if ($cells[8] != null && $cells[8] != '') $origin = $cells[8];
-                        $source = $cells[9];
-                        $price = $cells[10];
-                        $storage = $cells[11];
+                        $p_category = $cells[3];
+                        $category = $cells[4];
+                        $name = $cells[5];
+                        $oldSerial = $cells[6];
+                        $serial = $cells[7];
+                        $number = $cells[8];
+                        $size = $cells[9];
+                        if ($cells[10] != null && $cells[10] != '') $origin = $cells[10];
+                        $source = $cells[11];
+                        $price = $cells[12];
+                        $storage = $cells[13];
+
+                        if ($serial == null || $serial == '') continue; //忽略无编号农具
 
                         $serialArr = explode('、', trim($serial));
-                        if (count($serial) > 1) {
+                        if (count($serialArr) > 1) {
                             $serial_start = intval(substr($serialArr[0], 1, 7));
                             $serial_end = intval(substr($serialArr[0], 1, 7));
                         } else {
@@ -378,11 +385,12 @@ class FarmController extends Controller
 
                         while ($serial_start <= $serial_end) {
 
-                            $farm = Farm::where('serial', '=', substr($serial, 0, 1) . $serial_start)->first();
+                            $farm = Farm::where('serial', '=', substr($serial, 0, 1) . str_pad($serial_start, 7, '0', STR_PAD_LEFT))->first();
                             if ($farm == null) $farm = new Farm;
                             else if ($request->type == 'ignore') continue;
                             $farm->serial = substr($serial, 0, 1) . str_pad($serial_start, 7, '0', STR_PAD_LEFT);
-                            //$farm->category = $category;
+                            $farm->p_category = $p_category;
+                            $farm->category = $category;
                             $farm->name = $name;
                             $farm->input_date = $input_date;
                             $farm->source = $source;
@@ -500,7 +508,7 @@ class FarmController extends Controller
     {
         $lists = Farm::leftJoin('users as keepers', 'farms.keeper_id', '=', 'keepers.id')
             ->leftJoin('users', 'farms.user_id', '=', 'users.id')
-            ->select('farms.id', 'farms.input_date', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user', 'farms.storage', 'farms.origin', 'farms.number')
+            ->select('farms.id', 'farms.input_date','farms.p_category', 'farms.category', 'farms.name', 'farms.serial', 'farms.source', 'farms.keeper_id', 'keepers.name as keeper', 'farms.user_id', 'users.name as user', 'farms.storage', 'farms.origin', 'farms.number')
             ->where('farms.id', '!=', $id);
 
         if ($request->query_text != null && $request->query_text != '') {

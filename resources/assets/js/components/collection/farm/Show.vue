@@ -3,7 +3,8 @@
 * @author : wuzhihui
 * @date :2018/1/12
 * @description :
-* (1) 新增storage、origin字段，去除display、category字段；（2018/1/12）
+* （1) 新增storage、origin字段，去除display、category字段；（2018/1/12）
+* （2）新增cateogory和p_category字段；（2018/1/22）
 */
 <template>
     <content-component>
@@ -20,6 +21,7 @@
                     </div>
                     <el-col :lg="12" class="info-item">
                         <p>入库日期：{{info.input_date}}</p>
+                        <p>分类：{{info.category}}</p>
                         <p>名称：{{info.name}}</p>
                         <p>来源：{{info.source}}</p>
                         <p>尺寸：{{info.size}}</p>
@@ -27,7 +29,7 @@
                         <p>描述：{{info.description}}</p>
                     </el-col>
                     <el-col :lg="12" class="info-item">
-                        <!--<p>分类：{{info.category}}</p>-->
+                        <p>父分类：{{info.p_category}}</p>
                         <p>产地：{{info.origin}}</p>
                         <p>编号：{{info.serial}}</p>
                         <p>数量：{{info.number}}</p>
@@ -65,7 +67,8 @@
                     <el-table :data="list.data" border style="width: 100%">
                         <el-table-column type="index" label="序号" width="70"></el-table-column>
                         <el-table-column prop="input_date" label="入库时间" sortable></el-table-column>
-                        <!--<el-table-column prop="category" label="分类" sortable></el-table-column>-->
+                        <el-table-column prop="p_category" label="父分类" sortable></el-table-column>
+                        <el-table-column prop="category" label="分类" sortable></el-table-column>
                         <el-table-column prop="name" label="名称" sortable>
                             <template scope="scope">
                                 <router-link :to="'/collection/farm/' + scope.row.id">{{scope.row.name}}</router-link>
@@ -74,7 +77,7 @@
                         <el-table-column prop="serial" label="编号" sortable></el-table-column>
                         <el-table-column prop="origin" label="产地" sortable></el-table-column>
                         <el-table-column prop="source" label="来源" sortable></el-table-column>
-                        <el-table-column prop="keeper" label="保管人" sortable></el-table-column>
+                        <!--<el-table-column prop="keeper" label="保管人" sortable></el-table-column>-->
                         <el-table-column prop="user" label="编辑人" sortable></el-table-column>
                     </el-table>
                 </el-card>
