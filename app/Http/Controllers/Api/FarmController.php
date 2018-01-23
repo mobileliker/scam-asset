@@ -33,6 +33,7 @@
  * （3）新增p_category和category字段；（2018/1/22）
  * （4）修复农具导入是编号为XXXX-1、XXX-2无法导入的错误；（2018/1/22）
  * （5）修复首页按父分类排序的错误；（2018/1/22）
+ * （6）新增导入时导入旧编号；（2018/1/23）
  */
 
 namespace App\Http\Controllers\Api;
@@ -389,6 +390,7 @@ class FarmController extends Controller
                             $farm = Farm::where('serial', '=', substr($serial, 0, 1) . str_pad($serial_start, 7, '0', STR_PAD_LEFT))->first();
                             if ($farm == null) $farm = new Farm;
                             else if ($request->type == 'ignore') continue;
+                            $farm->odd_serial = $oldSerial;
                             $farm->serial = substr($serial, 0, 1) . str_pad($serial_start, 7, '0', STR_PAD_LEFT);
                             $farm->p_category = $p_category;
                             $farm->category = $category;

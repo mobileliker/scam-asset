@@ -13,6 +13,12 @@
  * @date : 2017/12/13
  * @description :
  * (1) 添加生成word文档的命令；(2017/12/13)
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/1/23
+ * @description :
+ * （1）添加农具图片重命名工具；（2018/1/23）
  */
 
 namespace App\Console;
@@ -32,6 +38,7 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\GenerateQrcode', //二维码生成的命令行工具
         Commands\ImportCollectionImageCommand::class, //导入图片
         Commands\GenerateWordDocument::class, //生成word文档
+        //Commands\RenameFarmImageCommand::class, //农具图片重命名工具（仅本地使用）默认为注释状态
     ];
 
     /**
