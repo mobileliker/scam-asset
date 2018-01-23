@@ -73,6 +73,7 @@ class ClearCollectionImageCommand extends Command
                         } else {
                             $collection = $image->collectible;
                             if ($collection == null) {
+                                $image->delete();
                                 rename($path . '/' . $dir . '/' . $file, $path2 . '/' . $file . '.' . date('ymdhis'));
                                 $this->comment($file . ':藏品已被删除图片');
                             } else {
