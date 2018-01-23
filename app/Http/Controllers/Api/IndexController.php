@@ -21,7 +21,8 @@
  * @author ： wuzhihui
  * @date : 2018/1/11
  * @description :
- * (4)新增首页的藏品入库统计功能；（2018/1/11）
+ * (1)新增首页的藏品入库统计功能；（2018/1/11）
+ * (2)新增首页的固定资产入库统计功能；(2018/1/23)
  */
 
 namespace App\Http\Controllers\Api;
@@ -135,27 +136,25 @@ class IndexController extends Controller
         $sumCount['year'] = '合计';
         $sumCount['sum'] = 0;
 
-        foreach($years as $key => $year){
+        foreach ($years as $key => $year) {
             $yearCount = array();
             $yearCount['year'] = $year;
             $yearCount['sum'] = 0;
-
 
             foreach ($prefixs as $key => $prefix) {
                 $model_name = 'App\\' . ucfirst($prefix);
                 $class = new ReflectionClass($model_name);
                 $model = $class->newInstanceArgs();
 
-                if($prefix == 'soilBig' || $prefix == 'soilSmall'){
+                if ($prefix == 'soilBig' || $prefix == 'soilSmall') {
                     $count = $model->join('soils', 'soils.id', '=', 'soil_id')->whereYear('soils.input_date', '=', $year)->count();
-                }
-                else {
+                } else {
                     $count = $model->whereYear('input_date', '=', $year)->count();
                 }
                 $yearCount['sum'] = $yearCount['sum'] + $count;
                 $yearCount[$prefix] = $count;
 
-                if(isset($sumCount[$prefix])) $sumCount[$prefix] = $sumCount[$prefix] + $count;
+                if (isset($sumCount[$prefix])) $sumCount[$prefix] = $sumCount[$prefix] + $count;
                 else $sumCount[$prefix] = $count;
                 $sumCount['sum'] = $sumCount['sum'] + $count;
             }
@@ -163,6 +162,44 @@ class IndexController extends Controller
         }
         $yearCounts[] = $sumCount;
         $total['yearCounts'] = $yearCounts;
+
+        //固定资产统计
+        $assetArr = array();
+
+        foreach ($years as $key => $year) {
+            $assetCount = array();
+            $assetCount['year'] = $year;
+            $data = Asset::whereYear('post_date', '=', $year)->groupBy('type')->selectRaw("type, sum(sum) as sum, count(id) as count")->get();
+            foreach (Asset::TYPE as $key => $value) {
+                $assetCount[$key] = '-';
+            }
+            $sumSum = 0;
+            $sumCount = 0;
+            foreach ($data as $key => $value) {
+                $assetCount[$value->type] = $value->count . '件(' . $value->sum . '元)';
+                $sumSum = $sumSum + $value->sum;
+                $sumCount = $sumCount + $value->count;
+            }
+            $assetCount['sum'] = $sumCount . '件(' . $sumSum . '元)';
+            $assetArr[] = $assetCount;
+        }
+
+        $sumAsset = array();
+        $sumAsset['year'] = '合计';
+        foreach (Asset::TYPE as $key => $type) {
+            $sumAsset[$key] = '-';
+        }
+        $data = Asset::groupBy('type')->selectRaw('type, sum(sum) as sum, count(id) as count')->get();
+        $sumSum = 0;
+        $sumCount = 0;
+        foreach ($data as $key => $value) {
+            $sumAsset[$value->type] = $value->count . '件(' . $value->sum . '元)';
+            $sumSum = $sumSum + $value->sum;
+            $sumCount = $sumCount + $value->count;
+        }
+        $sumAsset['sum'] = $sumCount . '件(' . $sumSum . '元)';
+        $assetArr[] = $sumAsset;
+        $total['assetCount'] = $assetArr;
 
         return response()->json($total);
     }

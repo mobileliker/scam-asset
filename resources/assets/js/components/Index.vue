@@ -14,6 +14,7 @@
 * @date : 2018/1/11
 * @description :
 * (1)新增藏品入库统计功能；（2018/1/11）
+* (2)新增固定资产入库统计功能；（2018/1/23）
 */
 
 <template>
@@ -58,6 +59,24 @@
                     <p>本年图片新增数量：{{total.collection.image_year_add}}</p>
                 </el-card>
             </el-col>
+        </el-col>
+        <el-col :lg="24">
+            <div class="page-header">
+                <h3>固定资产进库统计</h3>
+            </div>
+            <el-table :data="total.assetCount" style="width: 100%">
+                <el-table-column prop="year" label="年份" width="90"></el-table-column>
+                <el-table-column prop="1" label="农业文明史"></el-table-column>
+                <el-table-column prop="2" label="传统农具"></el-table-column>
+                <el-table-column prop="3" label="土壤与岩石"></el-table-column>
+                <el-table-column prop="4" label="植物世界"></el-table-column>
+                <el-table-column prop="5" label="动物世界"></el-table-column>
+                <el-table-column prop="6" label="昆虫世界"></el-table-column>
+                <el-table-column prop="7" label="林业资源与生产"></el-table-column>
+                <el-table-column prop="8" label="南海海洋生物"></el-table-column>
+                <el-table-column prop="9" label="可转让科技成果"></el-table-column>
+                <el-table-column prop="sum" label="合计"></el-table-column>
+            </el-table>
         </el-col>
         <el-col :lg="24">
             <div class="page-header">

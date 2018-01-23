@@ -30,7 +30,7 @@ class Asset extends Model {
     const TYPE_I = 9;
     const TYPE = [
         self::TYPE_A => '农业文明史展厅A(单据号为1xxxxxxx)',
-        self::TYPE_B => '传统农具展厅B(单据号为2xxxxxxx）',
+        self::TYPE_B => '传统农具展厅B(单据号为2xxxxxxx)',
         self::TYPE_C => '土壤与岩石展厅C(单据号为3xxxxxxx)',
         self::TYPE_D => '植物世界展厅D(单据号为4xxxxxxx)',
         self::TYPE_E => '动物世界展厅E(单据号为5xxxxxxx)',
