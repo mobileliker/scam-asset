@@ -57,21 +57,27 @@ class ClearCollectionImageCommand extends Command
         $this->comment('开始清理无效的藏品图片');
 
         $path = storage_path('app/public/collection');
-        $path2= storage_path('app/trash/');
+        $path2 = storage_path('app/trash/');
 
         $dirs = scandir($path);
-        foreach($dirs as $dir) {
+        foreach ($dirs as $dir) {
             //$this->comment($file);
-            if(!is_dir($dir)) {
+            if (!is_dir($dir)) {
                 $files = scandir($path . '/' . $dir);
-                foreach($files as $file) {
+                foreach ($files as $file) {
                     if (!is_dir($file) && strpos($file, '.') != false && $this->isImage($file)) {
-                        $image = CollectionImage::where('path', 'like', '%'. $file. '%')->first();
-                        if($image == null) {
-                            rename($path . '/' . $dir . '/' . $file, $path2 . '/' . $file . '.' . date('ymdhis') );
-                            $this->comment($file . ':无效图片');
+                        $image = CollectionImage::where('path', 'like', '%' . $file . '%')->first();
+                        if ($image == null) {
+                            rename($path . '/' . $dir . '/' . $file, $path2 . '/' . $file . '.' . date('ymdhis'));
+                            $this->comment($file . ':已被删除图片');
                         } else {
-                            $this->comment($file . ':有效图片');
+                            $collection = $image->collectible;
+                            if ($collection == null) {
+                                rename($path . '/' . $dir . '/' . $file, $path2 . '/' . $file . '.' . date('ymdhis'));
+                                $this->comment($file . ':藏品已被删除图片');
+                            } else {
+                                $this->comment($file . ':有效图片');
+                            }
                         }
                     }
                 }
