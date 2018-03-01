@@ -20,6 +20,7 @@
  * @description :
  * （1）添加农具图片重命名工具；（2018/1/23）
  * （2）添加藏品图片清理工具；(2018/1/23)
+ * （3）添加管理附件工具；(2018/3/1)
  */
 
 namespace App\Console;
@@ -41,6 +42,7 @@ class Kernel extends ConsoleKernel
         Commands\GenerateWordDocument::class, //生成word文档
         //Commands\RenameFarmImageCommand::class, //农具图片重命名工具（仅本地使用）默认为注释状态
         Commands\ClearCollectionImageCommand::class,
+        Commands\ManageAttachmentCommand::class, //管理附件命令行工具
     ];
 
     /**

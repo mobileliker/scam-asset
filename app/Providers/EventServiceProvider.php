@@ -7,6 +7,12 @@
  * @date : 2017/11/30
  * @description :
  * (1)添加日志事件；（2017/11/30）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/3/1
+ * @description :
+ * （1）添加附件管理的日志记录；（2018/3/1）
  */
 
 namespace App\Providers;
@@ -49,7 +55,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\SoilSmallEvent' => [ //土壤纸盒管理的事件
             'App\Listeners\SoilSmallEventListener'
         ],
-
+        'App\Events\AttachmentEvent' => [ //附件管理
+            'App\Listeners\AttachmentEventListener'
+        ]
     ];
 
     /**

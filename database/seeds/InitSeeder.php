@@ -18,6 +18,12 @@
  * (2)添加动物管理的菜单权限；（2017/11/30）
  * (3)新增批量导入用户；（2017/12/6）
  * (4)精简代码，并完成权限控制的导入；（2017/12/14）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/3/1
+ * @description :
+ * （1）添加附件管理的权限控制；（2018/3/1）
  */
 
 use Illuminate\Database\Seeder;
@@ -182,6 +188,10 @@ class InitSeeder extends Seeder
                 'User' => [
                     'display_name' => '用户管理',
                     'resource' => '/user'
+                ],
+                'Attachment' => [
+                    'display_name' => '附件管理',
+                    'resource' => '/system/attachment'
                 ]
             )
         );
@@ -226,6 +236,17 @@ class InitSeeder extends Seeder
             ]
         ];
         $this->generateCollection('User', $menu2ps['User'], $userPC, '/api/user', $params);
+
+        //附件管理
+        $attachmentPC = PermissionCategory::firstOrCreate(['name' => 'Method-Attachment', 'display_name' => '附件管理']);
+        $params = [
+            'only' => [
+                'Index',
+                'Destroy',
+                'BatchDelete'
+            ]
+        ];
+        $this->generateCollection('Attachment', $menu2ps['Attachment'], $attachmentPC, '/api/attachment', $params);
 
         //固定资产
         $assetPC = PermissionCategory::firstOrCreate(['name' => 'Method-Asset', 'display_name' => '固定资产管理']);

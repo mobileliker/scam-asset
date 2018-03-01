@@ -25,6 +25,12 @@
  * (6)修改藏品管理部分的使用post和get方法代替delete和put方法；（2017/12/5）
  * (7)新增土壤标本的新的显示图片的功能；（2017/12/12）
  * (8)修改用户管理部分、用户设置的使用post和get方法代替delete和put方法；（2017/12/14）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/3/1
+ * @description :
+ * (1)添加附件模块的相关接口；（2018/3/1）
  */
 
 //use Illuminate\Http\Request;
@@ -260,5 +266,12 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     Route::group(['prefix' => 'alog'], function () {
         Route::get('all-module', 'AlogController@allModule');
         Route::get('', 'AlogController@index');
+    });
+
+    //附件模块
+    Route::group(['prefix' => 'attachment'], function() {
+        Route::post('batch-delete', 'AttachmentController@batchDelete'); //批量删除
+        Route::get('', 'AttachmentController@index');
+        Route::get('{id}/delete', 'AttachmentController@destroy');
     });
 });

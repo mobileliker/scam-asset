@@ -39,6 +39,7 @@ import CollectionSoilShow from '../components/collection/soil/Show'
 import CollectionAnimalIndex from '../components/collection/animal/Index'
 import CollectionAnimalCreate from '../components/collection/animal/Create'
 import CollectionAnimalShow from '../components/collection/animal/Show'
+import AttachmentIndex from '../components/attachment/Index'
 
 export default new Router({
     routes: [
@@ -182,5 +183,10 @@ export default new Router({
           name : 'CollectionAnimalShow',
           component : CollectionAnimalShow
         },
+        {
+            path : '/system/attachment',
+            name : 'AttachmentIndex',
+            component : AttachmentIndex
+        }
     ]
 })
