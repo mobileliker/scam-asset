@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * 路由服务提供者
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/2/28
+ * @description :
+ * (1)添加id必须为数字的约束；（2018/2/28）
+ */
+
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
@@ -24,7 +33,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-
+        Route::pattern('id', '[0-9]+'); //配置id必须为数字
         parent::boot();
     }
 
