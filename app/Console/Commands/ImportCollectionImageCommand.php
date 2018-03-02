@@ -19,6 +19,7 @@
  * @date : 2017/12/18
  * @description:
  * （1）添加图片标签的导入；（2017/12/18）
+ * （2）修复农具被删除依然会被查询到的错误；（2018/3/1）
  **/
 
 namespace App\Console\Commands;
@@ -123,7 +124,7 @@ class ImportCollectionImageCommand extends Command
                   continue;
                 }
 
-                $collection = DB::table(str_plural($prefix))->where('serial', '=', $serial)->first();
+                $collection = DB::table(str_plural($prefix))->where('serial', '=', $serial)->whereNull('deleted_at')->first();
                 if ($collection != null) {
                     $md5_str = md5_file($path . '/' . $file);
 
@@ -156,18 +157,18 @@ class ImportCollectionImageCommand extends Command
                           $eventClass = new \ReflectionClass($eventModelName);
                           event($eventClass->newInstance('saveImage', '172.0.0.1', $collectionImage)); //添加日记事件
 
-                          $this->comment($file . ' : 导入成功');
+                          $this->comment($file . ' : Import Success.');
                         } else {
                             rename($path . '/' . $file, $path . '/.save_error/' . $file);
-                            $this->comment($file . ' : 保存图片失败');
+                            $this->comment($file . ' : Save Image Fail.');
                         }
                     } else {
                         rename($path . '/' . $file, $path . '/.image_exist/' . $file);
-                        $this->comment($file . ' : 图片已存在');
+                        $this->comment($file . ' : Image Not Exist.');
                     }
                 } else {
                     rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
-                    $this->comment($file . ' : 序列号不存在');
+                    $this->comment($file . ' : Serial Not Exist');
                 }
             }
         }
