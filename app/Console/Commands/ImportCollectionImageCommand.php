@@ -14,12 +14,14 @@
  * （6）新增图片导入不成功的分类功能；（2017/12/12）
  *（7）新增对大写后缀和jpg格式的图片的支持；（2017/12/12）
  *
+ *
  * @version : 2.0.3
  * @author : wuzhihui
  * @date : 2017/12/18
  * @description:
  * （1）添加图片标签的导入；（2017/12/18）
  * （2）修复农具被删除依然会被查询到的错误；（2018/3/1）
+ * (3)新增对植物图片的导入支持；（2018/3/13）
  **/
 
 namespace App\Console\Commands;
@@ -108,18 +110,19 @@ class ImportCollectionImageCommand extends Command
 
                 //$this->comment(substr($serial, 0, 1));
                 //Log::info(substr($serial, 0, 1));
-                if(substr($serial, 0, 1) == 'A') {
+                if (substr($serial, 0, 1) == 'A') {
                     $prefix = 'farm';
-                }
-                else if(substr($serial, 0, 3) == 'C06'){
-                  $prefix = 'soil_small';
-                }else if(substr($serial, 0, 3) == 'C05'){
-                  $prefix = 'soil_big';
-                }else if(substr($serial, 0, 3) == 'C01'){
-                  $prefix = 'soil';
-                }else if(substr($serial, 0, 1) == 'C') {
-                  $prefix = 'rock';
-                }else {
+                } else if (substr($serial, 0, 3) == 'C06') {
+                    $prefix = 'soil_small';
+                } else if (substr($serial, 0, 3) == 'C05') {
+                    $prefix = 'soil_big';
+                } else if (substr($serial, 0, 3) == 'C01') {
+                    $prefix = 'soil';
+                } else if (substr($serial, 0, 1) == 'C') {
+                    $prefix = 'rock';
+                } else if (substr($serial, 0, 1) == 'G') {
+                    $prefix = 'plant';
+                } else {
                   rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
                   continue;
                 }
