@@ -316,9 +316,9 @@
                     price : [
                         {required : true, message: '请输入价格', trigger: 'blur' },
                     ],
-                    amount : [
-                        {required : true, message: '请输入数量', trigger: 'blur' },
-                    ]
+//                    amount : [
+//                        {required : true, message: '请输入数量', trigger: 'blur' },
+//                    ]
                 },
                 rules3 : {
                     entry : [

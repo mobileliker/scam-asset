@@ -311,7 +311,7 @@
                     from: '',
                     'last_page': '',
                     'next_page_url': '',
-                    'per_page': 10,
+                    'per_page': 15,
                     'prev_page_url': '',
                     'to': '',
                     'total': 0,

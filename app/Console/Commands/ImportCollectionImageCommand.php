@@ -22,6 +22,7 @@
  * （1）添加图片标签的导入；（2017/12/18）
  * （2）修复农具被删除依然会被查询到的错误；（2018/3/1）
  * (3)新增对植物图片的导入支持；（2018/3/13）
+ * （4）新增序列号不存在的命令行提示；（2018/3/14）
  **/
 
 namespace App\Console\Commands;
@@ -123,8 +124,9 @@ class ImportCollectionImageCommand extends Command
                 } else if (substr($serial, 0, 1) == 'G') {
                     $prefix = 'plant';
                 } else {
-                  rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
-                  continue;
+                    rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
+                    $this->comment($file . ' : Serial Not Exist.');
+                    continue;
                 }
 
                 $collection = DB::table(str_plural($prefix))->where('serial', '=', $serial)->whereNull('deleted_at')->first();
@@ -148,19 +150,19 @@ class ImportCollectionImageCommand extends Command
                         $collectionImage->collectible_id = $collection->id;
 
                         $prefixs = explode('_', $file);
-                        if($prefixs != null && count($prefixs) == 4) {
-                            $collectionImage->target = iconv("GB2312", "UTF-8", $prefixs[2]) ;
+                        if ($prefixs != null && count($prefixs) == 4) {
+                            $collectionImage->target = iconv("GB2312", "UTF-8", $prefixs[2]);
                         }
 
                         if ($collectionImage->save()) {
 
-                          //记录日志
-                          $collectionImage->collectible;
-                          $eventModelName = 'App\\Events\\' . studly_case($prefix) . 'Event';
-                          $eventClass = new \ReflectionClass($eventModelName);
-                          event($eventClass->newInstance('saveImage', '172.0.0.1', $collectionImage)); //添加日记事件
+                            //记录日志
+                            $collectionImage->collectible;
+                            $eventModelName = 'App\\Events\\' . studly_case($prefix) . 'Event';
+                            $eventClass = new \ReflectionClass($eventModelName);
+                            event($eventClass->newInstance('saveImage', '172.0.0.1', $collectionImage)); //添加日记事件
 
-                          $this->comment($file . ' : Import Success.');
+                            $this->comment($file . ' : Import Success.');
                         } else {
                             rename($path . '/' . $file, $path . '/.save_error/' . $file);
                             $this->comment($file . ' : Save Image Fail.');
