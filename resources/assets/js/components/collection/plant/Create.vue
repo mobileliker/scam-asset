@@ -123,21 +123,21 @@
                     category: {
                         options: [
                             {
-                                label: 'G01木制品',
-                                value: 'G01木制品'
+                                label: 'D01-种质资源',
+                                value: 'D01-种质资源'
                             },
                             {
-                                label: 'G02茎段',
-                                value: 'G02茎段'
+                                label: 'D02-植物腊叶标本',
+                                value: 'D02-植物腊叶标本'
                             },
                             {
-                                label: 'G03卡片标本',
-                                value: 'G03卡片标本'
+                                label: 'D03-植物其他类型标本',
+                                value: 'D03-植物其他类型标本'
                             },
                             {
-                                label: 'G04林业生产相关物品',
-                                value: 'G04林业生产相关物品'
-                            },
+                                label: 'D04-植物相关物品',
+                                value: 'D04-植物相关物品'
+                            }
                         ]
                     }
                 },

@@ -23,6 +23,7 @@
  * @date : 2017/12/21
  * @description:
  * (1)添加拍摄清单函数；（2017/12/21）
+ * （2）修改导入函数以适应新的表格；（2018/3/27）
  */
 
 namespace App\Http\Controllers\Api;
@@ -121,25 +122,26 @@ class PlantController extends Controller
 
         Excel::load($path, function ($reader) use ($user, $request) {
             $categories = array();
-            $categories[0] = 'G01木制品';
-            $categories[1] = 'G02茎段';
-            $categories[2] = 'G03卡片标本';
-            $categories[3] = 'G04林业相关物品';
+            $categories[0] = 'D01-种质资源';
+            $categories[1] = 'D02-植物腊叶标本';
+            $categories[2] = 'D03-植物其他类型标本';
+            $categories[3] = 'D04-植物相关物品';
 
             for ($i = 0; $i < 4; $i++) {
+                if($i == 1) continue;
                 $sheet = $reader->getSheet($i);
                 $sheet_array = $sheet->toArray();
                 foreach ($sheet_array as $row => $cells) {
-                    if ($row == 0 || $row == 1) continue; //忽略标题行和表头
+                    if ($row == 0) continue; //忽略表头
                     if ($cells[2] == '') continue; //编号不存在则忽略
 
-                    if ($i == 0 || $i == 3) {
+                    if ($i == 3) {
                         //$index = $cells[0];
                         $input_date = $cells[1];
                         $serial = $cells[2];
                         $name = $cells[3];
                         $type = $cells[4];
-                        //$number = $cells[5];
+                        $number = $cells[5];
                         $size = $cells[6];
                         $origin = $cells[7];
                         $source = $cells[8];
@@ -150,7 +152,7 @@ class PlantController extends Controller
                         $family = null;
                         $genus = null;
                         $latin = null;
-                    } else {
+                    } else if ($i == 0 || $i == 2) {
                         //$index = $cells[0];
                         $input_date = $cells[1];
                         $serial = $cells[2];
@@ -158,7 +160,7 @@ class PlantController extends Controller
                         $genus = $cells[4];
                         $name = $cells[5];
                         $latin = $cells[6];
-                        //$number = $cells[7];
+                        if ($i == 2) $number = $cells[7];
                         $size = $cells[8];
                         $type = $cells[9];
                         $origin = $cells[10];
@@ -185,7 +187,13 @@ class PlantController extends Controller
                         else if ($request->type == 'ignore') contiue;
 
                         $input_dates = explode('-', $input_date);
-                        $obj->input_date = '20' . $input_dates[2] . '-' . $input_dates[0] . '-' . $input_dates[1];
+                        if (count($input_dates) == 1) {
+                            $obj->input_date = $input_dates[0] . '-01-01';
+                        } else if (strlen($input_dates[0]) == 4) {
+                            $obj->input_date = $input_date;
+                        } else {
+                            $obj->input_date = '20' . $input_dates[2] . '-' . $input_dates[0] . '-' . $input_dates[1];
+                        }
 
                         $obj->serial = $prefix . $serial;
                         $obj->family = $family;
