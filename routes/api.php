@@ -31,6 +31,8 @@
  * @date : 2018/3/1
  * @description :
  * (1)添加附件模块的相关接口；（2018/3/1）
+ * （2）添加林业资源管理模块的相关接口：（2018/3/27）
+ *
  */
 
 //use Illuminate\Http\Request;
@@ -156,6 +158,30 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
             Route::get('{id}/delete', 'PlantController@destroy');
         });
         //Route::resource('plant', 'PlantController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+
+        //植物模块
+        Route::group(['prefix' => 'forestry'], function () {
+            Route::get('{id}/image', 'ForestryController@showImage');
+            Route::post('{id}/image', 'ForestryController@saveImage');
+            Route::get('{id}/relate', 'ForestryController@relate');
+            //Route::delete('{plant_id}/image/{id}', 'PlantController@deleteImage');
+            Route::get('{plant_id}/image/{id}/delete', 'ForestryController@deleteImage');
+
+            Route::post('import', 'ForestryController@import');
+            Route::post('batch-delete', 'ForestryController@batchDelete');
+
+            Route::get('', 'ForestryController@index');
+            Route::post('', 'ForestryController@store');
+            Route::get('{id}/edit', 'ForestryController@edit');
+            //Route::put('{id}', 'ForestryController@update');
+            Route::get('{id}', 'ForestryController@show');
+            //Route::delete('{id}', 'ForestryController@destroy');
+
+            Route::post('{id}/update', 'ForestryController@update');
+            Route::get('{id}/delete', 'ForestryController@destroy');
+        });
+        //Route::resource('plant', 'ForestryController', ['only' => ['index', 'store', 'edit', 'update', 'show', 'destroy']]);
 
         //土壤模块
         Route::group(['prefix' => 'soil'], function () {

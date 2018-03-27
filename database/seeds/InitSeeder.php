@@ -24,6 +24,7 @@
  * @date : 2018/3/1
  * @description :
  * （1）添加附件管理的权限控制；（2018/3/1）
+ * （2）添加林业资源管理的权限控制；（2018/3/27）
  */
 
 use Illuminate\Database\Seeder;
@@ -171,6 +172,10 @@ class InitSeeder extends Seeder
                     'display_name' => '植物管理',
                     'resource' => '/collection/plant'
                 ],
+                'Forestry' => [
+                    'display_name' => '林业资源管理',
+                    'resource' => '/collection/forestry'
+                ],
                 'Animal' => [
                     'display_name' => '动物管理',
                     'resource' => '/collection/animal',
@@ -278,6 +283,7 @@ class InitSeeder extends Seeder
             'Farm' => '农具管理',
             'Rock' => '岩石管理',
             'Plant' => '植物管理',
+            'Forestry' => '林业资源管理',
             'Animal' => '动物管理',
             'Soil' => '土壤管理',
             'SoilBig' => '土壤段面管理',
@@ -293,6 +299,9 @@ class InitSeeder extends Seeder
 
         //植物管理
         $this->generateCollection('Plant', $menu2ps['Plant'], $method1pcs['Plant'], '/api/collection/plant');
+
+        //林业资源管理
+        $this->generateCollection('Forestry', $menu2ps['Forestry'], $method1pcs['Forestry'], '/api/collection/forestry');
 
         //动物管理
         $this->generateCollection('Animal', $menu2ps['Animal'], $method1pcs['Animal'], '/api/collection/animal');

@@ -7,6 +7,12 @@
  * （1）添加农具管理的路由；（2017/7/11）
  * （2）添加岩石管理的路由；（2017/10/18）
  * （3）添加动物管理的路由；（2017/11/30）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/3/27
+ * @description :
+ * (1)添加林业资源管理的路由；（2018/3/27）
  */
 
 import Vue from 'vue'
@@ -40,6 +46,10 @@ import CollectionAnimalIndex from '../components/collection/animal/Index'
 import CollectionAnimalCreate from '../components/collection/animal/Create'
 import CollectionAnimalShow from '../components/collection/animal/Show'
 import AttachmentIndex from '../components/attachment/Index'
+import CollectionForestryIndex from '../components/collection/forestry/Index'
+import CollectionForestryCreate from '../components/collection/forestry/Create'
+import CollectionForestryShow from '../components/collection/forestry/Show'
+
 
 export default new Router({
     routes: [
@@ -187,6 +197,26 @@ export default new Router({
             path : '/system/attachment',
             name : 'AttachmentIndex',
             component : AttachmentIndex
+        },
+        {
+            path : '/collection/forestry',
+            name : 'CollectionForestryIndex',
+            component : CollectionForestryIndex
+        },
+        {
+            path : '/collection/forestry/create',
+            name : 'CollectionForestryCreate',
+            component : CollectionForestryCreate
+        },
+        {
+            path : '/collection/forestry/:id/edit',
+            name : 'CollectionForestryEdit',
+            component : CollectionForestryCreate
+        },
+        {
+            path : '/collection/forestry/:id',
+            name : 'CollectionForestryShow',
+            component : CollectionForestryShow
         }
     ]
 })

@@ -1,20 +1,20 @@
 /**
- * 植物管理首页
- * @version : 2.0.3
- * @author : wuzhihui
- * @date : 2017/12/21
- * @description:
- * （1）基本功能；
- * （2）添加拍摄清单功能；（2017/12/21）
- * （3）修改删除功能的错误；（2018/3/27）
- **/
+* 林业资源管理首页
+* 林业资源管理新建和编辑页
+* @version : 2.0.3
+* @author : wuzhihui
+* @date : 2018/3/27
+* @description :
+* （1）基本功能；（2018/3/27）
+**/
+
 <template>
     <content-component>
         <el-col :lg="24">
             <el-breadcrumb id="breadcrumb" separtor="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                 <!--<el-breadcrumb-item :to="{ path: '/collection' }"></el-breadcrumb-item>-->
-                <el-breadcrumb-item>植物管理</el-breadcrumb-item>
+                <el-breadcrumb-item>林业资源管理</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>
 
@@ -48,7 +48,7 @@
                       :on-icon-click="handleSearchIconClick"></el-input>
         </el-col>
         <el-col :lg="4" class="pull-right">
-            <router-link to="/collection/plant/create">
+            <router-link to="/collection/forestry/create">
                 <el-button type="success">添加</el-button>
             </router-link>
             <el-button type="success" @click="handleImport">导入</el-button>
@@ -64,7 +64,7 @@
                 <el-table-column prop="category" label="分类" sortable></el-table-column>
                 <el-table-column prop="name" label="名称" sortable>
                     <template scope="scope">
-                        <router-link :to="'/collection/plant/' + scope.row.id">{{scope.row.name}}</router-link>
+                        <router-link :to="'/collection/forestry/' + scope.row.id">{{scope.row.name}}</router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="serial" label="编号" sortable></el-table-column>
@@ -76,7 +76,7 @@
                     <template scope="scope">
                         <el-button type="text" size="small" @click="handleImageClick(scope.row.id)">图片管理</el-button>
                         <el-button type="text" size="small">
-                            <router-link :to="'/collection/plant/' + scope.row.id + '/edit'">编辑</router-link>
+                            <router-link :to="'/collection/forestry/' + scope.row.id + '/edit'">编辑</router-link>
                         </el-button>
                         <el-button type="text" size="small"
                                    @click="handleDeleteRow(scope.$index, scope.row.id, list.data)">删除
@@ -349,14 +349,14 @@
                     this.search.user_id.options = response.data;
                     this.load();
                 }).catch(error => {
-                    this.$message.error('获取所有用户列表失败');
-                });
+                this.$message.error('获取所有用户列表失败');
+            });
         },
-        methods : {
+        methods: {
             load() {
                 //console.log('load');
                 this.loading = true;
-                axios.get('/api/collection/plant', this.options)
+                axios.get('/api/collection/forestry', this.options)
                     .then(response => {
                         this.list = response.data;
                         this.loading = false;
@@ -398,23 +398,23 @@
             },
             //单个删除事件
             handleDeleteRow(index, id, data) {
-                this.$confirm('此操作将永久删除该植物，是否继续？', '提示', {
+                this.$confirm('此操作将永久删除该林业资源，是否继续？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    //axios.delete('/api/collection/plant/' + id)
-                    axios.get('/api/collection/plant/' + id + '/delete')
+                    //axios.delete('/api/collection/forestry/' + id)
+                    axios.get('/api/collection/forestry/' + id + '/delete')
                         .then(response => {
                             this.$message({
-                                type : 'success',
-                                message : '删除成功'
+                                type: 'success',
+                                message: '删除成功'
                             });
                             data.splice(index, 1);
                         }).catch(error => {
-                        if(error.response.status == 404){
-                            this.$message.error('欲删除的植物不存在');
-                        }else{
+                        if (error.response.status == 404) {
+                            this.$message.error('欲删除的林业资源不存在');
+                        } else {
                             this.$message.error('删除失败');
                         }
                     });
@@ -434,7 +434,7 @@
                     ids.push(this.batch.farm[i].id);
                 }
                 this.batch.params.ids = ids;
-                axios.post('/api/collection/plant/batch-delete', this.batch.params)
+                axios.post('/api/collection/forestry/batch-delete', this.batch.params)
                     .then(response => {
                         this.load();
                     }).catch(error => {
@@ -463,7 +463,7 @@
             handleImportSave() {
                 //console.log('handleImportSave');
                 this.fullscreenLoading = true;
-                axios.post('/api/collection/plant/import', this.dialog.import.model)
+                axios.post('/api/collection/forestry/import', this.dialog.import.model)
                     .then((response) => {
                         this.$message('导入成功');
                         this.fullscreenLoading = false;
@@ -487,14 +487,14 @@
             },
 
             handleImageClick(id) {
-                this.dialog.image.prefix = 'api/collection/plant/' + id;
+                this.dialog.image.prefix = 'api/collection/forestry/' + id;
 
                 this.dialog.image.visible = true;
             },
 
             //拍摄清单
             handleCaremaList() {
-                window.open('/api/plant/camera-list', '_blank');
+                window.open('/api/forestry/camera-list', '_blank');
             }
         }
     }

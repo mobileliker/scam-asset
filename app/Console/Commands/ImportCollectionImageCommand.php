@@ -23,6 +23,7 @@
  * （2）修复农具被删除依然会被查询到的错误；（2018/3/1）
  * (3)新增对植物图片的导入支持；（2018/3/13）
  * （4）新增序列号不存在的命令行提示；（2018/3/14）
+ * （5）修改图片已被导入过后的提示语；（2018/3/19）
  **/
 
 namespace App\Console\Commands;
@@ -169,7 +170,7 @@ class ImportCollectionImageCommand extends Command
                         }
                     } else {
                         rename($path . '/' . $file, $path . '/.image_exist/' . $file);
-                        $this->comment($file . ' : Image Not Exist.');
+                        $this->comment($file . ' : Image Exist.');
                     }
                 } else {
                     rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);

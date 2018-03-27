@@ -13,6 +13,7 @@
  * @date : 2018/3/1
  * @description :
  * （1）添加附件管理的日志记录；（2018/3/1）
+ * （2）添加植物资源管理的日志记录；（2018/3/27）
  */
 
 namespace App\Providers;
@@ -43,6 +44,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PlantEvent' => [ //植物管理的事件
             'App\Listeners\PlantEventListener'
         ],
+        'App\Events\ForestryEvent' => [ //林业资源管理的事件
+            'App\Listeners\ForestryEventListener'
+        ],
         'App\Events\AnimalEvent' => [ //动物管理的事件
             'App\Listeners\AnimalEventListener'
         ],
@@ -57,7 +61,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\AttachmentEvent' => [ //附件管理
             'App\Listeners\AttachmentEventListener'
-        ]
+        ],
+        'App\Events\AssetEvent' => [ //
+            'App\Events\AssetEventListener'
+        ],
     ];
 
     /**
