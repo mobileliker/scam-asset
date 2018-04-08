@@ -7,6 +7,7 @@
  * @date : 2018/3/27
  * @description:
  * (1)基本功能；（2018/3/27）
+ * （2）修改拍摄清单的Xls路径；（2018/4/8）
  */
 
 namespace App\Http\Controllers\Api;
@@ -447,7 +448,7 @@ class ForestryController extends Controller
     {
         $post_time = Date('YmdHis');
         $filePath = resource_path('assets/template/camera-list.xls');
-        $distPath = storage_path('excel/exports/camera-list/Forestry/' . $post_time . '.xls');
+        $distPath = storage_path('excel/exports/camera-list/forestry/' . $post_time . '.xls');
         copy($filePath, $distPath);
 
         Excel::load($distPath, function ($reader) {
