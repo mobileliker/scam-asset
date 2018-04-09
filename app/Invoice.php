@@ -5,6 +5,12 @@
  * @author: wuzhihui
  * @date: 2017/7/3
  * @description:
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/4/9
+ * @description :
+ * (1)修复保存功能的错误；（2018/4/9）
  * 
  */
 
@@ -171,6 +177,6 @@ class Invoice extends Model
             $sheet->setCellValue('I8', $sum);
             $sheet->setCellValue('D10', $entry);
 
-        })->store('xls');
+        })->store('xls', storage_path('excel/exports'));
     }
 }
