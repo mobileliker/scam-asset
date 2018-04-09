@@ -211,6 +211,7 @@ return [
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class, //角色权限管理
         Barryvdh\Debugbar\ServiceProvider::class, //Laravel-Debugbar
+        Chumper\Zipper\ZipperServiceProvider::class, //Zipper
 
         /*
          * Mannal Service Providers
@@ -271,6 +272,7 @@ return [
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class, //角色权限
         'Debugbar' => Barryvdh\Debugbar\Facade::class, //Laravel Debugbar
+        'Zipper' => Chumper\Zipper\Zipper::class, //Zipper
 
         //mannal facecade
         'IQuery' => App\Facades\IQueryClass::class, //IQuery 别名

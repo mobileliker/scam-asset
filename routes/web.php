@@ -81,6 +81,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
     Route::group(['prefix' => 'asset'], function () {
         Route::get('export', 'AssetController@batchExport'); //批量导出所有固定资产
         Route::get('{id}/export', 'AssetController@export'); //导出单据
+        Route::get('/print', 'AssetController@batchPrint'); //到处打印单
     });
 
     //农具管理

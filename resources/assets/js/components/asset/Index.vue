@@ -27,8 +27,10 @@
             <el-input placeholder="请输入名称进行查询" icon="search" v-model="search.query_text"
                       :on-icon-click="handleIconClick"></el-input>
         </el-col>
-        <el-col :lg="4" class="pull-right">
+        <el-col :lg="5" class="pull-right">
             <el-button type="success" @click="exportAsset">导出</el-button>
+            <el-button type="success" @click="handleImport">导入</el-button>
+            <el-button type="success" @click="exportPrint">报增单</el-button>
             <el-button type="success">
                 <router-link to="/asset/create">添加</router-link>
             </el-button>
@@ -71,6 +73,34 @@
                     :total="list.total" class="pull-right">
             </el-pagination>
         </el-col>
+
+
+        <el-dialog title="导入数据" v-model="dialog.import.visible" size="small">
+            <error-component v-if="Object.getOwnPropertyNames(dialog.import.errors).length > 1"
+                             :berrors="dialog.import.errors"></error-component>
+            <el-form v-model="dialog.import.model" ref="ImportModel" :rules="dialog.import.rules">
+                <span>导入方式：</span>
+                <el-radio class="radio" v-model="dialog.import.model.type" label="cover">覆盖</el-radio>
+                <el-radio class="radio" v-model="dialog.import.model.type" label="ignore">忽略</el-radio>
+                <el-upload
+                        class="upload-demo"
+                        :headers="token"
+                        drag
+                        accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        action="/api/file/update"
+                        :on-success="handleSuccess">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件，且不超过500kb</div>
+                </el-upload>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialog.import.visible=false">取消</el-button>
+                <el-button type="primary" @click="handleImportSave" element-loading-text="导入中..."
+                           v-loading.fullscreen.lock="fullscreenLoading">导入
+                </el-button>
+            </div>
+        </el-dialog>
     </content-component>
 </template>
 
@@ -100,7 +130,9 @@
     export default {
         data() {
             return {
+                token: {'X-CSRF-TOKEN': window.Laravel.csrfToken},
                 loading: true,
+                fullscreenLoading: false,
                 search: {
                     type: {
                         value: '',
@@ -200,6 +232,17 @@
                         ids: []
                     }
                 },
+                dialog: {
+                    import: {
+                        visible: false,
+                        errors: {},
+                        model: {
+                            file: [],
+                            type: 'cover',
+                            version: '',
+                        }
+                    }
+                }
             }
         },
         computed: {
@@ -352,8 +395,45 @@
 //                          response.data.pipe(fs.createWriteStream('1.xls'))
 //                      });
             },
+
+            exportPrint() {
+                window.open("/api/asset/print", "_blank");
+            },
+
             exportInvoice(id) {
                 window.open("/api/asset/" + id + "/export", "_blank");
+            },
+
+            //处理附件上传结果
+            handleSuccess(response, file, fileList) {
+                //console.log(response);
+                this.dialog.import.model.file = response.url;
+            },
+
+            //导入数据
+            handleImport() {
+                //console.log('handleImport');
+                this.dialog.import.visible = true;
+            },
+
+            handleImportSave() {
+                //console.log('handleImportSave');
+                this.fullscreenLoading = true;
+                axios.post('/api/asset/import', this.dialog.import.model)
+                    .then(response => {
+                        //console.log(response.data);
+                        this.$message('导入成功');
+                        this.fullscreenLoading = false;
+                        this.dialog.import.visible = false;
+                        this.load();
+                    }).catch(error => {
+                    if (error.response.status == 422) {
+                        this.dialog.import.errors = error.response.data;
+                    } else {
+                        this.$message.error('导入失败');
+                    }
+                    this.fullscreenLoading = false;
+                });
             }
         }
     }

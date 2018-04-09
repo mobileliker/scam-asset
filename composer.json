@@ -15,7 +15,8 @@
         "phpoffice/phpword": "v0.13.*",
         "predis/predis": "^1.1",
         "simplesoftwareio/simple-qrcode": "~1",
-        "zizaco/entrust": "5.2.x-dev"
+        "zizaco/entrust": "5.2.x-dev",
+        "chumper/zipper": "1.0.x"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -72,7 +72,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
 
     //资产管理模块
     Route::group(['prefix' => 'asset'], function () {
-        //Route::put('import', 'AssetController@import'); //导入固定资产的数据
+        Route::post('import', 'AssetController@import'); //导入固定资产的数据
         //Route::get('generate', 'AssetController@generate'); //批量导出所有的单据
         //Route::get('{id}/qrcode', 'AssetController@qrcode'); //生成二维码
         //Route::get('export', 'AssetController@batchExport'); //批量导出所有固定资产

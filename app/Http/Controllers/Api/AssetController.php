@@ -14,6 +14,13 @@
  * @date: 2017/12/14
  * @description:
  * （1）更改权限控制；（2017/12/14）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/4/9
+ * @description :
+ * （1）新增导入功能；（2018/4/9）
+ * (2)新增报增单导出功能；（2018/4/9）
  */
 
 namespace App\Http\Controllers\Api;
@@ -27,6 +34,7 @@ use Auth, Redirect;
 use Excel;
 use IQuery, IQrcode;
 use App\Asset, App\Alog, App\Invoice, App\User;
+use Log;
 
 class AssetController extends Controller
 {
@@ -62,60 +70,59 @@ class AssetController extends Controller
         $assets = Asset::whereRaw('1 = 1');
 
         //文本查询
-        $query_text=$request->input('query_text');
-        if($query_text != null && $request != ''){
-            $texts=  explode(' ', $query_text);
-            foreach($texts as $text)
-            {
-                $assets = $assets->where('assets.name', 'like', '%'.$text.'%');
+        $query_text = $request->input('query_text');
+        if ($query_text != null && $request != '') {
+            $texts = explode(' ', $query_text);
+            foreach ($texts as $text) {
+                $assets = $assets->where('assets.name', 'like', '%' . $text . '%');
             }
 
         }
 
-        $post_date_start=$request->input('post_date_start');
-        if($post_date_start != null && $post_date_start != ''){
+        $post_date_start = $request->input('post_date_start');
+        if ($post_date_start != null && $post_date_start != '') {
             $assets = $assets->where('post_date', '>=', $post_date_start);
         }
 
         $post_date_end = $request->input('post_date_end');
-        if($post_date_end != null && $post_date_end != ''){
+        if ($post_date_end != null && $post_date_end != '') {
             $assets = $assets->where('post_date', '<=', $post_date_end);
         }
 
         $type = $request->input('type');
-        if($type != null && $type != ''){
+        if ($type != null && $type != '') {
             $assets = $assets->where('assets.type', '=', $type);
         }
 
         IQuery::ofOrder($assets, $request);
 
-        $assets = $assets->join('users as consumers', function($join) {
+        $assets = $assets->join('users as consumers', function ($join) {
             $join->on('consumers.id', '=', 'assets.consumer_id');
         });
-        $assets = $assets->join('users as handlers', function($join) {
+        $assets = $assets->join('users as handlers', function ($join) {
             $join->on('handlers.id', '=', 'assets.handler_id');
         });
-        $assets = $assets->join('categories', function($join) {
+        $assets = $assets->join('categories', function ($join) {
             $join->on('categories.value', '=', 'assets.category_number')->where('categories.serial', 'like', 'category%');
         });
         $assets->select('assets.*', 'consumers.name as consumer_name', 'handlers.name as handler_name', 'categories.name as category_name');
 
-        if($request->paginate != null && $request->paginate != '')
+        if ($request->paginate != null && $request->paginate != '')
             $assets = $assets->paginate($request->paginate);
         else
             $assets = $assets->paginate(10);
 
-        if($request->ajax()){
-            foreach($assets as $asset){
+        if ($request->ajax()) {
+            foreach ($assets as $asset) {
                 $asset->type = Asset::TYPE[$asset->type];
             }
             return $assets;
         }
 
-        if($assets == null || count($assets) == 0){
-            return view(config('app.theme').'.admin.asset.index')->withAssets($assets)->with('status', '查询结果为空');
-        }else{
-            return view(config('app.theme').'.admin.asset.index')->withAssets($assets);
+        if ($assets == null || count($assets) == 0) {
+            return view(config('app.theme') . '.admin.asset.index')->withAssets($assets)->with('status', '查询结果为空');
+        } else {
+            return view(config('app.theme') . '.admin.asset.index')->withAssets($assets);
         }
     }
 
@@ -134,7 +141,7 @@ class AssetController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -145,7 +152,7 @@ class AssetController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
 //    public function show($id)
@@ -156,23 +163,23 @@ class AssetController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, $id)
     {
         $asset = Asset::find($id);
 
-        if($request->ajax()) return $asset;
+        if ($request->ajax()) return $asset;
 
-        return view(config('app.theme').'.admin.asset.edit')->withAsset($asset);
+        return view(config('app.theme') . '.admin.asset.edit')->withAsset($asset);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -183,7 +190,7 @@ class AssetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
@@ -196,10 +203,10 @@ class AssetController extends Controller
         //    return Redirect::back()->withErrors();
         //}
         $asset = Asset::findOrFail($id);
-        if($asset->delete()){
+        if ($asset->delete()) {
             //Alog::log('Asset', Alog::OPERATE_DELETE, $asset->name, $request->getClientIp());
             return $asset;
-        }else{
+        } else {
             abort(500);
         }
     }
@@ -210,7 +217,7 @@ class AssetController extends Controller
         $asset = Asset::find($id);
 
         $c_invoice = Invoice::where('number', '>', $asset->type * 10000000)->where('number', '<=', $asset->type * 10000000 + 9999999)->orderBy('number', 'desc')->first();
-        if($c_invoice != null && count($c_invoice) > 0 ) $number = $c_invoice->number + 1;
+        if ($c_invoice != null && count($c_invoice) > 0) $number = $c_invoice->number + 1;
         else $number = $asset->type * 10000000 + 1;
 
         $invoice = Invoice::generate($asset, $number);
@@ -293,9 +300,9 @@ class AssetController extends Controller
         //return "admin.asset.batch_export";
 
 
-        Excel::create('固定资产', function($excel) {
+        Excel::create('固定资产', function ($excel) {
 
-            $excel->sheet('固定资产', function($sheet){
+            $excel->sheet('固定资产', function ($sheet) {
                 //$assets = Asset::all()->toArray();
                 //$sheet->fromArray($assets);
                 $assets = Asset::all();
@@ -325,7 +332,7 @@ class AssetController extends Controller
                 ];
                 $sheet->appendRow($header);
 
-                foreach($assets as $key=>$asset){
+                foreach ($assets as $key => $asset) {
                     $data = [
                         $key + 1,
                         $asset->post_date,
@@ -430,9 +437,9 @@ class AssetController extends Controller
         $handler_id = $request->input('handler_id');
         $memo = $request->input('memo');
 
-        if(-1 == $id){
+        if (-1 == $id) {
             $asset = new Asset;
-        }else{
+        } else {
             $asset = Asset::find($id);
         }
 
@@ -473,7 +480,7 @@ class AssetController extends Controller
         $asset->user_id = Auth::user()->id;
         $asset->memo = $memo;
 
-        if($asset->save()){
+        if ($asset->save()) {
 
             //$link = url('s?c='.$asset->serial);
             //IQrcode::generate2($link, $asset->serial);
@@ -484,11 +491,141 @@ class AssetController extends Controller
 
             return $asset;
             //return Redirect::to('admin/asset')->with('status', '保存成功');
-        }else{
+        } else {
             abort(500);
             //return Redirect::back()->withInput()->withErrors();
         }
+    }
 
+    /**
+     * 批量导入
+     * @param Request $request
+     */
+    public function import(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required',
+            'type' => 'required|in:ignore,cover',
+        ]);
 
+        $user = Auth::user();
+
+        $path = $request->file;
+
+        Excel::load($path, function ($reader) use ($user, $request) {
+            $sheet = $reader->getSheet(0);
+            $sheet_array = $sheet->toArray();
+            foreach ($sheet_array as $row => $cells) {
+                if ($row == 0 || $row == 1) continue; //忽略标题，共2行
+
+                $index = $cells[0];
+                $post_date = $cells[1];
+                $type_name = $cells[2];
+                $name = $cells[3];
+                $serial = $cells[4];
+                $course = $cells[5];
+                $model = $cells[6];
+                $size = $cells[7];
+                $consumer_company = $cells[8];
+                $factory = $cells[9];
+                $provider = $cells[10];
+                $country = $cells[11];
+                $storage_location = $cells[12];
+                $application = $cells[13];
+                $category_name = $cells[14];
+                $invoice = $cells[15];
+                $purchase_number = $cells[16];
+                $purchase_date = $cells[17];
+                $card = $cells[18];
+                $price = $cells[19];
+                $amount = $cells[20];
+                $sum = $cells[21];
+                $consumer_name = $cells[22];
+                $entry = $cells[23];
+                $handler_name = $cells[24];
+
+                $asset = Asset::where('serial', '=', $serial)->first();
+                if($asset == null) {
+                    $asset = new Asset;
+                } else if($request->type == 'ignore') {
+                    continue;
+                }
+
+                $asset->post_date = $post_date;
+
+                $asset->type = 1;
+                foreach(Asset::TYPE as $key=>$type){
+                    if($type_name == $type) $asset->type = $key;
+                }
+
+                $asset->name = $name;
+                $asset->serial = $serial;
+                $asset->course = $course;
+                $asset->model = $model;
+                $asset->size = $size;
+                $asset->consumer_company = $consumer_company;
+                $asset->factory = $factory;
+                $asset->provider = $provider;
+                $asset->country = $country;
+                $asset->storage_location = $storage_location;
+                $asset->application = $application;
+
+                $category = \App\Category::where('serial', 'like', 'category-%')->where('name', 'like', $category_name)->first();
+                if($category != null) {
+                    $asset->category_number = $category->value;
+                } else {
+                    $asset->category_number = 4020000;
+                }
+
+                $asset->invoice = $invoice;
+                $asset->purchase_number = $purchase_number;
+                $asset->purchase_date = $purchase_date;
+                $asset->card = $card;
+                $asset->price = $price;
+                $asset->amount = $amount;
+                $asset->sum = $sum;
+
+                $consumer = \App\User::where('name', '=', $consumer_name)->first();
+                if($consumer != null) {
+                    $asset->consumer_id = $consumer->id;
+                }else {
+                    $asset->consumer_id = $user->id;
+                }
+
+                $asset->entry = $entry;
+
+                $handler = \App\User::where('name', '=', $handler_name)->first();
+                if($handler != null) {
+                    $asset->handler_id = $handler->id;
+                }else {
+                    $asset->handler_id = $user->id;
+                }
+
+                $asset->user_id = $user->id;
+
+                $asset->save();
+            }
+        });
+    }
+
+    public function batchPrint(Request $request)
+    {
+        $assets = Asset::all();
+
+        foreach($assets as $asset){
+            $c_invoice = Invoice::where('number', '>', $asset->type * 10000000)->where('number', '<=', $asset->type * 10000000 + 9999999)->orderBy('number', 'desc')->first();
+            if ($c_invoice != null && count($c_invoice) > 0) $number = $c_invoice->number + 1;
+            else $number = $asset->type * 10000000 + 1;
+
+            $invoice = Invoice::generate($asset, $number);
+
+            $invoice->store();
+        }
+
+        $files = glob(storage_path('excel/exports/*.xls'));
+        $path = storage_path('excel/exports/print.zip');
+        $zipper = new \Chumper\Zipper\Zipper;
+        $zipper->make($path)->add($files)->close();
+        return response()->download($path);
     }
 }
