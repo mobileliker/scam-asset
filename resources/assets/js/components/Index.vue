@@ -87,6 +87,7 @@
                 <el-table-column prop="farm" label="农具"></el-table-column>
                 <el-table-column prop="rock" label="岩石"></el-table-column>
                 <el-table-column prop="plant" label="植物"></el-table-column>
+                <el-table-column prop="forestry" label="林业"></el-table-column>
                 <el-table-column prop="animal" label="动物"></el-table-column>
                 <el-table-column prop="soilBig" label="土壤段面"></el-table-column>
                 <el-table-column prop="soilSmall" label="土壤纸盒"></el-table-column>
@@ -123,19 +124,32 @@
                   <p>本年图片新增数量：{{total.rock.image_year_add}}</p>
               </el-card>
           </el-col>
-          <el-col :lg="4" class="box-card">
-              <el-card>
-                  <div slot="header" class="clearfix">
-                      <h3>植物</h3>
-                  </div>
-                  <p>总数量：{{total.plant.number}}</p>
-                  <p>图片总数量：{{total.plant.image_number}}</p>
-                  <p>本月新增数量：{{total.plant.month_add}}</p>
-                  <p>本年新增数量：{{total.plant.year_add}}</p>
-                  <p>本月图片新增数量：{{total.plant.image_month_add}}</p>
-                  <p>本年图片新增数量：{{total.plant.image_year_add}}</p>
-              </el-card>
-          </el-col>
+            <el-col :lg="4" class="box-card">
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <h3>林业资源</h3>
+                    </div>
+                    <p>总数量：{{total.forestry.number}}</p>
+                    <p>图片总数量：{{total.forestry.image_number}}</p>
+                    <p>本月新增数量：{{total.forestry.month_add}}</p>
+                    <p>本年新增数量：{{total.forestry.year_add}}</p>
+                    <p>本月图片新增数量：{{total.forestry.image_month_add}}</p>
+                    <p>本年图片新增数量：{{total.forestry.image_year_add}}</p>
+                </el-card>
+            </el-col>
+            <el-col :lg="4" class="box-card">
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <h3>植物资源</h3>
+                    </div>
+                    <p>总数量：{{total.plant.number}}</p>
+                    <p>图片总数量：{{total.plant.image_number}}</p>
+                    <p>本月新增数量：{{total.plant.month_add}}</p>
+                    <p>本年新增数量：{{total.plant.year_add}}</p>
+                    <p>本月图片新增数量：{{total.plant.image_month_add}}</p>
+                    <p>本年图片新增数量：{{total.plant.image_year_add}}</p>
+                </el-card>
+            </el-col>
           <el-col :lg="4" class="box-card">
               <el-card>
                   <div slot="header" class="clearfix">

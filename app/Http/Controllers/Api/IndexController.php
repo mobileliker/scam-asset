@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * 首页控制器
  * @version 2.0
  * @author: wuzhihui
  * @date: 2017/7/3
@@ -23,6 +24,7 @@
  * @description :
  * (1)新增首页的藏品入库统计功能；（2018/1/11）
  * (2)新增首页的固定资产入库统计功能；(2018/1/23)
+ * （3）新增首页的林业资源和植物植物的统计功能；（2018/4/9）
  */
 
 namespace App\Http\Controllers\Api;
@@ -78,6 +80,7 @@ class IndexController extends Controller
         $prefixs[] = 'animal';
         $prefixs[] = 'soilBig';
         $prefixs[] = 'soilSmall';
+        $prefixs[] = 'forestry';
 
         $years = array();
         $years[] = 2015;
