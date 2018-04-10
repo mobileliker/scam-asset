@@ -11,6 +11,13 @@
  * (3)格式化代码：（2017/12/1）
  * (4)新增权限管理的内容；（2017/12/14）
  * （5）更改权限控制；（2017/12/14）
+ *
+ * @version : 2.0.3
+ * @author : wuzhihui
+ * @date : 2018/4/10
+ * @description :
+ * （1）修改了导入功能；（2018/4/10）
+ * （2）新增了门属性；（2018/4/10）
  */
 
 namespace App\Http\Controllers\Api;
@@ -61,6 +68,7 @@ class AnimalController extends Controller
             'number' => 'nullable|integer|min:1',
             'size' => 'nullable|string|max:255',
 
+            'phylum' => 'nullable|string|max:255',
             'clazz' => 'nullable|string|max:255',
             'order' => 'nullable|string|max:255',
             'family' => 'nullable|string|max:255',
@@ -88,7 +96,7 @@ class AnimalController extends Controller
             $obj = Animal::findOrFail($id);
         }
 
-        $obj->setRawAttributes($request->only(['serial', 'category', 'input_date', 'name', 'storage', 'size', 'number', 'clazz', 'order', 'family', 'genus', 'latin', 'level_1989', 'level_2015', 'level_CITES', 'description', 'range', 'habitat', 'batch', 'source', 'memo', 'keeper_id', 'asset_id']));
+        $obj->setRawAttributes($request->only(['serial', 'category', 'input_date', 'name', 'storage', 'size', 'number', 'phylum', 'clazz', 'order', 'family', 'genus', 'latin', 'level_1989', 'level_2015', 'level_CITES', 'description', 'range', 'habitat', 'batch', 'source', 'memo', 'keeper_id', 'asset_id']));
         $obj->user_id = Auth::id();
         if ($id != -1) $obj->id = $id;
 
@@ -120,30 +128,39 @@ class AnimalController extends Controller
             $sheet = $reader->getSheet(0);
             $sheet_array = $sheet->toArray();
             foreach ($sheet_array as $row => $cells) {
-                if ($row == 0 || $row == 1) continue; //忽略标题行和表头
-                if ($cells[3] == '') continue; //编号不存在则忽略
+                if ($row == 0) continue; //忽略标题行和表头
+                if ($cells[5] == '') continue; //编号不存在则忽略
 
                 $index = $cells[0];
-                $input_date = $cells[1];
-                $name = $cells[2];
-                $serial = $cells[3];
-                $category = $cells[4];
-                $size = $cells[5];
-                $storage = $cells[6];
-                $clazz = $cells[7];
-                $order = $cells[8];
-                $family = $cells[9];
-                $genus = $cells[10];
-                $latin = $cells[11];
-                $level_1989 = $cells[12];
-                $level_2015 = $cells[13];
-                $level_CITES = $cells[14];
-                $description = $cells[15];
+                $batch = $cells[1];
+                $batchIndex = $cells[2];
+                $input_date = $cells[3];
+                $name = $cells[4];
+                $serial = $cells[5];
+                $latin = $cells[6];
+                $phylum = $cells[7];
+                $clazz = $cells[8];
+                $order = $cells[9];
+                $family = $cells[10];
+                $genus = $cells[11];
+                $noname1 = $cells[12];
+                $noname2 = $cells[13];
+                $level_1989 = $cells[14];
+                //$level_2015 = $cells[X]; //暂时去除了
+                $level_CITES = $cells[15];
                 $range = $cells[16];
                 $habitat = $cells[17];
-                $batch = $cells[18];
-                $source = $cells[19];
-                $memo = $cells[20];
+                $description = $cells[18];
+                $size_length = $cells[19];
+                $size_width = $cells[20];
+                $size_height = $cells[21];
+                $size = $size_length . ' * ' . $size_width . ' * ' . $size_height;
+
+                $category = $cells[25];
+                $storage = $cells[28];
+
+                $source = $cells[36];
+                $memo = $cells[37];
 
                 $obj = Animal::where('serial', '=', $serial)->first();
                 if ($obj == null) {
@@ -156,13 +173,14 @@ class AnimalController extends Controller
                 $obj->name = $name;
                 $obj->storage = $storage;
                 $obj->size = $size;
+                $obj->phylum = $phylum;
                 $obj->clazz = $clazz;
                 $obj->order = $order;
                 $obj->family = $family;
                 $obj->genus = $genus;
                 $obj->latin = $latin;
                 $obj->level_1989 = $level_1989;
-                $obj->level_2015 = $level_2015;
+                //$obj->level_2015 = $level_2015;
                 $obj->level_CITES = $level_CITES;
                 $obj->description = $description;
                 $obj->range = $range;

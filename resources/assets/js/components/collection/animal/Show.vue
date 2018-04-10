@@ -18,14 +18,15 @@
                         <p>位置：{{info.storage}}</p>
                         <p>数量：{{info.number}}</p>
                         <p>编号：{{info.serial}}</p>
+                        <p>门：{{info.phylum}}</p>
                         <p>纲：{{info.clazz}}</p>
                         <p>目：{{info.order}}</p>
                         <p>科：{{info.family}}</p>
                         <p>属：{{info.genus}}</p>
-                        <p>拉丁名：{{info.latin}}</p>
                         <p>描述：{{info.description}}</p>
                     </el-col>
                     <el-col :lg="12" class="info-item">
+                        <p>拉丁名：{{info.latin}}</p>
                         <p>尺寸：{{info.size}}</p>
                         <p>保护等级（1989）：{{info.level_1989}}</p>
                         <p>保护等级（2015）：{{info.level_2015}}</p>

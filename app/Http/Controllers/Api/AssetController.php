@@ -20,7 +20,7 @@
  * @date : 2018/4/9
  * @description :
  * （1）新增导入功能；（2018/4/9）
- * (2)新增报增单导出功能；（2018/4/9）
+ * （2）新增报增单导出功能；（2018/4/9）
  */
 
 namespace App\Http\Controllers\Api;
@@ -50,6 +50,8 @@ class AssetController extends Controller
         $this->middleware('ability:Asset|Method-Asset-Export,true')->only('export');
         $this->middleware('ability:Asset|Method-Asset-BatchExport,true')->only('batchExport');
         $this->middleware('ability:Asset|Method-Asset-BatchDelete,true')->only('batchDelete');
+        $this->middleware('ability:Asset|Method-Asset-Import,true')->only('import');
+        $this->middleware('ability:Asset|Method-Asset-BatchPrint,true')->only('batchPrint');
     }
 
     /**
@@ -518,7 +520,7 @@ class AssetController extends Controller
             foreach ($sheet_array as $row => $cells) {
                 if ($row == 0 || $row == 1) continue; //忽略标题，共2行
 
-                $index = $cells[0];
+                //$index = $cells[0];
                 $post_date = $cells[1];
                 $type_name = $cells[2];
                 $name = $cells[3];

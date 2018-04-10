@@ -273,6 +273,14 @@ class InitSeeder extends Seeder
                     'display_name' => '批量导出',
                     'resource' => '/export',
                 ],
+                'Import' => [
+                    'display_name' => '导入',
+                    'resource' => '/import',
+                ],
+                'BatchPrint' => [
+                    'display_name' => '报增单',
+                    'resource' => '/print',
+                ],
             ]
         ];
         $this->generateCollection('Asset', $menu2ps['Asset'], $assetPC, '/api/asset', $params);

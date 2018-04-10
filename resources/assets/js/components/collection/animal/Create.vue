@@ -36,6 +36,9 @@
                             <el-form-item label="编号" prop="serial">
                                 <el-input v-model="animal.serial" placeholder="编号"></el-input>
                             </el-form-item>
+                            <el-form-item label="门" prop="clazz">
+                                <el-input v-model="animal.phylum" placeholder="门"></el-input>
+                            </el-form-item>
                             <el-form-item label="纲" prop="clazz">
                                 <el-input v-model="animal.clazz" placeholder="纲"></el-input>
                             </el-form-item>
@@ -48,24 +51,24 @@
                             <el-form-item label="属" prop="genus">
                                 <el-input v-model="animal.genus" placeholder="属"></el-input>
                             </el-form-item>
-                            <el-form-item label="拉丁名" prop="latin">
-                                <el-input v-model="animal.latin" placeholder="拉丁名"></el-input>
-                            </el-form-item>
                             <el-form-item label="描述" prop="description">
                                 <el-input type="textarea" :rows="10" v-model="animal.description"
                                           placeholder="描述"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :lg="12">
+                            <el-form-item label="拉丁名" prop="latin">
+                                <el-input v-model="animal.latin" placeholder="拉丁名"></el-input>
+                            </el-form-item>
                             <el-form-item label="尺寸" prop="size">
                                 <el-input v-model="animal.size" placeholder="尺寸"></el-input>
                             </el-form-item>
                             <el-form-item label="保护等级（1989）" prop="level_1989">
                                 <el-input v-model="animal.level_1989" placeholder="保护等级（1989）"></el-input>
                             </el-form-item>
-                            <el-form-item label="保护等级（2015）" prop="level_2015">
-                                <el-input v-model="animal.level_2015" placeholder="保护等级（2015）"></el-input>
-                            </el-form-item>
+                            <!--<el-form-item label="保护等级（2015）" prop="level_2015">-->
+                                <!--<el-input v-model="animal.level_2015" placeholder="保护等级（2015）"></el-input>-->
+                            <!--</el-form-item>-->
                             <el-form-item label="保护等级（CITES）" prop="level_1989">
                                 <el-input v-model="animal.level_CITES" placeholder="保护等级（CITES）"></el-input>
                             </el-form-item>
@@ -167,6 +170,7 @@
                     size: '',
                     number: 1,
                     serial : '',
+                    phylum : '',
                     clazz : '',
                     order : '',
                     family: '',
@@ -174,7 +178,7 @@
                     latin: '',
 
                     level_1989 : '',
-                    level_2015 : '',
+                    //level_2015 : '',
                     level_CITES : '',
 
                     description: '',
@@ -203,6 +207,9 @@
                         {required : true, message : '请输入编号', trigger : 'blur'},
                         {max: 255, message: '编号不能超过255个字', trigger: 'blur'}
                     ],
+                    phylum : [
+                        {max: 255, message: '界不能超过255个字', trigger: 'blur'}
+                    ],
                     clazz : [
                         {max: 255, message: '纲不能超过255个字', trigger: 'blur'}
                     ],
@@ -221,9 +228,9 @@
                     level_1989 : [
                         {max: 255, message: '保护等级（1989）不能超过255个字', trigger: 'blur'}
                     ],
-                    level_2015 : [
-                        {max: 255, message: '保护等级（2015）不能超过255个字', trigger: 'blur'}
-                    ],
+//                    level_2015 : [
+//                        {max: 255, message: '保护等级（2015）不能超过255个字', trigger: 'blur'}
+//                    ],
                     level_CITES : [
                         {max: 255, message: '保护等级（CITES）不能超过255个字', trigger: 'blur'}
                     ],
