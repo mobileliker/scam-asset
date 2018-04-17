@@ -21,9 +21,10 @@
  * @description:
  * （1）添加图片标签的导入；（2017/12/18）
  * （2）修复农具被删除依然会被查询到的错误；（2018/3/1）
- * (3)新增对植物图片的导入支持；（2018/3/13）
+ * （3）新增对植物图片的导入支持；（2018/3/13）
  * （4）新增序列号不存在的命令行提示；（2018/3/14）
  * （5）修改图片已被导入过后的提示语；（2018/3/19）
+ * （6）新增对动物图片导入的支持；（2018/4/17）
  **/
 
 namespace App\Console\Commands;
@@ -124,6 +125,8 @@ class ImportCollectionImageCommand extends Command
                     $prefix = 'rock';
                 } else if (substr($serial, 0, 1) == 'G') {
                     $prefix = 'plant';
+                } else if(substr($serial, 0, 1) == 'E') {
+                    $prefix = 'animal';
                 } else {
                     rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
                     $this->comment($file . ' : Serial Not Exist.');
