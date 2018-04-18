@@ -24,6 +24,7 @@
  * @description:
  * (1)添加拍摄清单函数；（2017/12/21）
  * （2）修改导入函数以适应新的表格；（2018/3/27）
+ * （3）导入函数新增对D05类型的支持；（2018/4/18）
  */
 
 namespace App\Http\Controllers\Api;
@@ -126,8 +127,9 @@ class PlantController extends Controller
             $categories[1] = 'D02-植物腊叶标本';
             $categories[2] = 'D03-植物其他类型标本';
             $categories[3] = 'D04-植物相关物品';
+            $categories[4] = 'D05-植物病虫害标本';
 
-            for ($i = 0; $i < 4; $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 if($i == 1) continue;
                 $sheet = $reader->getSheet($i);
                 $sheet_array = $sheet->toArray();
@@ -135,7 +137,7 @@ class PlantController extends Controller
                     if ($row == 0) continue; //忽略表头
                     if ($cells[2] == '') continue; //编号不存在则忽略
 
-                    if ($i == 3) {
+                    if ($i == 3 || $i == 4) {
                         //$index = $cells[0];
                         $input_date = $cells[1];
                         $serial = $cells[2];
