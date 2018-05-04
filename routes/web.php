@@ -108,4 +108,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth'], 
     Route::group(['prefix' => 'forestry'], function () {
         Route::get('camera-list', 'ForestryController@cameraList'); //拍摄清单
     });
+
+    //动物管理
+    Route::group(['prefix' => 'animal'], function () {
+        Route::get('camera-list', 'AnimalController@cameraList'); //拍摄清单
+    });
 });

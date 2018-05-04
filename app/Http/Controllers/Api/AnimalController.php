@@ -51,6 +51,7 @@ class AnimalController extends Controller
         $this->middleware('ability:Animal|Method-Collection-Animal-SaveImage,true')->only('saveImage');
         $this->middleware('ability:Animal|Method-Collection-Animal-DeleteImage,true')->only('deleteImage');
         $this->middleware('ability:Animal|Method-Collection-Animal-Relate,true')->only('relate');
+        $this->middleware('ability:Animal|Method-Collection-Animal-CameraList,true')->only('cameraList');
     }
 
     /**
@@ -436,5 +437,35 @@ class AnimalController extends Controller
         $lists = $lists->orderBy('id', 'desc')->take(50)->get();
 
         return $lists;
+    }
+
+
+//生成拍摄清单函数
+    public function cameraList()
+    {
+        $post_time = Date('YmdHis');
+        $filePath = resource_path('assets/template/camera-list.xls');
+        $distPath = storage_path('excel/exports/' . $post_time . '.xls');
+        copy($filePath, $distPath);
+
+        Excel::load($distPath, function ($reader) {
+            $lists = Animal::leftJoin('collection_images', function ($join) {
+                $join->on('animals.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Farm::class);
+            })->whereNull('collection_images.id')->select('animals.category', 'animals.name', 'animals.serial', 'animals.number'/*, 'animals.storage'*/)->get();
+
+            $sheet = $reader->getActiveSheet();
+
+            $post_date = Date('Y-m-d');
+            $sheet->setCellValue('G2', $post_date);
+
+            foreach ($lists as $index => $obj) {
+                $sheet->setCellValue('A' . ($index + 4), ($index + 1));
+                $sheet->setCellValue('B' . ($index + 4), $obj->category);
+                $sheet->setCellValue('C' . ($index + 4), $obj->name);
+                $sheet->setCellValue('D' . ($index + 4), $obj->number);
+                $sheet->setCellValue('E' . ($index + 4), $obj->serial);
+                $sheet->setCellValue('F' . ($index + 4), $obj->storage);
+            }
+        })->export('xls');
     }
 }

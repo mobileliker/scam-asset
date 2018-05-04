@@ -37,11 +37,12 @@
             <el-input placeholder="请输入名称、编号、来源或描述进行搜索" icon="search" v-model="search.query_text"
                       :on-icon-click="handleSearchIconClick"></el-input>
         </el-col>
-        <el-col :lg="2" class="pull-right">
+        <el-col :lg="4" class="pull-right">
             <router-link to="/collection/animal/create">
                 <el-button type="success">添加</el-button>
             </router-link>
             <el-button type="success" @click="handleImport">导入</el-button>
+            <el-button type="success" @click="handleCaremaList">拍摄单</el-button>
         </el-col>
         <el-col :lg="24" class="list">
             <el-table :data="list.data" border style="width: 100%" v-loading="loading" element-loading-text="拼命加载数据中"
@@ -285,7 +286,7 @@
                     from: '',
                     'last_page': '',
                     'next_page_url': '',
-                    'per_page': 10,
+                    'per_page': 15,
                     'prev_page_url': '',
                     'to': '',
                     'total': 0,
@@ -326,10 +327,10 @@
                     this.search.user_id.options = response.data;
                     this.load();
                 }).catch(error => {
-                    this.$message.error('获取所有用户列表失败');
-                });
+                this.$message.error('获取所有用户列表失败');
+            });
         },
-        methods : {
+        methods: {
             load() {
                 //console.log('load');
                 this.loading = true;
@@ -384,14 +385,14 @@
                     axios.get('/api/collection/animal/' + id + '/delete')
                         .then(response => {
                             this.$message({
-                                type : 'success',
-                                message : '删除成功'
+                                type: 'success',
+                                message: '删除成功'
                             });
                             data.splice(index, 1);
                         }).catch(error => {
-                        if(error.response.status == 404){
+                        if (error.response.status == 404) {
                             this.$message.error('欲删除的动物不存在');
-                        }else{
+                        } else {
                             this.$message.error('删除失败');
                         }
                     });
@@ -468,6 +469,11 @@
 
                 this.dialog.image.visible = true;
             },
+
+            //拍摄清单
+            handleCaremaList() {
+                window.open('/api/animal/camera-list', '_blank');
+            }
         }
     }
 </script>
