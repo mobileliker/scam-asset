@@ -19,6 +19,7 @@
  * （1）修改了导入功能；（2018/4/10）
  * （2）新增了门属性；（2018/4/10）
  * （3）新增南海海洋标本的导入支持；（2018/5/7）
+ * （4）修改拍摄清单功能的错误；（2018/5/7）
  */
 
 namespace App\Http\Controllers\Api;
@@ -453,7 +454,7 @@ class AnimalController extends Controller
 
         Excel::load($distPath, function ($reader) {
             $lists = Animal::leftJoin('collection_images', function ($join) {
-                $join->on('animals.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Farm::class);
+                $join->on('animals.id', '=', 'collection_images.collectible_id')->whereNull('collection_images.deleted_at')->where('collectible_type', '=', Animal::class);
             })->whereNull('collection_images.id')->select('animals.category', 'animals.name', 'animals.serial', 'animals.number'/*, 'animals.storage'*/)->get();
 
             $sheet = $reader->getActiveSheet();
