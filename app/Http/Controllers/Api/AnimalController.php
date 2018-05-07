@@ -18,6 +18,7 @@
  * @description :
  * （1）修改了导入功能；（2018/4/10）
  * （2）新增了门属性；（2018/4/10）
+ * （3）新增南海海洋标本的导入支持；（2018/5/7）
  */
 
 namespace App\Http\Controllers\Api;
@@ -126,76 +127,78 @@ class AnimalController extends Controller
 
         Excel::load($path, function ($reader) use ($user, $request) {
 
-            $sheet = $reader->getSheet(0);
-            $sheet_array = $sheet->toArray();
-            foreach ($sheet_array as $row => $cells) {
-                if ($row == 0) continue; //忽略标题行和表头
-                if ($cells[5] == '') continue; //编号不存在则忽略
+            for($i = 0; $i < 2; $i++) {
+                $sheet = $reader->getSheet($i);
+                $sheet_array = $sheet->toArray();
+                foreach ($sheet_array as $row => $cells) {
+                    if ($row == 0) continue; //忽略标题行和表头
+                    if ($cells[5] == '') continue; //编号不存在则忽略
 
-                $index = $cells[0];
-                $batch = $cells[1];
-                $batchIndex = $cells[2];
-                $input_date = $cells[3];
-                $name = $cells[4];
-                $serial = $cells[5];
-                $latin = $cells[6];
-                $phylum = $cells[7];
-                $clazz = $cells[8];
-                $order = $cells[9];
-                $family = $cells[10];
-                $genus = $cells[11];
-                $noname1 = $cells[12];
-                $noname2 = $cells[13];
-                $level_1989 = $cells[14];
-                //$level_2015 = $cells[X]; //暂时去除了
-                $level_CITES = $cells[15];
-                $range = $cells[16];
-                $habitat = $cells[17];
-                $description = $cells[18];
-                $size_length = $cells[19];
-                $size_width = $cells[20];
-                $size_height = $cells[21];
-                $size = $size_length . ' * ' . $size_width . ' * ' . $size_height;
+                    $index = $cells[0]; //总序号
+                    $batch = $cells[1]; //批次
+                    $batchIndex = $cells[2]; //批次序号
+                    $input_date = $cells[3]; //入账日期
+                    $name = $cells[4]; //藏品名称
+                    $serial = $cells[5]; //藏品编号
+                    $latin = $cells[6]; //拉丁名
+                    $phylum = $cells[7]; //门
+                    $clazz = $cells[8]; //纲
+                    $order = $cells[9]; //目
+                    $family = $cells[10]; //科
+                    $genus = $cells[11]; //属
+                    $level_1989 = $cells[12]; //保护等级
+                    //$level_2015 = $cells[X]; //暂时去除了
+                    $level_CITES = $cells[13]; //CIETS2017
+                    $range = $cells[14];
+                    $habitat = $cells[15];
+                    $description = $cells[16];
+                    $size_length = $cells[17];
+                    $size_width = $cells[18];
+                    $size_height = $cells[19];
+                    $size = $size_length . ' * ' . $size_width . ' * ' . $size_height;
 
-                $category = $cells[25];
-                $storage = $cells[28];
+                    $category = $cells[23];
+                    $storage = $cells[26];
 
-                $source = $cells[36];
-                $memo = $cells[37];
+                    $source = $cells[24];
+                    if(isset($cells[34])) $memo = $cells[34];
+                    else $memo = null;
 
-                $obj = Animal::where('serial', '=', $serial)->first();
-                if ($obj == null) {
-                    $obj = new Animal;
-                    $obj->serial = $serial;
-                } else if ($request->type == 'ignore') contiue;
+                    $obj = Animal::where('serial', '=', $serial)->first();
+                    if ($obj == null) {
+                        $obj = new Animal;
+                        $obj->serial = $serial;
+                    } else if ($request->type == 'ignore') contiue;
 
-                $obj->category = $category;
-                $obj->input_date = $input_date;
-                $obj->name = $name;
-                $obj->storage = $storage;
-                $obj->size = $size;
-                $obj->phylum = $phylum;
-                $obj->clazz = $clazz;
-                $obj->order = $order;
-                $obj->family = $family;
-                $obj->genus = $genus;
-                $obj->latin = $latin;
-                $obj->level_1989 = $level_1989;
-                //$obj->level_2015 = $level_2015;
-                $obj->level_CITES = $level_CITES;
-                $obj->description = $description;
-                $obj->range = $range;
-                $obj->habitat = $habitat;
-                $obj->batch = $batch;
-                $obj->source = $source;
-                $obj->memo = $memo;
+                    $obj->category = $category;
+                    $obj->input_date = $input_date;
+                    $obj->name = $name;
+                    $obj->storage = $storage;
+                    $obj->size = $size;
+                    $obj->phylum = $phylum;
+                    $obj->clazz = $clazz;
+                    $obj->order = $order;
+                    $obj->family = $family;
+                    $obj->genus = $genus;
+                    $obj->latin = $latin;
+                    $obj->level_1989 = $level_1989;
+                    //$obj->level_2015 = $level_2015;
+                    $obj->level_CITES = $level_CITES;
+                    $obj->description = $description;
+                    $obj->range = $range;
+                    $obj->habitat = $habitat;
+                    $obj->batch = $batch;
+                    $obj->source = $source;
+                    $obj->memo = $memo;
 
-                $obj->keeper_id = $user->id;
-                $obj->user_id = $user->id;
+                    $obj->keeper_id = $user->id;
+                    $obj->user_id = $user->id;
 
-                $obj->save();
-                event(new AnimalEvent('import', $request->getClientIp(), $obj)); //添加导入日记记录
+                    $obj->save();
+                    event(new AnimalEvent('import', $request->getClientIp(), $obj)); //添加导入日记记录
+                }
             }
+
         });
 
     }
