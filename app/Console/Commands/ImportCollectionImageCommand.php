@@ -131,7 +131,7 @@ class ImportCollectionImageCommand extends Command
                     $prefix = 'animal';
                 } else if (substr($serial, 0, 1) == 'D') {
                     $prefix = 'forestry';
-                } lse {
+                } else {
                     rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
                     $this->comment($file . ' : Serial Not Exist.');
                     continue;
