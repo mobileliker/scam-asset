@@ -30,7 +30,11 @@
                 <el-table-column type="index" label="序号" width="70"></el-table-column>
                 <el-table-column prop="created_at" label="创建时间" width="200" sortable></el-table-column>
                 <el-table-column prop="name" label="名称" sortable></el-table-column>
-                <el-table-column prop="path" label="路径" sortable></el-table-column>
+                <el-table-column prop="path" label="路径" sortable>
+                    <template scope="scope">
+                        <a :href="scope.row.path">{{scope.row.path}}</a>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="user" label="创建人" width="150" sortable></el-table-column>
                 <el-table-column fixed="right" label="操作" width="100">
                     <template scope="scope">
