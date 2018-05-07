@@ -26,6 +26,7 @@
  * （5）修改图片已被导入过后的提示语；（2018/3/19）
  * （6）新增对动物图片导入的支持；（2018/4/17）
  * （7）修改植物和林业图片的导入支持；（2018/4/19）
+ * （8）新增对南海海洋标本图片的导入支持；（2018/5/7）
  **/
 
 namespace App\Console\Commands;
@@ -126,11 +127,11 @@ class ImportCollectionImageCommand extends Command
                     $prefix = 'rock';
                 } else if (substr($serial, 0, 1) == 'D') {
                     $prefix = 'plant';
-                } else if (substr($serial, 0, 1) == 'E') {
+                } else if (substr($serial, 0, 1) == 'E' || substr($serial, 0, 1) == 'H') {
                     $prefix = 'animal';
                 } else if (substr($serial, 0, 1) == 'D') {
                     $prefix = 'forestry';
-                } else {
+                } lse {
                     rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
                     $this->comment($file . ' : Serial Not Exist.');
                     continue;
