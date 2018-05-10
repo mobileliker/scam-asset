@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version: 1.0 批量生成固定自唱二维码的命令行工具
+ * @version: 1.0 批量生成固定资产二维码的命令行工具
  * @author: wuzhihui
  * @date: 2017/7/3
  * @description:

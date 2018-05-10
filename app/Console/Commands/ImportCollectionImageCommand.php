@@ -27,6 +27,8 @@
  * （6）新增对动物图片导入的支持；（2018/4/17）
  * （7）修改植物和林业图片的导入支持；（2018/4/19）
  * （8）新增对南海海洋标本图片的导入支持；（2018/5/7）
+ * （9）修复林业资源图片导入的错误；（2018/5/10）
+ * （10）添加导入图片完成的提示语；（2018/5/10）
  **/
 
 namespace App\Console\Commands;
@@ -129,7 +131,7 @@ class ImportCollectionImageCommand extends Command
                     $prefix = 'plant';
                 } else if (substr($serial, 0, 1) == 'E' || substr($serial, 0, 1) == 'H') {
                     $prefix = 'animal';
-                } else if (substr($serial, 0, 1) == 'D') {
+                } else if (substr($serial, 0, 1) == 'G') {
                     $prefix = 'forestry';
                 } else {
                     rename($path . '/' . $file, $path . '/.serial_not_exist/' . $file);
@@ -185,5 +187,7 @@ class ImportCollectionImageCommand extends Command
                 }
             }
         }
+
+        $this->comment('导入藏品图片结束');
     }
 }
