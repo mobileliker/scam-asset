@@ -32,6 +32,7 @@
  * @description :
  * (1)添加附件模块的相关接口；（2018/3/1）
  * （2）添加林业资源管理模块的相关接口：（2018/3/27）
+ * （3）新增动物管理删除图片的接口；（2018/6/1）
  *
  */
 
@@ -250,6 +251,7 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
             Route::post('{id}/image', 'AnimalController@saveImage');
             Route::get('{id}/relate', 'AnimalController@relate');
             Route::delete('{animal_id}/image/{id}', 'AnimalController@deleteImage');
+            Route::get('{animal_id}/image/{id}/delete', 'AnimalController@deleteImage');
 
             Route::post('import', 'AnimalController@import');
             Route::post('batch-delete', 'AnimalController@batchDelete');
