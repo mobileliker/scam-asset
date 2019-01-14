@@ -25,6 +25,7 @@
  * (1)新增首页的藏品入库统计功能；（2018/1/11）
  * (2)新增首页的固定资产入库统计功能；(2018/1/23)
  * （3）新增首页的林业资源和植物植物的统计功能；（2018/4/9）
+ * (4)修改统计功能的年份获取方式，以适用年份的自然增长；(2019/1/14)
  */
 
 namespace App\Http\Controllers\Api;
@@ -83,10 +84,19 @@ class IndexController extends Controller
         $prefixs[] = 'forestry';
 
         $years = array();
-        $years[] = 2015;
-        $years[] = 2016;
-        $years[] = 2017;
-        $years[] = 2018;
+        $currentYear = Date('Y');
+        $year = 2015;
+
+        while($year <= $currentYear)
+        {
+            $years[] = $year;
+            $year++;
+        }
+//        $years[] = 2015;
+//        $years[] = 2016;
+//        $years[] = 2017;
+//        $years[] = 2018;
+//        $years[] = 2019;
         $countYears =
 
         $numberSum = 0;
