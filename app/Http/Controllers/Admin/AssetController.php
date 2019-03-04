@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Asset Controller
+ * @version 1.0
+ * @author : wuzhihui
+ * @date : 2019/3/4
+ * @descrption :
+ * (1) Remove the code of generating Qr code in storeOrUpdate method.(2019/3/4)
+ */
+
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
@@ -184,8 +193,9 @@ class AssetController extends Controller
 
         if($asset->save()){
 
-            $link = url('s?c='.$asset->serial);
-            IQrcode::generate2($link, $asset->serial);
+            //remove the code of generating QR code.
+            //$link = url('s?c='.$asset->serial);
+            //IQrcode::generate2($link, $asset->serial);
 
             if($id == -1) $operate = Alog::OPERATE_CREATE;
             else $operate = Alog::OPERATE_UPDATE;
