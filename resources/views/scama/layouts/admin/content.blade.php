@@ -108,7 +108,7 @@ description:
     @yield('content')
 </div>
 <div class="col-lg-12 admin-footer">
-    <span> <i class="fa fa-copyright"></i>&nbsp;2016-2016 {{config('app.copyright')}}  All rights reserved.</span>
+    <span> <i class="fa fa-copyright"></i>&nbsp;2016-{{date('Y')}} {{config('app.copyright')}}  All rights reserved.</span>
 </div>
 
 <div id="admin-settings" style="display: none; padding: 20px 20px;">
