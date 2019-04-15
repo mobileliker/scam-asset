@@ -266,12 +266,17 @@ class RockController extends Controller
             $categories[0] = '岩石';
             $categories[1] = '矿物';
             $categories[2] = '化石';
+            $categories[3] = '土壤标本采集工具';
+            $categories[4] = '岩矿标本采集工具';
 
-            for ($i = 1; $i <= 3; $i++) {
+
+            for ($i = 1; $i <= 5; $i++) {
 
                 $sheet = $reader->getSheet($i);
                 $sheet_array = $sheet->toArray();
                 foreach ($sheet_array as $row => $cells) {
+                    \Log::info('$i='.$i.',$row='.$row);
+
                     if ($row == 0 || $row == 1) continue; //忽略标题行和表头
                     if ($cells[4] == '') continue; //编号不存在则忽略
 
