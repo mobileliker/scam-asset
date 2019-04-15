@@ -275,7 +275,7 @@ class RockController extends Controller
                 $sheet = $reader->getSheet($i);
                 $sheet_array = $sheet->toArray();
                 foreach ($sheet_array as $row => $cells) {
-                    \Log::info('$i='.$i.',$row='.$row);
+                    //\Log::info('$i='.$i.',$row='.$row);
 
                     if ($row == 0 || $row == 1) continue; //忽略标题行和表头
                     if ($cells[4] == '') continue; //编号不存在则忽略
