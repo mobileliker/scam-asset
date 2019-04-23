@@ -25,6 +25,7 @@
  * (1)添加拍摄清单函数；（2017/12/21）
  * （2）修改导入函数以适应新的表格；（2018/3/27）
  * （3）导入函数新增对D05类型的支持；（2018/4/18）
+ * (4) 新增对蜡叶标本的支持；(2019/4/23)
  */
 
 namespace App\Http\Controllers\Api;
@@ -130,12 +131,14 @@ class PlantController extends Controller
             $categories[4] = 'D05-植物病虫害标本';
 
             for ($i = 0; $i < 5; $i++) {
-                if($i == 1) continue;
+                //if($i == 1) continue;
                 $sheet = $reader->getSheet($i);
                 $sheet_array = $sheet->toArray();
                 foreach ($sheet_array as $row => $cells) {
                     if ($row == 0) continue; //忽略表头
                     if ($cells[2] == '') continue; //编号不存在则忽略
+
+                    \Log::info('$i=' . $i . ',row=' . $row . ',name=' . $cells[3] );
 
                     if ($i == 3 || $i == 4) {
                         //$index = $cells[0];
@@ -154,13 +157,13 @@ class PlantController extends Controller
                         $family = null;
                         $genus = null;
                         $latin = null;
-                    } else if ($i == 0 || $i == 2) {
+                    } else if ($i == 0 || $i == 2 || $i == 1) {
                         //$index = $cells[0];
                         $input_date = $cells[1];
                         $serial = $cells[2];
                         $family = $cells[3];
                         $genus = $cells[4];
-                        $name = $cells[5];
+                        $name = $cells[5] != null ? $cells[5] : '';
                         $latin = $cells[6];
                         if ($i == 2) $number = $cells[7];
                         $size = $cells[8];
@@ -170,6 +173,8 @@ class PlantController extends Controller
                         $storage = $cells[12];
                         $description = $cells[13];
                         $memo = $cells[14];
+                    } else if($i == 1) {
+
                     }
 
                     $serials = explode('-', $serial);
