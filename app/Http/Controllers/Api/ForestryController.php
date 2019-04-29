@@ -7,7 +7,8 @@
  * @date : 2018/3/27
  * @description:
  * (1)基本功能；（2018/3/27）
- * （2）修改拍摄清单的Xls路径；（2018/4/8）
+ * (2)修改拍摄清单的Xls路径；（2018/4/8）
+ * (3)新增G05导入支持；
  */
 
 namespace App\Http\Controllers\Api;
@@ -110,15 +111,16 @@ class ForestryController extends Controller
             $categories[1] = 'G02茎段';
             $categories[2] = 'G03卡片标本';
             $categories[3] = 'G04林业相关物品';
+            $categories[4] = 'G05古木';
 
-            for ($i = 0; $i < 4; $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 $sheet = $reader->getSheet($i);
                 $sheet_array = $sheet->toArray();
                 foreach ($sheet_array as $row => $cells) {
                     if ($row == 0 || $row == 1) continue; //忽略标题行和表头
                     if ($cells[2] == '') continue; //编号不存在则忽略
 
-                    if ($i == 0 || $i == 3) {
+                    if ($i == 0 || $i == 3 || $i == 4) {
                         //$index = $cells[0];
                         $input_date = $cells[1];
                         $serial = $cells[2];
