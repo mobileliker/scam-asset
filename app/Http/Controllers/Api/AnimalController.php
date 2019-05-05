@@ -6,20 +6,21 @@
  * @author : wuzhihui
  * @date : 2017/11/30
  * @description :
- * (1)基本功能；（2017/11/30）
- * (2)添加日志记录；（2017/12/1）
- * (3)格式化代码：（2017/12/1）
- * (4)新增权限管理的内容；（2017/12/14）
- * （5）更改权限控制；（2017/12/14）
+ * (1) 基本功能；(2017/11/30)
+ * (2) 添加日志记录；(2017/12/1)
+ * (3) 格式化代码：(2017/12/1)
+ * (4) 新增权限管理的内容；(2017/12/14)
+ * (5) 更改权限控制；(2017/12/14)
  *
  * @version : 2.0.3
  * @author : wuzhihui
  * @date : 2018/4/10
  * @description :
- * （1）修改了导入功能；（2018/4/10）
- * （2）新增了门属性；（2018/4/10）
- * （3）新增南海海洋标本的导入支持；（2018/5/7）
- * （4）修改拍摄清单功能的错误；（2018/5/7）
+ * (1) 修改了导入功能；(2018/4/10)
+ * (2) 新增了门属性；(2018/4/10)
+ * (3) 新增南海海洋标本的导入支持；(2018/5/7)
+ * (4) 修改拍摄清单功能的错误；(2018/5/7)
+ * (5) 修改导入功能以适应新的excel;(2019/5/5)
  */
 
 namespace App\Http\Controllers\Api;
@@ -134,6 +135,7 @@ class AnimalController extends Controller
                 foreach ($sheet_array as $row => $cells) {
                     if ($row == 0) continue; //忽略标题行和表头
                     if ($cells[5] == '') continue; //编号不存在则忽略
+                    if($cells[3] == '') continue; //入库日期不存在则忽略
 
                     $index = $cells[0]; //总序号
                     $batch = $cells[1]; //批次
@@ -150,19 +152,19 @@ class AnimalController extends Controller
                     $level_1989 = $cells[12]; //保护等级
                     //$level_2015 = $cells[X]; //暂时去除了
                     $level_CITES = $cells[13]; //CIETS2017
-                    $range = $cells[14];
-                    $habitat = $cells[15];
-                    $description = $cells[16];
-                    $size_length = $cells[17];
-                    $size_width = $cells[18];
-                    $size_height = $cells[19];
-                    $size = $size_length . ' * ' . $size_width . ' * ' . $size_height;
+                    $range = $cells[14]; //分布范围
+                    $habitat = $cells[15]; //生境
+                    $description = $cells[16]; //描述
+                    $size_length = $cells[17]; //长
+                    $size_width = $cells[18]; //宽
+                    $size_height = $cells[19]; //高
+                    $size = $size_length . ' * ' . $size_width . ' * ' . $size_height; //尺寸
 
-                    $category = $cells[23];
-                    $storage = $cells[26];
+                    $category = $cells[23]; //分类
+                    $storage = $cells[26]; //保存地点
 
-                    $source = $cells[24];
-                    if(isset($cells[34])) $memo = $cells[34];
+                    $source = $cells[24]; //来源
+                    if(isset($cells[34])) $memo = $cells[34]; //备注
                     else $memo = null;
 
                     $obj = Animal::where('serial', '=', $serial)->first();
@@ -172,6 +174,7 @@ class AnimalController extends Controller
                     } else if ($request->type == 'ignore') contiue;
 
                     $obj->category = $category;
+                    if($obj->category == null) $obj->category = "";
                     $obj->input_date = $input_date;
                     $obj->name = $name;
                     $obj->storage = $storage;
