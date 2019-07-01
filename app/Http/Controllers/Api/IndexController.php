@@ -97,7 +97,7 @@ class IndexController extends Controller
 //        $years[] = 2017;
 //        $years[] = 2018;
 //        $years[] = 2019;
-        $countYears =
+//       $countYears = 0;
 
         $numberSum = 0;
         $imageNumberSum = 0;
@@ -112,10 +112,10 @@ class IndexController extends Controller
 
             $number = $model->count();
             $imageNumber = CollectionImage::where('collectible_type', $model_name)->count();
-            $monthAdd = $model->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
-            $yearAdd = $model->whereYear('created_at', $year)->count();
-            $imageMonthAdd = CollectionImage::where('collectible_type', $model_name)->whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
-            $imageYearAdd = CollectionImage::where('collectible_type', $model_name)->whereYear('created_at', $year)->count();
+            $monthAdd = $model->whereYear('created_at', $currentYear)->whereMonth('created_at', $month)->count();
+            $yearAdd = $model->whereYear('created_at', $currentYear)->count();
+            $imageMonthAdd = CollectionImage::where('collectible_type', $model_name)->whereYear('created_at', $currentYear)->whereMonth('created_at', $month)->count();
+            $imageYearAdd = CollectionImage::where('collectible_type', $model_name)->whereYear('created_at', $currentYear)->count();
 
             $numberSum += $number;
             $imageNumberSum += $imageNumber;
