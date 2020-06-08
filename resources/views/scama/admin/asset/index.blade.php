@@ -118,10 +118,11 @@ description:
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/export')}}" target="_blank">
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
-              <a class="a-admin-asset-qrcode btn btn-primary btn-xs" href="javascript:void(0)" data-id="{{$asset->id}}"  data-image="{{url('/storage/qrcode/'.$asset->serial.'.png')}}"><i class="fa fa-qrcode" aria-hidden="true"></i></a>
+{{--              <a class="a-admin-asset-qrcode btn btn-primary btn-xs" href="javascript:void(0)" data-id="{{$asset->id}}"  data-image="{{url('/storage/qrcode/'.$asset->serial.'.png')}}"><i class="fa fa-qrcode" aria-hidden="true"></i></a>--}}
               <a class="btn btn-primary btn-xs" href="{{url('admin/asset/'.$asset->id.'/edit')}}">
                 <i class="fa fa-pencil"></i>
               </a>
+              @if($asset->created_at > date("Y-m-d H:i:s", strtotime("-1 month")) || Auth::user()->type == 1)
               <form class="form-operate-delete" action="{{url('admin/asset/'.$asset->id)}}" method="POST">
                 {{ csrf_field() }}
                 <input name="_method" type="hidden" value="DELETE">
@@ -129,6 +130,7 @@ description:
                   <i class="fa fa-trash-o"></i>
                 </button>
               </form>
+              @endif
             </td>
           </tr>
         @endforeach
@@ -158,13 +160,13 @@ description:
       {{ csrf_field() }}
       <input name="_method" type="hidden" value="PUT">
       <div class="form-group">
-        <label for="file" class="col-sm-2 control-label">@lang('common.file')</label>
+        <label for="file" class="col-sm-2 control-label">@lang('file')</label>
         <div class="col-sm-10">
           <input class="form-control" id="file" name="file" type="file" placeholder="@lang('common.file')" accept="application/vnd.ms-excel">
         </div>
       </div>
       <div class="form-group">
-        <label for="type" class="col-sm-2 control-label">@lang('common.type')</label>
+        <label for="type" class="col-sm-2 control-label">@lang('type')</label>
         <div class="col-sm-10">
           <label class="checkbox-inline">
             <input type="radio" name="type"value="override" checked>覆盖
