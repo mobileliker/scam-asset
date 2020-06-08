@@ -277,7 +277,7 @@ class AssetController extends Controller
         $asset = Asset::find($id);
 
         $c_invoice = Invoice::where('number', '>', $asset->type * 10000000)->where('number', '<=', $asset->type * 10000000 + 9999999)->orderBy('number', 'desc')->first();
-        if($c_invoice != null && count($c_invoice) > 0 ) $number = $c_invoice->number + 1;
+        if($c_invoice != null/* && count($c_invoice) > 0 */) $number = $c_invoice->number + 1;
         else $number = $asset->type * 10000000 + 1;
 
         $invoice = Invoice::generate($asset, $number);
@@ -292,7 +292,7 @@ class AssetController extends Controller
 
         foreach($assets as $asset){
             $c_invoice = Invoice::where('number', '>', $asset->type * 10000000)->where('number', '<=', $asset->type * 10000000 + 9999999)->orderBy('number', 'desc')->first();
-            if($c_invoice != null && count($c_invoice) > 0 ) $number = $c_invoice->number + 1;
+            if($c_invoice != null/* && count($c_invoice) > 0 */) $number = $c_invoice->number + 1;
             else $number = $asset->type * 10000000 + 1;
 
             $invoice = Invoice::generate($asset, $number);
