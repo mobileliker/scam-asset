@@ -7,6 +7,7 @@
  * @date : 2019/3/4
  * @descrption :
  * (1) Remove the code of generating Qr code in storeOrUpdate method.(2019/3/4)
+ * (2) 修改导出为按照日期正序；(2020/06/09)
  */
 
 namespace App\Http\Controllers\Admin;
@@ -369,7 +370,8 @@ class AssetController extends Controller
             $excel->sheet('固定资产', function($sheet){
                 //$assets = Asset::all()->toArray();
                 //$sheet->fromArray($assets);
-                $assets = Asset::all();
+                //$assets = Asset::all();
+                $assets = Asset::orderBy('post_date', 'asc')->get();
 
                 $header = [
                     '序号',
@@ -422,7 +424,6 @@ class AssetController extends Controller
                     ];
                     $sheet->appendRow($data);
                 }
-
             });
         })->export('xls');
 
